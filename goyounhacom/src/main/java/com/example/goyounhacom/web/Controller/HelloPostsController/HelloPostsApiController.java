@@ -15,12 +15,12 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/hellopost")
 public class HelloPostsApiController {
 
     private final HelloPostsService helloPostsService;
 
-    @PostMapping("/hellopost/post")
+    @PostMapping("/post")
     public String save(@RequestBody HelloPostsSaveDto helloPostsSaveDto){
         log.info("글 제목 : {}", helloPostsSaveDto.getTitle());
         log.info("글 내용 : {}", helloPostsSaveDto.getContent());
@@ -28,7 +28,7 @@ public class HelloPostsApiController {
         return "등록된 글 번호 : " + helloPostsService.save(helloPostsSaveDto);
     }
 
-    @PutMapping("/hellopost/put/{id}")
+    @PutMapping("/put/{id}")
     public String udpate(@PathVariable Long id, @RequestBody HelloPostsUpdateDto helloPostsUpdateDto){
         log.info("수정 글 제목 : {}", helloPostsUpdateDto.getTitle());
         log.info("수정 글 내용 : {}", helloPostsUpdateDto.getContent());
@@ -36,31 +36,31 @@ public class HelloPostsApiController {
         return "수정된 글 번호 : " + helloPostsService.update(id, helloPostsUpdateDto);
     }
 
-    @GetMapping("/hellopost/get")
+    @GetMapping("/get")
     public List<HelloPostsGetDto> findbyAll(){
         return helloPostsService.findByAll();
     }
 
 
-    @GetMapping("/hellopost/get/id/{id}")
+    @GetMapping("/get/id/{id}")
     public HelloPostsGetDto getbyid(@PathVariable Long id) {
         return helloPostsService.findbyid(id);
     }
 
 
-    @GetMapping("/hellopost/get/key/{key}")
+    @GetMapping("/get/key/{key}")
     public List<HelloPostsGetDto> findBySearchwithkey(@PathVariable String key){
         return helloPostsService.findbysearchlist(key);
     }
 
 
-    @DeleteMapping("/hellopost/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public String deletebyid(@PathVariable Long id){
         return "삭제된 글 번호 : " + helloPostsService.deletebyid(id);
 
     }
 
-    @GetMapping("/hellopost/get/userid/{userid}")
+    @GetMapping("/get/userid/{userid}")
     public List<HelloPostsGetDto> findbyuserid(@PathVariable String userid){
         return helloPostsService.findbyuserid(userid);
     }
