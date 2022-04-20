@@ -1,6 +1,7 @@
 package com.example.goyounhacom.domain.HelloPosts;
 
 
+import com.example.goyounhacom.domain.baseTimeEntity.BaseTimeEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +11,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @Entity
-public class HelloPost {
+public class HelloPost extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) //기본키, 자동증가
@@ -32,6 +33,12 @@ public class HelloPost {
         this.userId = userId;
     }
 
+
+    public void update(String title, String content, String userId){
+        this.title = title;
+        this.content = content;
+        this.userId = userId;
+    }
 
 
 
