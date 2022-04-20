@@ -4,6 +4,8 @@ import com.example.goyounhacom.domain.HelloPosts.HelloPost;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Getter
 public class HelloPostsGetDto {
     private Long id;
@@ -14,11 +16,18 @@ public class HelloPostsGetDto {
 
     private String userId;
 
+    private LocalDateTime createdDate;
+
+    private LocalDateTime modifiedDate;
+
+
     public HelloPostsGetDto(HelloPost entity){
         this.id = entity.getId();
         this.title = entity.getTitle();
         this.content = entity.getContent();
         this.userId = entity.getUserId();
+        this.createdDate = entity.getCreatedDate();
+        this.modifiedDate = entity.getModifiedDate();
     }
 
 
