@@ -6,6 +6,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class) //기능 추가
 public abstract class BaseTimeEntity {
     @CreatedDate
+    @Column(updatable = false) //생성 시점부터 소멸될때 까지 수정 불가로 만들어 주자
     private LocalDateTime createdDate; //최초 생성 시간
 
     @LastModifiedDate
