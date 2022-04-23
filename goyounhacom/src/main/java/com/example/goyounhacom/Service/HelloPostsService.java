@@ -68,4 +68,9 @@ public class HelloPostsService {
         List<HelloPostsGetDto> list = helloPostRepository.findByTitleContaining(key).stream().map(dto -> new HelloPostsGetDto(dto)).collect(Collectors.toList());
         return list;
     }
+
+    @Transactional
+    public Long updateviewcount(Long id){
+        return helloPostRepository.updateviewcount(id);
+    }
 }

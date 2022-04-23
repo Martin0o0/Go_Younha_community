@@ -44,6 +44,7 @@ public class HelloPostsApiController {
 
     @GetMapping("/get/id/{id}")
     public HelloPostsGetDto getbyid(@PathVariable Long id) {
+        helloPostsService.updateviewcount(id); //게시글 조회
         return helloPostsService.findbyid(id);
     }
 

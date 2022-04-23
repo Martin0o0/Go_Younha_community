@@ -51,6 +51,15 @@ public class User {
         this.role = role;
     }
 
+
+    public void update(String password, String email, String nickname){
+        this.password = password;
+        this.email = email;
+        this.nickname = nickname;
+
+    }
+
+
     public String getRoleKey(){
         return this.role.getKey();
     }

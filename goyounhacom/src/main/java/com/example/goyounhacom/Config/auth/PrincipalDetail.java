@@ -1,7 +1,10 @@
 package com.example.goyounhacom.Config.auth;
 
 import com.example.goyounhacom.domain.Users.User;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -9,10 +12,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class PrincipalDetail implements UserDetails {
 
-    private final User user;
+    private User user;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -20,6 +24,7 @@ public class PrincipalDetail implements UserDetails {
         collection.add(() -> user.getRoleKey());
         return collection;
     }
+
 
     @Override //pw
     public String getPassword() {
@@ -29,6 +34,23 @@ public class PrincipalDetail implements UserDetails {
     @Override //userid
     public String getUsername() {
         return user.getUserid();
+    }
+
+    public String getEmail(){
+        return user.getEmail();
+    }
+
+   public void setUser(User user){
+        this.user = user; //정보 변경 후 세션 변경 후 유지.
+
+   }
+
+    public String getNickname(){
+        return user.getNickname();
+    }
+
+    public Long getId(){
+        return user.getId();
     }
 
     @Override //계정이 만료되었는가?

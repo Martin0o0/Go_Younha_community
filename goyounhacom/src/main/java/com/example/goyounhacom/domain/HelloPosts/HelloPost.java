@@ -26,13 +26,15 @@ public class HelloPost extends BaseTimeEntity {
     @Column(nullable = false)
     private String userId;
 
+    @Column(columnDefinition = "integer default 0", nullable = false)
+    private Long viewcount;
+
     @Builder
     public HelloPost(String title, String content, String userId){
         this.title = title;
         this.content = content;
         this.userId = userId;
     }
-
 
 
     public void update(String title, String content, String userId){
