@@ -9,7 +9,7 @@ import lombok.Getter;
 @Getter
 public class UserSaveDto {
 
-        private String userid;
+        private String username;
         private String password;
         private String email;
         private String nickname;
@@ -19,7 +19,7 @@ public class UserSaveDto {
 
         @Builder
         public UserSaveDto(String userid, String password, String email, String nickname){
-                this.userid = userid;
+                this.username = userid;
                 this.password = password;
                 this.email = email;
                 this.nickname = nickname;
@@ -31,7 +31,7 @@ public class UserSaveDto {
 
         public User toEntity(){
                 return User.builder()
-                        .userid(userid)
+                        .username(username)
                         .password(password)
                         .email(email)
                         .nickname(nickname)

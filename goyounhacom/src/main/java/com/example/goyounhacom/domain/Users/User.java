@@ -1,6 +1,7 @@
 package com.example.goyounhacom.domain.Users;
 
 
+import com.example.goyounhacom.domain.baseTimeEntity.BaseTimeEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,13 +13,13 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class User {
+public class User extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, length = 30, unique = true)
-    private String userid;
+    private String username;
 
     @Column(nullable = false, length = 100)
     private String password;
@@ -41,8 +42,8 @@ public class User {
 
 
     @Builder
-    public User(String userid, String password, String email, String nickname, Boolean isholics, Long noholics, Role role) {
-        this.userid = userid;
+    public User(String username, String password, String email, String nickname, Boolean isholics, Long noholics, Role role) {
+        this.username = username;
         this.password = password;
         this.email = email;
         this.nickname = nickname;
@@ -55,6 +56,8 @@ public class User {
     public void update(String password, String email, String nickname){
         this.password = password;
         this.email = email;
+        this.nickname = nickname;
+        this.nickname = nickname;
         this.nickname = nickname;
 
     }

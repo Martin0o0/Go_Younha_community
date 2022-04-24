@@ -1,7 +1,5 @@
 package com.example.goyounhacom.Service;
 
-
-import com.example.goyounhacom.Config.auth.PrincipalDetail;
 import com.example.goyounhacom.domain.HelloPosts.HelloPost;
 import com.example.goyounhacom.domain.Users.User;
 import com.example.goyounhacom.domain.Users.UserRepository;
@@ -33,10 +31,9 @@ public class UserService {
     }
 
     @Transactional
-    public Long update(Long id, UserUpdateDto userUpdateDto, @AuthenticationPrincipal PrincipalDetail principalDetail){ //유저정보 업데이트
+    public Long update(Long id, UserUpdateDto userUpdateDto){ //유저정보 업데이트
         User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당하는 회원이 없음"));
         user.update(bCryptPasswordEncoder.encode(userUpdateDto.getPassword()), userUpdateDto.getEmail(), userUpdateDto.getNickname());
- //       principalDetail.setUser(user);
         return user.getId();
     }
 
@@ -55,8 +52,8 @@ public class UserService {
     }
 
     @Transactional
-    public UserGetDto findbyuserid(String userid){//회원아이디로 조회
-        User entity = userRepository.findByUserid(userid).orElseThrow(() -> new IllegalArgumentException("해당하는 유저 아이디는 없습니다. " + userid));
+    public UserGetDto findbyusername(String userid){//회원아이디로 조회
+        User entity = userRepository.findByUsername(userid).orElseThrow(() -> new IllegalArgumentException("해당하는 유저 아이디는 없습니다. " + userid));
         return new UserGetDto(entity);
     }
 

@@ -9,7 +9,7 @@ import lombok.Getter;
 public class UserGetDto {
 
     private Long id;
-    private String userid;
+    private String username;
     private String password;
     private String email;
     private String nickname;
@@ -19,7 +19,7 @@ public class UserGetDto {
 
     public UserGetDto(User entity){
         this.id = entity.getId();
-        this.userid = entity.getUserid();
+        this.username = entity.getUsername();
         this.password = entity.getPassword();
         this.email = entity.getEmail();
         this.nickname = entity.getNickname();
