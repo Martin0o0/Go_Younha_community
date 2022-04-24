@@ -25,13 +25,20 @@ public class UserApiController {
 
     @PostMapping("/sign-up")
     public String signup(@RequestBody UserSaveDto userSaveDto) {
-        log.info("유저 id : {}", userSaveDto.getUsername());
-        log.info("유저 p/w : {}", userSaveDto.getPassword());
-        log.info("유저 이메일: {}", userSaveDto.getEmail());
-        log.info("유저 닉네임 : {}", userSaveDto.getNickname());
-        log.info("홀릭스 여부  : {}", userSaveDto.getIs_holics());
-        log.info("일반 사용자 여부 : {}", userSaveDto.getRole());
-        return "등록된 회원 번호 : " + userService.save(userSaveDto);
+        long status = userService.save(userSaveDto);
+        if(status == -1){
+            return "이미 등록된 아이디가 있습니다.";
+        }
+        else {
+            log.info("유저 id : {}", userSaveDto.getUsername());
+            log.info("유저 p/w : {}", userSaveDto.getPassword());
+            log.info("유저 이메일: {}", userSaveDto.getEmail());
+            log.info("유저 닉네임 : {}", userSaveDto.getNickname());
+            log.info("홀릭스 여부  : {}", userSaveDto.getIs_holics());
+            log.info("일반 사용자 여부 : {}", userSaveDto.getRole());
+
+            return "등록된 번호 : " + status;
+        }
     }
 
     @PutMapping("/update/{id}") //유저정보 업데이트
