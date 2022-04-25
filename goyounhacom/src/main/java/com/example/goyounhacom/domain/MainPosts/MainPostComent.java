@@ -1,5 +1,4 @@
-package com.example.goyounhacom.domain.HelloPosts;
-
+package com.example.goyounhacom.domain.MainPosts;
 
 import com.example.goyounhacom.domain.baseTimeEntity.BaseTimeEntity;
 import lombok.Builder;
@@ -8,11 +7,10 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@NoArgsConstructor
 @Getter
+@NoArgsConstructor
 @Entity
-public class HelloPost extends BaseTimeEntity {
-
+public class MainPostComent extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) //기본키, 자동증가
     private Long id;
@@ -26,23 +24,13 @@ public class HelloPost extends BaseTimeEntity {
     @Column(nullable = false)
     private String username;
 
-//    @Column(columnDefinition = "integer default 0", nullable = true)
-//    private Integer viewcount;
+    @ManyToOne
+    private MainPost mainPost; //자식이니까 N:1방식이다.
 
     @Builder
-    public HelloPost(String title, String content, String username){
+    public MainPostComent(String title, String content, String username){
         this.title = title;
         this.content = content;
         this.username = username;
     }
-
-
-    public void update(String title, String content, String username){
-        this.title = title;
-        this.content = content;
-        this.username = username;
-    }
-
-
-
 }

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>자유게시판</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <script src="/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+<div class="=container">
+    <table>
+        <thead>
+        <tr>
+            <th>제목</th>
+            <th>작성일시</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#main_post}}
+            <tr>
+                <td>{{title}}</td>
+                <td>{{content}}</td>
+                <td>{{username}}</td>
+            </tr>
+        {{/main_post}}
+        </tbody>
+    </table>
+</div>
+
+<script src="/js/bootstrap.js"></script>
+</body>
+</html>

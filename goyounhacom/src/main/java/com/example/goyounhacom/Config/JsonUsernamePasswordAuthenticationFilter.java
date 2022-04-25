@@ -17,7 +17,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
-    private static final String DEFAULT_LOGIN_REQUEST_URL = "/api/auth/user/login";  // /login/oauth2/ + ????? 로 오는 요청을 처리할 것이다
+    private static final String DEFAULT_LOGIN_REQUEST_URL = "/api/auth/user/login";  // 이경로로 오는 요청을 처리할 것이다
 
     private static final String HTTP_METHOD = "POST";    //로그인시, HTTP 메서드의 방식은 POST.
 
@@ -29,7 +29,7 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
     private static final String PASSWORD_KEY="password";
 
 
-    private static final AntPathRequestMatcher DEFAULT_LOGIN_PATH_REQUEST_MATCHER; //   /login 의 요청에, POST로 온 요청에 매칭된다.
+    private static final AntPathRequestMatcher DEFAULT_LOGIN_PATH_REQUEST_MATCHER; //로그인의 요청에, post로 온 요청에 매칭된다.
 
     static { //전역 값 설정.
         DEFAULT_LOGIN_PATH_REQUEST_MATCHER = new AntPathRequestMatcher(DEFAULT_LOGIN_REQUEST_URL, HTTP_METHOD);
@@ -37,7 +37,7 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
 
     public JsonUsernamePasswordAuthenticationFilter(ObjectMapper objectMapper) {
 
-        super(DEFAULT_LOGIN_PATH_REQUEST_MATCHER);   // 위에서 설정한  /oauth2/login/* 의 요청에, GET으로 온 요청을 처리하기 위해 설정한다.
+        super(DEFAULT_LOGIN_PATH_REQUEST_MATCHER);   // 위에서 설정한  경로의 요청에, GET으로 온 요청을 처리하기 위해 설정한다.
 
         this.objectMapper = objectMapper;
     }

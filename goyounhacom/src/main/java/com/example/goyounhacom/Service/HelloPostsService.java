@@ -28,7 +28,7 @@ public class HelloPostsService {
     @Transactional
     public Long update(Long id, HelloPostsUpdateDto helloPostsUpdateDto){
         HelloPost posts = helloPostRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당하는 게시글이 없다. No : " + id));
-        posts.update(helloPostsUpdateDto.getTitle(), helloPostsUpdateDto.getContent(), helloPostsUpdateDto.getUserId());
+        posts.update(helloPostsUpdateDto.getTitle(), helloPostsUpdateDto.getContent(), helloPostsUpdateDto.getUsername());
         return id;
     }
 
@@ -42,7 +42,7 @@ public class HelloPostsService {
 
     @Transactional
     public List<HelloPostsGetDto> findbyuserid(String userid){
-        List<HelloPostsGetDto> list = helloPostRepository.findByUserId(userid).stream().map(dto -> new HelloPostsGetDto(dto)).collect(Collectors.toList());
+        List<HelloPostsGetDto> list = helloPostRepository.findByUsername(userid).stream().map(dto -> new HelloPostsGetDto(dto)).collect(Collectors.toList());
         return list;
     }
 
@@ -68,9 +68,9 @@ public class HelloPostsService {
         List<HelloPostsGetDto> list = helloPostRepository.findByTitleContaining(key).stream().map(dto -> new HelloPostsGetDto(dto)).collect(Collectors.toList());
         return list;
     }
-
-    @Transactional
-    public Long updateviewcount(Long id){
-        return helloPostRepository.updateviewcount(id);
-    }
+//
+//    @Transactional
+//    public Long updateviewcount(Long id){
+//        return helloPostRepository.updateviewcount(id);
+//    }
 }

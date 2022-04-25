@@ -41,7 +41,7 @@ public class hellopostControllerTest {
         HelloPostsSaveDto helloPostsSaveDto = HelloPostsSaveDto.builder()
                 .title(title)
                 .content(content)
-                .userId("chy0310")
+                .username("chy0310")
                 .build();
 
         String url = "http://localhost:" + port + "/api/hellopost/save";

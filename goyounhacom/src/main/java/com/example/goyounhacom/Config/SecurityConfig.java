@@ -33,16 +33,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public BCryptPasswordEncoder bCryptPasswordEncoder() { //비밀번호 암호화
         return new BCryptPasswordEncoder(); //비밀번호 암호화를 해주어야 함.
     }
-//
-//    @Override
-//    public AuthenticationManager authenticationManagerBean() throws Exception {
-//        return super.authenticationManagerBean();
-//    }
-//
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.userDetailsService(principalDetailService).passwordEncoder(bCryptPasswordEncoder()); //
-//    }
 
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -53,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 // URL별 권한 관리를 설정하는 옵션의 시작점
-                .antMatchers("/", "/h2/**", "/api/auth/**", "/api/hellopost/**").permitAll()
+                .antMatchers("/", "/h2/**", "/api/auth/**", "/api/hellopost/**", "/mainpost/**").permitAll()
                 .anyRequest().authenticated() //나머지의 요청에 대해서는 인증받은 사람만 접속 가능.
                 .and()
                 .csrf().ignoringAntMatchers("/h2/**") //h2에 대해서만 crsf 끄기.
@@ -75,7 +65,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManager() {//- AuthenticationManager 등록
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();//DaoAuthenticationProvider 사용
         provider.setPasswordEncoder(bCryptPasswordEncoder());//PasswordEncoder로는 bCryPasswordEncoder를 사용
-        provider.setUserDetailsService(principalDetailService); //이후 작성할 코드입니다.
+        provider.setUserDetailsService(principalDetailService);
         return new ProviderManager(provider);
     }
 
@@ -94,8 +84,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public JsonUsernamePasswordAuthenticationFilter jsonUsernamePasswordLoginFilter(){
         JsonUsernamePasswordAuthenticationFilter jsonUsernamePasswordLoginFilter = new JsonUsernamePasswordAuthenticationFilter(objectMapper);
         jsonUsernamePasswordLoginFilter.setAuthenticationManager(authenticationManager());
-        jsonUsernamePasswordLoginFilter.setAuthenticationSuccessHandler(loginSuccessHandler());
-        jsonUsernamePasswordLoginFilter.setAuthenticationFailureHandler(loginFailuereHandler());
+        jsonUsernamePasswordLoginFilter.setAuthenticationSuccessHandler(loginSuccessHandler()); //성공핸들러 적용
+        jsonUsernamePasswordLoginFilter.setAuthenticationFailureHandler(loginFailuereHandler()); //실패해들러 적용
         return jsonUsernamePasswordLoginFilter;
     }
 

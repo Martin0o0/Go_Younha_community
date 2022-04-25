@@ -41,6 +41,7 @@ public class User extends BaseTimeEntity {
     private Role role;
 
 
+
     @Builder
     public User(String username, String password, String email, String nickname, Boolean isholics, Long noholics, Role role) {
         this.username = username;

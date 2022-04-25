@@ -31,7 +31,7 @@ public class hellopostRepositoryTest {
         helloPostRepository.save(HelloPost.builder()
                         .title(title)
                         .content(content)
-                        .userId("chy0310")
+                        .username("chy0310")
                         .build());
 
         //when

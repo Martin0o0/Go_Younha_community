@@ -1,17 +1,14 @@
-package com.example.goyounhacom.web.Dto.HelloPostsDto;
-
+package com.example.goyounhacom.web.Dto.MainPostDto;
 
 import com.example.goyounhacom.domain.HelloPosts.HelloPost;
+import com.example.goyounhacom.domain.MainPosts.MainPost;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import javax.persistence.Column;
 
 @Getter
 @NoArgsConstructor
-public class HelloPostsSaveDto {
+public class MainPostSaveDto {
 
     private String title;
 
@@ -20,14 +17,14 @@ public class HelloPostsSaveDto {
     private String username;
 
     @Builder
-    public HelloPostsSaveDto(String title, String content, String username){
+    public MainPostSaveDto(String title, String content, String userId){
         this.title = title;
         this.content = content;
-        this.username = username;
+        this.username = userId;
     }
 
-    public HelloPost toEntity(){
-        return HelloPost.builder()
+    public MainPost toEntity(){
+        return MainPost.builder()
                 .title(title)
                 .content(content)
                 .username(username)

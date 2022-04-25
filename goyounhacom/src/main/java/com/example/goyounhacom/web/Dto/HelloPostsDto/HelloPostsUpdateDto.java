@@ -13,13 +13,13 @@ public class HelloPostsUpdateDto {
 
     private String content;
 
-    private String userId;
+    private String username;
 
     @Builder
-    public HelloPostsUpdateDto(Long id, String title, String content, String userId){
+    public HelloPostsUpdateDto(Long id, String title, String content, String username){
         this.title = title;
         this.content = content;
-        this.userId = userId;
+        this.username = username;
     }
 
 }

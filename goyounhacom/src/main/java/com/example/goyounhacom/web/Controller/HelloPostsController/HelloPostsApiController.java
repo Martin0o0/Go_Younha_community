@@ -24,7 +24,7 @@ public class HelloPostsApiController {
     public String save(@RequestBody HelloPostsSaveDto helloPostsSaveDto){
         log.info("글 제목 : {}", helloPostsSaveDto.getTitle());
         log.info("글 내용 : {}", helloPostsSaveDto.getContent());
-        log.info("글 작성자 : {}", helloPostsSaveDto.getUserId());
+        log.info("글 작성자 : {}", helloPostsSaveDto.getUsername());
         return "등록된 글 번호 : " + helloPostsService.save(helloPostsSaveDto);
     }
 
@@ -32,7 +32,7 @@ public class HelloPostsApiController {
     public String udpate(@PathVariable Long id, @RequestBody HelloPostsUpdateDto helloPostsUpdateDto){
         log.info("수정 글 제목 : {}", helloPostsUpdateDto.getTitle());
         log.info("수정 글 내용 : {}", helloPostsUpdateDto.getContent());
-        log.info("수정 글 작성자 : {}", helloPostsUpdateDto.getUserId());
+        log.info("수정 글 작성자 : {}", helloPostsUpdateDto.getUsername());
         return "수정된 글 번호 : " + helloPostsService.update(id, helloPostsUpdateDto);
     }
 
@@ -41,12 +41,12 @@ public class HelloPostsApiController {
         return helloPostsService.findByAll();
     }
 
-
-    @GetMapping("/get/id/{id}")
-    public HelloPostsGetDto getbyid(@PathVariable Long id) {
-        helloPostsService.updateviewcount(id); //게시글 조회
-        return helloPostsService.findbyid(id);
-    }
+//
+//    @GetMapping("/get/id/{id}")
+//    public HelloPostsGetDto getbyid(@PathVariable Long id) {
+//        helloPostsService.updateviewcount(id); //게시글 조회
+//        return helloPostsService.findbyid(id);
+//    }
 
 
     @GetMapping("/get/key/{key}")

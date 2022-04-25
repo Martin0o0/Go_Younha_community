@@ -1,13 +1,13 @@
-package com.example.goyounhacom.web.Dto.HelloPostsDto;
+package com.example.goyounhacom.web.Dto.MainPostDto;
 
 import com.example.goyounhacom.domain.HelloPosts.HelloPost;
-import lombok.Builder;
+import com.example.goyounhacom.domain.MainPosts.MainPost;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Getter
-public class HelloPostsGetDto {
+public class MainPostGetDto {
     private Long id;
 
     private String title;
@@ -21,7 +21,7 @@ public class HelloPostsGetDto {
     private LocalDateTime modifiedDate;
 
 
-    public HelloPostsGetDto(HelloPost entity) {
+    public MainPostGetDto(MainPost entity) {
         this.id = entity.getId();
         this.title = entity.getTitle();
         this.content = entity.getContent();
