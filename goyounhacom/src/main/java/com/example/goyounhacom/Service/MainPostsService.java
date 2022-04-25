@@ -1,6 +1,8 @@
 package com.example.goyounhacom.Service;
 
 
+import com.example.goyounhacom.domain.HelloPosts.HelloPost;
+import com.example.goyounhacom.domain.MainPosts.MainPost;
 import com.example.goyounhacom.domain.MainPosts.MainPostRepository;
 import com.example.goyounhacom.web.Dto.HelloPostsDto.HelloPostsGetDto;
 import com.example.goyounhacom.web.Dto.HelloPostsDto.HelloPostsSaveDto;
@@ -28,6 +30,12 @@ public class MainPostsService {
     @Transactional
     public List<MainPostGetDto> findByAll(){
         return  mainPostRepository.findAll().stream().map(dto -> new MainPostGetDto(dto)).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public MainPostGetDto getMainpost(Long id){
+        MainPost posts = mainPostRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 게시글이 없다."));
+        return new MainPostGetDto(posts);
     }
 
 

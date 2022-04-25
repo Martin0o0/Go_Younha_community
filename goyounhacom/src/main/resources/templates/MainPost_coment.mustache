@@ -10,23 +10,12 @@
 </head>
 <body>
 <div class="container">
-    <table>
-        <thead>
-        <tr>
-            <th>제목</th>
-            <th>작성자</th>
-            <th>작성일시</th>
-        </tr>
-        </thead>
-        <tbody>
-        {{#main_post}}
-            <td><a href="/mainpost/coment/{{id}}">{{title}}</a></td>
-                <td>{{username}}</td>
-                <td>{{createdDate}}</td>
-            </tr>
-        {{/main_post}}
-        </tbody>
-    </table>
+    <h1>{{main_post.title}}</h1>
+    <div>{{main_post.content}}</div>
+    <form action="/coment/post/{{main_post.id}}" method="post">
+        <textarea name="content" id="content" rows="15"></textarea>
+        <input type="submit" value="답변등록">
+    </form>
 </div>
 
 <script src="/js/bootstrap.js"></script>

@@ -15,9 +15,6 @@ public class MainPostComent extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY) //기본키, 자동증가
     private Long id;
 
-    @Column(nullable = false)
-    private String title;
-
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
@@ -29,7 +26,6 @@ public class MainPostComent extends BaseTimeEntity {
 
     @Builder
     public MainPostComent(String title, String content, String username){
-        this.title = title;
         this.content = content;
         this.username = username;
     }
