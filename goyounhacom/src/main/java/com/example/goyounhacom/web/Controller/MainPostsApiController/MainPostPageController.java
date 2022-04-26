@@ -27,10 +27,10 @@ public class MainPostPageController {
         return "MainPost";
     }
 
-    @GetMapping("/coment/{id}")
+    @GetMapping("/comment/{id}")
     public String mainpostcoment(@PathVariable Long id,  Model model){
         MainPostGetDto post = mainPostsService.getMainpost(id);
         model.addAttribute("main_post", post);
-        return "MainPost_coment";
+        return "MainPost_comment";
     }
 }

@@ -14,24 +14,26 @@
 </head>
 <body>
 <div class="container">
-    <table>
-        <thead>
-        <tr>
-            <th>제목</th>
-            <th>작성자</th>
-            <th>작성일시</th>
-        </tr>
-        </thead>
-        <tbody>
-        {{#main_post}}
-            <td><a href="/mainpost/comment/{{id}}">{{title}}</a></td>
-                <td>{{username}}</td>
-                <td>{{createdDate}}</td>
-            </tr>
-        {{/main_post}}
-        </tbody>
-    </table>
+    <h1>{{main_post.title}}</h1>
+    <div>{{main_post.content}}</div>
+    <hr>
+    <div>
+        {{#main_post.list}}
+            <ul>
+                <li>{{content}}</li>
+                <li>{{username}}</li>
+            </ul>
+        {{/main_post.list}}
+
+    </div>
+
+    <form action="/mainpost/comment/post/{{main_post.id}}" method="post">
+        <input type="text" id="username" name="username" required>
+        <textarea name="content" id="content" rows="15"></textarea>
+        <input type="submit" value="답변등록">
+    </form>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
         integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
         crossorigin="anonymous"></script>

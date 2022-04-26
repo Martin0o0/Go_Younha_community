@@ -2,9 +2,11 @@ package com.example.goyounhacom.web.Dto.MainPostDto;
 
 import com.example.goyounhacom.domain.HelloPosts.HelloPost;
 import com.example.goyounhacom.domain.MainPosts.MainPost;
+import com.example.goyounhacom.domain.MainPosts.MainPostComment;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 public class MainPostGetDto {
@@ -20,6 +22,7 @@ public class MainPostGetDto {
 
     private LocalDateTime modifiedDate;
 
+    private List<MainPostComment> list;
 
     public MainPostGetDto(MainPost entity) {
         this.id = entity.getId();
@@ -28,5 +31,6 @@ public class MainPostGetDto {
         this.username = entity.getUsername();
         this.createdDate = entity.getCreatedDate();
         this.modifiedDate = entity.getModifiedDate();
+        this.list = entity.getMainPostComents();
     }
 }

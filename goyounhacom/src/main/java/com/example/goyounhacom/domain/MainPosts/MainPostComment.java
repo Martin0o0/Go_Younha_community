@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @Entity
-public class MainPostComent extends BaseTimeEntity {
+public class MainPostComment extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) //기본키, 자동증가
     private Long id;
@@ -25,8 +25,9 @@ public class MainPostComent extends BaseTimeEntity {
     private MainPost mainPost; //자식이니까 N:1방식이다.
 
     @Builder
-    public MainPostComent(String title, String content, String username){
+    public MainPostComment(String title, String content, String username, MainPost mainPost){
         this.content = content;
         this.username = username;
+        this.mainPost = mainPost;
     }
 }
