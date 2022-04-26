@@ -21,21 +21,28 @@ public class MainPostsService {
     private final MainPostRepository mainPostRepository;
 
     @Transactional
-    public Long save(MainPostSaveDto mainPostSaveDto){
+    public Long save(MainPostSaveDto mainPostSaveDto) {
         return mainPostRepository.save(mainPostSaveDto.toEntity()).getId();
         //반환값은 HelloPost가 된다. getId를 통해 등록된 글 번호를 가져오자.
     }
 
 
     @Transactional
-    public List<MainPostGetDto> findByAll(){
-        return  mainPostRepository.findAll().stream().map(dto -> new MainPostGetDto(dto)).collect(Collectors.toList());
+    public List<MainPostGetDto> findByAll() {
+        return mainPostRepository.findAll().stream().map(dto -> new MainPostGetDto(dto)).collect(Collectors.toList());
     }
 
     @Transactional
-    public MainPostGetDto getMainpost(Long id){
-        MainPost posts = mainPostRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 게시글이 없다."));
+    public MainPostGetDto getMainpost(Long id) {
+        MainPost posts = mainPostRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없다."));
         return new MainPostGetDto(posts);
+    }
+
+    @Transactional
+    public Long save(String username, String title, String content) {
+        MainPostSaveDto mainPostSaveDto = new MainPostSaveDto(title, content, username);
+        return mainPostRepository.save(mainPostSaveDto.toEntity()).getId();
+        //반환값은 HelloPost가 된다. getId를 통해 등록된 글 번호를 가져오자.
     }
 
 

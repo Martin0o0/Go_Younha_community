@@ -5,11 +5,10 @@ import com.example.goyounhacom.domain.MainPosts.MainPost;
 import com.example.goyounhacom.domain.MainPosts.MainPostRepository;
 import com.example.goyounhacom.web.Dto.MainPostDto.MainPostGetDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -33,4 +32,18 @@ public class MainPostPageController {
         model.addAttribute("main_post", post);
         return "MainPost_comment";
     }
+
+    @GetMapping("/savepage")
+    public String mainpostpage(){
+        return "MainPost_save";
+    }
+
+
+    @PostMapping("/save")
+    public String mainpostsave(@RequestParam String username, @RequestParam String title, @RequestParam String content){
+        long savenum = mainPostsService.save(username, title, content);
+        return "redirect:/mainpost/mainlist";
+
+    }
+
 }
