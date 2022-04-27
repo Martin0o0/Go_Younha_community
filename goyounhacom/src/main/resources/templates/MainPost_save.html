@@ -12,7 +12,7 @@
 <body>
 <div class="container my-4">
         <h5 class="my-3 border-bottom pb-2">질문등록</h5>
-        <form action="/mainpost/save" method="post">
+        <form th:action="@{/mainpost/save}" method="post">
             <div class="mb-3">
                 <label for="username" class="form-label">유저이름</label>
                 <input id="username" type="text" name="username" class="form-control">

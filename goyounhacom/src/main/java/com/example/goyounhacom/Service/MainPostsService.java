@@ -9,6 +9,8 @@ import com.example.goyounhacom.web.Dto.HelloPostsDto.HelloPostsSaveDto;
 import com.example.goyounhacom.web.Dto.MainPostDto.MainPostGetDto;
 import com.example.goyounhacom.web.Dto.MainPostDto.MainPostSaveDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -45,5 +47,11 @@ public class MainPostsService {
         //반환값은 HelloPost가 된다. getId를 통해 등록된 글 번호를 가져오자.
     }
 
+
+    @org.springframework.transaction.annotation.Transactional(readOnly = true)
+    public Page<MainPost> pageList(Pageable pageable){ //page<T>로 지정하면 바드시 파라미터로 pageable한것으로 해주어야 한다고 함.
+        Page<MainPost> list = mainPostRepository.findAll(pageable);
+        return list;
+    }
 
 }
