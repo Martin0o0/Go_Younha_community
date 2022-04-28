@@ -12,18 +12,21 @@
 <body>
 <div class="container my-4">
         <h5 class="my-3 border-bottom pb-2">질문등록</h5>
-        <form th:action="@{/mainpost/save}" method="post">
+        <form th:action="@{/mainpost/save}"  th:object="${mainPostSaveDto}" method="post">
+            <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}"> <!--경고문-->
+                <div th:each="err : ${#fields.allErrors()}" th:text="${err}"/>
+            </div>
             <div class="mb-3">
                 <label for="username" class="form-label">유저이름</label>
-                <input id="username" type="text" name="username" class="form-control">
+                <input type="text" th:field="*{username}" class="form-control">
             </div>
             <div class="mb-3">
                 <label for="title" class="form-label">제목</label>
-                <input id="title" type="text" name="title" class="form-control">
+                <input type="text" th:field="*{title}" class="form-control">
             </div>
             <div class="mb-3">
                 <label for="content" class="form-label">내용</label>
-                <textarea id="content" name="content" class="form-control" rows="10"></textarea>
+                <textarea th:field="*{content}" class="form-control" rows="10"></textarea>
             </div>
             <input type="submit" value="저장하기" class="btn btn-primary my-2">
         </form>

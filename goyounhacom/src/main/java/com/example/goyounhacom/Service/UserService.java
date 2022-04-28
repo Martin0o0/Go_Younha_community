@@ -10,6 +10,7 @@ import com.example.goyounhacom.web.Dto.UserDto.UserUpdateDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -21,7 +22,7 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public Long save(UserSaveDto userSaveDto) {
@@ -29,7 +30,7 @@ public class UserService {
             return (long) -1;
         }
         else {
-            String hashpw = bCryptPasswordEncoder.encode(userSaveDto.getPassword());
+            String hashpw = passwordEncoder.encode(userSaveDto.getPassword());
             userSaveDto.setPassword(hashpw);
             return userRepository.save(userSaveDto.toEntity()).getId();
         }
@@ -38,7 +39,7 @@ public class UserService {
     @Transactional
     public Long update(Long id, UserUpdateDto userUpdateDto) { //유저정보 업데이트
         User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당하는 회원이 없음"));
-        user.update(bCryptPasswordEncoder.encode(userUpdateDto.getPassword()), userUpdateDto.getEmail(), userUpdateDto.getNickname());
+        user.update(passwordEncoder.encode(userUpdateDto.getPassword()), userUpdateDto.getEmail(), userUpdateDto.getNickname());
         return user.getId();
     }
 

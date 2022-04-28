@@ -8,14 +8,19 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Column;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 @Getter
 @NoArgsConstructor
 public class HelloPostsSaveDto {
 
+
     private String title;
 
+
     private String content;
+
 
     private String username;
 

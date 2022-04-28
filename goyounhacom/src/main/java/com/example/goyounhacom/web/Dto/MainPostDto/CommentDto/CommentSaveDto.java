@@ -7,15 +7,22 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.aspectj.bridge.Message;
 
 import javax.persistence.Column;
+import javax.validation.constraints.NotEmpty;
 
 @Getter
+@Setter
 @NoArgsConstructor
 public class CommentSaveDto {
 
+    @NotEmpty(message="내용필수입니다.")
     private String content;
+
+    @NotEmpty(message = "이름 필수입니다.")
     private String username;
+
     private MainPost mainPost;
 
     @Builder

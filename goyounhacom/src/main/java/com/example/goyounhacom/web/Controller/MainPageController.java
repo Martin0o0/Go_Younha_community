@@ -9,7 +9,7 @@ public class MainPageController {
 
     @RequestMapping("/") //루트 다이렉트
     public String root() {
-        return "redirect:/mainpost/mainlist";
+        return "Main";
     }
 
 }

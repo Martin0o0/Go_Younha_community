@@ -18,10 +18,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.web.header.writers.StaticHeadersWriter;
 
-@Configuration //하나 이상의 빈을 등록하기 위해 Configuration 선언
+@Configuration //하나 이상의 빈을 등록하기 위해 Configuration 선언 //환경설정파일을 뜻하는 어노테이션이기도 함.
 @EnableWebSecurity //스프링 시큐리티 설정 활성화
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -30,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final ObjectMapper objectMapper;
 
     @Bean // 필드단위니까 Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() { //비밀번호 암호화
+    public PasswordEncoder passwordEncoder() { //비밀번호 암호화
         return new BCryptPasswordEncoder(); //비밀번호 암호화를 해주어야 함.
     }
 
@@ -43,7 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 // URL별 권한 관리를 설정하는 옵션의 시작점
-                .antMatchers("/", "/h2/**", "/api/auth/**", "/api/hellopost/**", "/mainpost/**").permitAll()
+                .antMatchers("/", "/h2/**", "/api/auth/**", "/api/hellopost/**", "/mainpost/**", "/auth/**").permitAll()
                 .anyRequest().authenticated() //나머지의 요청에 대해서는 인증받은 사람만 접속 가능.
                 .and()
                 .csrf().ignoringAntMatchers("/h2/**") //h2에 대해서만 crsf 끄기.
@@ -64,7 +65,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public AuthenticationManager authenticationManager() {//- AuthenticationManager 등록
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();//DaoAuthenticationProvider 사용
-        provider.setPasswordEncoder(bCryptPasswordEncoder());//PasswordEncoder로는 bCryPasswordEncoder를 사용
+        provider.setPasswordEncoder(passwordEncoder());//PasswordEncoder로는 bCryPasswordEncoder를 사용
         provider.setUserDetailsService(principalDetailService);
         return new ProviderManager(provider);
     }
