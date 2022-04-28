@@ -22,6 +22,13 @@ public class UserPageController {
 
     private final UserService userService;
 
+    @GetMapping("/login")
+    public String login(){
+        return "log-in-form";
+    }
+
+
+
     @GetMapping("/sign-up")
     public String signup(UserSaveDto userSaveDto){
         return "sign-up-form";

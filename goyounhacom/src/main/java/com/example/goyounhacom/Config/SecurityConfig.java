@@ -21,6 +21,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.web.header.writers.StaticHeadersWriter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration //하나 이상의 빈을 등록하기 위해 Configuration 선언 //환경설정파일을 뜻하는 어노테이션이기도 함.
 @EnableWebSecurity //스프링 시큐리티 설정 활성화
@@ -53,10 +54,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addHeaderWriter(new StaticHeadersWriter("X-Content-Security-Policy", "script-src 'self'")) //header name 오류 방지.
                 .frameOptions().disable()
                 .and()
-                .formLogin().disable() //폼 로그인 좆까라 선언.
-                .httpBasic().disable() //특정리소스 접그할 때마다 쳐물어보는 아디비번 좆까라고 선언.
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS); //세션 상태 유지 안함
-        //.loginPage("/auth/user/log-in") //해당하는 로그인 페이지로 이동
+                .formLogin()
+                .loginPage("/auth/login")
+                .defaultSuccessUrl("/")
+                .and()//해당하는 로그인 페이지로 이동//폼 로그인 좆까라 선언.
+                .logout()
+                .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout"))
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true);
+                //세션 상태 유지 안함
+
 
         http.addFilterAfter(jsonUsernamePasswordLoginFilter(), LogoutFilter.class);
 
@@ -90,5 +97,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return jsonUsernamePasswordLoginFilter;
     }
 
-
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception { // 스프링 시큐리티의 인증절차를 수행함.
+        auth.userDetailsService(principalDetailService).passwordEncoder(passwordEncoder());
+    }
 }
