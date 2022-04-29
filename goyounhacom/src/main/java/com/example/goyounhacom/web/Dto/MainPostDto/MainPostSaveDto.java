@@ -2,6 +2,8 @@ package com.example.goyounhacom.web.Dto.MainPostDto;
 
 import com.example.goyounhacom.domain.HelloPosts.HelloPost;
 import com.example.goyounhacom.domain.MainPosts.MainPost;
+import com.example.goyounhacom.domain.Users.User;
+import com.example.goyounhacom.web.Dto.UserDto.UserGetDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,21 +23,20 @@ public class MainPostSaveDto {
     @Size(max=400, message = "400자 이내로 적어주세요.")
     private String content;
 
-    @NotEmpty(message = "이름 필수입니다.")
-    private String username;
+    private User user;
 
     @Builder
-    public MainPostSaveDto(String title, String content, String userId){
+    public MainPostSaveDto(String title, String content, User user){
         this.title = title;
         this.content = content;
-        this.username = userId;
+        this.user = user;
     }
 
     public MainPost toEntity(){
         return MainPost.builder()
                 .title(title)
                 .content(content)
-                .username(username)
+                .user(user)
                 .build();
     }
 }

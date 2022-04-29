@@ -12,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -26,6 +27,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration //하나 이상의 빈을 등록하기 위해 Configuration 선언 //환경설정파일을 뜻하는 어노테이션이기도 함.
 @EnableWebSecurity //스프링 시큐리티 설정 활성화
 @RequiredArgsConstructor
+@EnableGlobalMethodSecurity(prePostEnabled = true) //prePostEnabled = true 설정은 로그인 여부를 판별하기 위해 사용했던 @PreAuthorize 애너테이션을 사용하기 위해 반드시 필요하다.
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final PrincipalDetailService principalDetailService;
@@ -45,7 +47,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 // URL별 권한 관리를 설정하는 옵션의 시작점
-                .antMatchers("/", "/h2/**", "/api/auth/**", "/api/hellopost/**", "/mainpost/**", "/auth/**").permitAll()
+                .antMatchers("/**").permitAll()
                 .anyRequest().authenticated() //나머지의 요청에 대해서는 인증받은 사람만 접속 가능.
                 .and()
                 .csrf().ignoringAntMatchers("/h2/**") //h2에 대해서만 crsf 끄기.
@@ -56,6 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginPage("/auth/login")
+                .loginProcessingUrl("/auth/login")
                 .defaultSuccessUrl("/")
                 .and()//해당하는 로그인 페이지로 이동//폼 로그인 좆까라 선언.
                 .logout()
@@ -65,7 +68,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //세션 상태 유지 안함
 
 
-        http.addFilterAfter(jsonUsernamePasswordLoginFilter(), LogoutFilter.class);
+//        http.addFilterAfter(jsonUsernamePasswordLoginFilter(), LogoutFilter.class);
 
     }
 

@@ -3,6 +3,8 @@ package com.example.goyounhacom.web.Dto.MainPostDto.CommentDto;
 import com.example.goyounhacom.domain.HelloPosts.HelloPost;
 import com.example.goyounhacom.domain.MainPosts.MainPost;
 import com.example.goyounhacom.domain.MainPosts.MainPostComment;
+import com.example.goyounhacom.domain.Users.User;
+import com.example.goyounhacom.web.Dto.UserDto.UserGetDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,23 +22,22 @@ public class CommentSaveDto {
     @NotEmpty(message="내용필수입니다.")
     private String content;
 
-    @NotEmpty(message = "이름 필수입니다.")
-    private String username;
+    private User user;
 
     private MainPost mainPost;
 
     @Builder
-    public CommentSaveDto(String content, String username, MainPost mainpost){
+    public CommentSaveDto(String content, MainPost mainpost, User user){
         this.content = content;
-        this.username = username;
         this.mainPost = mainpost;
+        this.user = user;
     }
 
     public MainPostComment toEntity(){
         return MainPostComment.builder()
                 .content(content)
-                .username(username)
                 .mainPost(mainPost)
+                .user(user)
                 .build();
     }
 

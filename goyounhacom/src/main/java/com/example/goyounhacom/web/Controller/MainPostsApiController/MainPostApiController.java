@@ -23,7 +23,6 @@ public class MainPostApiController {
     public String save(@RequestBody MainPostSaveDto mainPostSaveDto){
         log.info("글 제목 : {}", mainPostSaveDto.getTitle());
         log.info("글 내용 : {}", mainPostSaveDto.getContent());
-        log.info("글 작성자 : {}", mainPostSaveDto.getUsername());
         return "등록된 글 번호 : " + mainPostsService.save(mainPostSaveDto);
     }
 

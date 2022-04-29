@@ -58,8 +58,6 @@ public class User extends BaseTimeEntity {
         this.password = password;
         this.email = email;
         this.nickname = nickname;
-        this.nickname = nickname;
-        this.nickname = nickname;
 
     }
 

@@ -4,10 +4,12 @@ package com.example.goyounhacom.Service;
 import com.example.goyounhacom.domain.HelloPosts.HelloPost;
 import com.example.goyounhacom.domain.MainPosts.MainPost;
 import com.example.goyounhacom.domain.MainPosts.MainPostRepository;
+import com.example.goyounhacom.domain.Users.User;
 import com.example.goyounhacom.web.Dto.HelloPostsDto.HelloPostsGetDto;
 import com.example.goyounhacom.web.Dto.HelloPostsDto.HelloPostsSaveDto;
 import com.example.goyounhacom.web.Dto.MainPostDto.MainPostGetDto;
 import com.example.goyounhacom.web.Dto.MainPostDto.MainPostSaveDto;
+import com.example.goyounhacom.web.Dto.UserDto.UserGetDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,8 +43,8 @@ public class MainPostsService {
     }
 
     @Transactional
-    public Long save(String username, String title, String content) {
-        MainPostSaveDto mainPostSaveDto = new MainPostSaveDto(title, content, username);
+    public Long save(String title, String content, User user) {
+        MainPostSaveDto mainPostSaveDto = new MainPostSaveDto(title, content, user);
         return mainPostRepository.save(mainPostSaveDto.toEntity()).getId();
         //반환값은 HelloPost가 된다. getId를 통해 등록된 글 번호를 가져오자.
     }

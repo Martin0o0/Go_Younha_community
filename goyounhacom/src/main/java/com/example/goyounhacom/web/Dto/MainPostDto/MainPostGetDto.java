@@ -16,8 +16,6 @@ public class MainPostGetDto {
 
     private String content;
 
-    private String username;
-
     private LocalDateTime createdDate;
 
     private LocalDateTime modifiedDate;
@@ -28,7 +26,6 @@ public class MainPostGetDto {
         this.id = entity.getId();
         this.title = entity.getTitle();
         this.content = entity.getContent();
-        this.username = entity.getUsername();
         this.createdDate = entity.getCreatedDate();
         this.modifiedDate = entity.getModifiedDate();
         this.list = entity.getMainPostComents();

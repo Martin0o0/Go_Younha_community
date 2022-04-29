@@ -63,6 +63,11 @@ public class UserService {
         return new UserGetDto(entity);
     }
 
+    @Transactional
+    public User getbyUsername(String username){
+        User entity = userRepository.findByUsername(username).orElseThrow(() -> new IllegalArgumentException("해당하는 유저 아이디는 없습니다. " + username));
+        return entity;
+    }
 
     @Transactional
     public String deletebyid(Long No) { //회원번호로 삭제
