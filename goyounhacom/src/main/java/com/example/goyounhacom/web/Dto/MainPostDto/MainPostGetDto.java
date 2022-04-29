@@ -3,6 +3,7 @@ package com.example.goyounhacom.web.Dto.MainPostDto;
 import com.example.goyounhacom.domain.HelloPosts.HelloPost;
 import com.example.goyounhacom.domain.MainPosts.MainPost;
 import com.example.goyounhacom.domain.MainPosts.MainPostComment;
+import com.example.goyounhacom.domain.Users.User;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -20,6 +21,8 @@ public class MainPostGetDto {
 
     private LocalDateTime modifiedDate;
 
+    private User user;
+
     private List<MainPostComment> list;
 
     public MainPostGetDto(MainPost entity) {
@@ -28,6 +31,7 @@ public class MainPostGetDto {
         this.content = entity.getContent();
         this.createdDate = entity.getCreatedDate();
         this.modifiedDate = entity.getModifiedDate();
+        this.user = entity.getUser();
         this.list = entity.getMainPostComents();
     }
 }
