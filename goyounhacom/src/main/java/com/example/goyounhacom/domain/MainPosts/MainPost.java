@@ -41,9 +41,8 @@ public class MainPost extends BaseTimeEntity {
         this.user = user;
     }
 
-    public void update(String title, String content, User user){
+    public void update(String title, String content){
         this.title = title;
         this.content = content;
-        this.user = user;
     }
 }

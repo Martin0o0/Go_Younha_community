@@ -9,8 +9,9 @@
 </head>
 <body>
 <div class="container my-4">
-        <h5 class="my-3 border-bottom pb-2">질문등록</h5>
-        <form th:action="@{|/mainpost/save|}"  th:object="${mainPostSaveDto}" method="post">
+        <h5 class="my-3 border-bottom pb-2">게시글 등록</h5>
+        <form th:object="${mainPostSaveDto}" method="post">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> <!--CSRF 값을 수동으로 추가하기 위해서는 위와 같이 해야한다. 이것은 스프링 시큐리티의 규칙이다.-->
             <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}"> <!--경고문-->
                 <div th:each="err : ${#fields.allErrors()}" th:text="${err}"/>
             </div>

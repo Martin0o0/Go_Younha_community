@@ -14,11 +14,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -46,8 +48,10 @@ public class MainPostPageController {
         return "MainPost_comment";
     }
 
+
+
     @PreAuthorize("isAuthenticated()") //로그인이 붙은 메서드는 로그인이 필요한 메서드를 의미
-    @GetMapping("/savepage")
+    @GetMapping("/save")
     public String mainpostpage(MainPostSaveDto mainPostSaveDto){
         return "MainPost_save";
     } //발리데이션 때문에.
@@ -64,6 +68,34 @@ public class MainPostPageController {
         log.info("저장된 글 번호 : {}", savenum);
         return "redirect:/mainpost/mainlist";
 
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/put/{id}")
+    public String mainpostput(@PathVariable Long id, Principal principal, MainPostSaveDto mainPostSaveDto){
+        MainPostGetDto Dto = mainPostsService.getMainpost(id);
+        if(Dto.getUser().getUsername().equals(principal.getName()) == false){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없음");
+        }
+        mainPostSaveDto.setTitle(Dto.getTitle());
+        mainPostSaveDto.setContent(Dto.getContent());
+        return "MainPost_save";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/put/{id}")
+    public String mainpostupdate(@PathVariable Long id, @Valid MainPostSaveDto mainPostSaveDto, BindingResult bindingResult, Principal principal) { //BindingResult 매개변수는 @Valid 애너테이션으로 인해 검증이 수행된 결과를 의미하는 객체이다.
+
+        if (bindingResult.hasErrors()) {
+            return "MainPost_save";
+        }
+        MainPostGetDto Dto = mainPostsService.getMainpost(id);
+        if(Dto.getUser().getUsername().equals(principal.getName()) == false){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없음");
+        }
+        long savenum = mainPostsService.modify(id, mainPostSaveDto.getTitle(), mainPostSaveDto.getContent());
+        log.info("저장된 글 번호 : {}", savenum);
+        return "redirect:/mainpost/comment/" + id;
     }
 
 }

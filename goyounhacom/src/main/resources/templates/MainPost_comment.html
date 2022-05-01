@@ -8,6 +8,33 @@
     <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
 </head>
 <body>
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">메인화면</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbar"
+                    aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbar">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/mainpost/mainlist">자유게시판</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{|/auth/login|}">로그인</a>
+                        <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{|/auth/logout|}">로그아웃</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link"  sec:authorize="isAnonymous()" th:href="@{|/auth/sign-up|}">회원가입</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
 <div class="container my-4">
     <h2 class="border-bottom py-3">[[${main_post.title}]]</h2>
     <div class="card border-dark my-3">
@@ -16,6 +43,12 @@
             <h6 class="card-text">[[${main_post.content}]]</h6>
             <div class="d-flex justify-content-end">
                 <p class="badge bg-light text-black p-3 text-center">[[${main_post.modifiedDate}]]</p>
+            </div>
+            <div class="my-3">
+                <a th:href="@{|/mainpost/put/${main_post.id}|}" class="btn btn-sm btn-outline-secondary"
+                   sec:authorize="isAuthenticated()"
+                   th:if="${main_post.user.username != null and #authentication.getPrincipal().getUsername() == main_post.user.username}"
+                   th:text="수정"></a>
             </div>
         </div>
     </div>

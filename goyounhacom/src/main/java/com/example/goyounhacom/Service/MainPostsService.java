@@ -50,6 +50,13 @@ public class MainPostsService {
     }
 
 
+    @Transactional
+    public Long modify(Long id, String title, String content) {
+        MainPost post = mainPostRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당하는 게시글이 없다. No : " + id));
+        post.update(title, content);
+        return id;
+    }
+
     @org.springframework.transaction.annotation.Transactional(readOnly = true)
     public Page<MainPost> pageList(Pageable pageable){ //page<T>로 지정하면 바드시 파라미터로 pageable한것으로 해주어야 한다고 함.
         Page<MainPost> list = mainPostRepository.findAll(pageable);
