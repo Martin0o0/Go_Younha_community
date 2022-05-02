@@ -5,13 +5,19 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collection;
 
 @RequiredArgsConstructor
 public class PrincipalDatails implements UserDetails {
 
-    private final User user;
+    private User user;
+
+    public PrincipalDatails(User user){
+        this.user = user;
+    }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -19,6 +25,7 @@ public class PrincipalDatails implements UserDetails {
         collection.add(() -> user.getRoleKey());
         return collection;
     }
+
 
 
     @Override
@@ -33,6 +40,18 @@ public class PrincipalDatails implements UserDetails {
 
     public User getUser(){
         return this.getUser();
+    }
+
+    public String getEmail(){
+        return this.getEmail();
+    }
+
+    public String getNickname(){
+        return this.getNickname();
+    }
+
+    public void setUser(User user){
+        this.user = user;
     }
 
     @Override

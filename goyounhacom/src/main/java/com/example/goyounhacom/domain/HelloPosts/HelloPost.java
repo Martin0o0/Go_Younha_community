@@ -36,7 +36,6 @@ public class HelloPost extends BaseTimeEntity {
         this.username = username;
     }
 
-
     public void update(String title, String content, String username){
         this.title = title;
         this.content = content;

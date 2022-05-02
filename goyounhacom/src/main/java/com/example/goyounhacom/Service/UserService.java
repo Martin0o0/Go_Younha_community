@@ -1,5 +1,6 @@
 package com.example.goyounhacom.Service;
 
+import com.example.goyounhacom.Config.PrincipalDatails;
 import com.example.goyounhacom.domain.HelloPosts.HelloPost;
 import com.example.goyounhacom.domain.Users.User;
 import com.example.goyounhacom.domain.Users.UserRepository;
@@ -43,6 +44,14 @@ public class UserService {
         return user.getId();
     }
 
+    @Transactional
+    public Long updateUser(UserUpdateDto userUpdateDto, @AuthenticationPrincipal PrincipalDatails principalDatails, String username){
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new IllegalArgumentException("해당하는 회원이 없음"));
+        user.update(passwordEncoder.encode(userUpdateDto.getPassword()), userUpdateDto.getEmail(), userUpdateDto.getEmail());
+        principalDatails.setUser(user);
+        return user.getId();
+    }
+
 
     @Transactional
     public List<UserGetDto> findByAll() { //전체조회
@@ -75,6 +84,7 @@ public class UserService {
         userRepository.delete(user);
         return "회원번호" + No + "는 삭제되었습니다.";
     }
+
 
 
 }

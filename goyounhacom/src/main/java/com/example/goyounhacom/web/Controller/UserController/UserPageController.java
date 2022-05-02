@@ -1,10 +1,13 @@
 package com.example.goyounhacom.web.Controller.UserController;
 
 
+import com.example.goyounhacom.Config.PrincipalDatails;
 import com.example.goyounhacom.Service.UserService;
 import com.example.goyounhacom.web.Dto.UserDto.UserSaveDto;
+import com.example.goyounhacom.web.Dto.UserDto.UserUpdateDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -61,4 +65,21 @@ public class UserPageController {
             return "redirect:/";
         }
     }
+
+    @GetMapping("/update/")
+    public String userupdate(UserUpdateDto userUpdateDto){
+        return "user-update";
+    }
+
+    @PostMapping("/update")
+    public String userupdate(@Valid UserUpdateDto userUpdateDto, BindingResult bindingResult, @AuthenticationPrincipal PrincipalDatails principalDatails){
+        if(bindingResult.hasErrors()){
+            return "user-update";
+        }
+
+        long status = userService.updateUser(userUpdateDto, principalDatails);
+        return "redirect:/";
+    }
+
+
 }

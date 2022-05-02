@@ -20,6 +20,9 @@
             <div class="collapse navbar-collapse" id="navbar">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
+                        <a class="nav-link" href="/hellopost/hellolist">등업신청</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="/mainpost/mainlist">자유게시판</a>
                     </li>
                     <li class="nav-item">
@@ -28,6 +31,8 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link"  sec:authorize="isAnonymous()" th:href="@{|/auth/sign-up|}">회원가입</a>
+                        <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{|/auth/update|}">회원정보 수정</a>
+
                     </li>
                 </ul>
             </div>

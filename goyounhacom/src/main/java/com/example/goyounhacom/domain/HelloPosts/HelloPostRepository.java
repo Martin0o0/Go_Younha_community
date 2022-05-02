@@ -12,7 +12,7 @@ public interface HelloPostRepository extends JpaRepository<HelloPost, Long> {
     List<HelloPost> findByTitleContaining(String keyword); //Json객체로 반환.
 
     List<HelloPost> findByUsername(String username);
-//
+
 //    @Modifying
 //    @Query("update HelloPost as p set p.viewcount = p.viewcount + 1 where p.id = :id") //조회수 증가
 //    Long updateviewcount(Long id);
