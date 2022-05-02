@@ -50,6 +50,10 @@
                    th:if="${main_post.user.username != null and #authentication.getPrincipal().getUsername() == main_post.user.username}"
                    th:text="수정"></a>
             </div>
+            <a href="#" th:data-uri="@{|/mainpost/delete/${main_post.id}|}" id="deletebtn"
+               class="btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()"
+               th:if="${main_post.user.username != null and #authentication.getPrincipal().getUsername() == main_post.user.username}"
+               th:text="삭제"></a>
         </div>
     </div>
     <hr>
@@ -76,6 +80,7 @@
         <input type="submit" class="btn btn-primary my-2" value="답글등록">
     </form>
 </div>
-<script th:src="@{/js/bootstrap.js}"></script>
+<script th:src="@{/js/mainpost_comment.js}" type="text/javascript"></script>
+<script th:src="@{/js/bootstrap.js}" type="text/javascript"></script>
 </body>
 </html>

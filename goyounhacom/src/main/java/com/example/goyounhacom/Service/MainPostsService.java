@@ -63,4 +63,11 @@ public class MainPostsService {
         return list;
     }
 
+    @Transactional
+    public Long delete(Long id){
+        MainPost posts = mainPostRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 게시글이 없다. 삭제할 수 없음."));
+        mainPostRepository.delete(posts);
+        return id;
+    }
+
 }
