@@ -86,4 +86,15 @@ public class CommentPageController {
     }
 
 
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/comment/like/{id}")
+    public String commentlike(@PathVariable Long id, Principal principal){
+        User user = this.userService.getbyUsername(principal.getName());
+        CommentGetDto commentGetDto = commentService.getComment(id);
+        this.commentService.like(id, user);
+        return "redirect:/mainpost/comment/" + commentGetDto.getMainPost().getId();
+    }
+
+
+
 }

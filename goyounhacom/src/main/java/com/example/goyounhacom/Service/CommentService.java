@@ -55,5 +55,12 @@ public class CommentService {
         return id;
     }
 
+    @Transactional
+    public void like(Long id, User user){
+        MainPostComment mainPostComment = mainPostCommentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없다."));
+        mainPostComment.getLike().add(user);
+        this.mainPostCommentRepository.save(mainPostComment);
+    }
+
 
 }

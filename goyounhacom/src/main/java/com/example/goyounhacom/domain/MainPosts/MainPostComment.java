@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Getter
 @NoArgsConstructor
@@ -25,6 +26,10 @@ public class MainPostComment extends BaseTimeEntity {
 
     @ManyToOne
     private MainPost mainPost; //자식이니까 N:1방식이다.
+
+    @ManyToMany //마찬가지로 대등관계이므로
+    Set<User> like;
+
 
     @Builder
     public MainPostComment(String title, String content, User user, MainPost mainPost){

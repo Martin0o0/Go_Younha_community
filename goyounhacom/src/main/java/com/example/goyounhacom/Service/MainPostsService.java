@@ -49,6 +49,12 @@ public class MainPostsService {
         //반환값은 HelloPost가 된다. getId를 통해 등록된 글 번호를 가져오자.
     }
 
+   @Transactional
+    public void like(Long id, User user){
+        MainPost mainpost = mainPostRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없다."));
+        mainpost.getLike().add(user);
+        this.mainPostRepository.save(mainpost);
+    }
 
     @Transactional
     public Long modify(Long id, String title, String content) {
@@ -69,5 +75,7 @@ public class MainPostsService {
         mainPostRepository.delete(posts);
         return id;
     }
+
+
 
 }

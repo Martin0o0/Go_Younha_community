@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -51,17 +51,24 @@
                     <p>[[${#temporals.format(main_post.createdDate, 'yyyy-MM-dd HH:mm')}]]</p>
                 </div>
             </div>
-            <div class="my-3">
+            <div class="my-1">
                 <a th:href="@{|/mainpost/put/${main_post.id}|}" class="btn btn-sm btn-outline-secondary"
                    sec:authorize="isAuthenticated()"
                    th:if="${main_post.user != null and #authentication.getPrincipal().getUsername() == main_post.user.username}"
                    th:text="수정"></a>
             </div>
-            <div>
+            <div class="my-1">
                 <a href="#" th:data-uri="@{|/mainpost/delete/${main_post.id}|}" id="deletebtn"
                    class="btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()"
                    th:if="${main_post.user.username != null and #authentication.getPrincipal().getUsername() == main_post.user.username}"
                    th:text="삭제"></a>
+            </div>
+            <div class="my-1">
+                <a href="#" class="btn btn-sm btn-outline-secondary" id="recommend"
+                   th:data-uri="@{|/mainpost/like/${main_post.id}|}">
+                    추천
+                    <span class="badge rounded-pill bg-info" th:text="${#lists.size(main_post.like)}"></span>
+                </a>
             </div>
         </div>
     </div>
@@ -82,17 +89,24 @@
                     <p>[[${#temporals.format(commentlist.createdDate, 'yyyy-MM-dd HH:mm')}]]</p>
                 </div>
             </div>
-            <div class="my-3">
+            <div class="my-1">
                 <a th:href="@{|/mainpost/comment/put/${commentlist.id}|}" class="btn btn-sm btn-outline-secondary"
                    sec:authorize="isAuthenticated()"
                    th:if="${commentlist.user != null and #authentication.getPrincipal().getUsername() == commentlist.user.username}"
                    th:text="수정"></a>
             </div>
-            <div>
+            <div class="my-1">
                 <a href="#" th:data-uri="@{|/mainpost/comment/delete/${commentlist.id}|}" id="deletebtn"
                    class="btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()"
                    th:if="${commentlist.user != null and #authentication.getPrincipal().getUsername() == commentlist.user.username}"
                    th:text="삭제"></a>
+            </div>
+            <div class="my-1">
+                <a href="#" class="btn btn-sm btn-outline-secondary" id="recommend"
+                   th:data-uri="@{|/mainpost/comment/like/${main_post.id}|}">
+                    추천
+                    <span class="badge rounded-pill bg-info" th:text="${#lists.size(commentlist.like)}"></span>
+                </a>
             </div>
         </div>
 

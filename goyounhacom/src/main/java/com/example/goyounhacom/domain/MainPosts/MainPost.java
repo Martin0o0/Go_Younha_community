@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 
 @NoArgsConstructor
@@ -33,6 +34,9 @@ public class MainPost extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "mainPost", cascade = CascadeType.REMOVE) //mappedby => 참조엔티티 속성명, cascade => 질문 삭제하면 그 예하 묶인 놈들 싸그리 삭제함.
     private List<MainPostComment> mainPostComents; //1:N방식이니까. 부모엔티티가 자식엔티티를 여러개 가질 수 있어
+
+    @ManyToMany //대등관계
+    Set<User> like;
 
     @Builder
     public MainPost(String title, String content, User user){

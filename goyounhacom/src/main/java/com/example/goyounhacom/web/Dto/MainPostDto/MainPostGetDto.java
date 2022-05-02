@@ -8,6 +8,7 @@ import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 public class MainPostGetDto {
@@ -25,6 +26,8 @@ public class MainPostGetDto {
 
     private List<MainPostComment> list;
 
+    private Set<User> like;
+
     public MainPostGetDto(MainPost entity) {
         this.id = entity.getId();
         this.title = entity.getTitle();
@@ -33,5 +36,6 @@ public class MainPostGetDto {
         this.modifiedDate = entity.getModifiedDate();
         this.user = entity.getUser();
         this.list = entity.getMainPostComents();
+        this.like = entity.getLike();
     }
 }

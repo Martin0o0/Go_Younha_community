@@ -110,4 +110,12 @@ public class MainPostPageController {
         return "redirect:/";
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/like/{id}")
+    public String mainpostlike(@PathVariable Long id, Principal principal){
+        User user = this.userService.getbyUsername(principal.getName());
+        this.mainPostsService.like(id, user);
+        return "redirect:/mainpost/comment/" + id;
+    }
+
 }
