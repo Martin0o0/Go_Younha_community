@@ -32,4 +32,8 @@ public class MainPostComment extends BaseTimeEntity {
         this.user = user;
         this.mainPost = mainPost;
     }
+
+    public void update(String content){
+        this.content = content;
+    }
 }

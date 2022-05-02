@@ -100,13 +100,13 @@ public class MainPostPageController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/delete/{id}")
-    public String mainpoostdelte(@PathVariable Long id, Principal principal){
+    public String mainpoostdelete(@PathVariable Long id, Principal principal){
         MainPostGetDto Dto = mainPostsService.getMainpost(id);
         if(Dto.getUser().getUsername().equals(principal.getName()) == false){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없음");
         }
-        long savenum = mainPostsService.delete(id);
-        log.info("삭제된 글 번호 : {}", savenum);
+        long deletenum = mainPostsService.delete(id);
+        log.info("삭제된 글 번호 : {}", deletenum);
         return "redirect:/";
     }
 
