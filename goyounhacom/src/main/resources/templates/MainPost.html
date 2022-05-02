@@ -40,6 +40,7 @@
             <th scope="col">제목</th>
             <th scope="col">작성자</th>
             <th scope="col">작성일시</th>
+            <th scope="col">홀릭스인가?</th>
         </tr>
         </thead>
         <tbody>
@@ -48,12 +49,13 @@
                 <th class="text-start"><a th:href="@{|/mainpost/comment/${list.id}|}" th:text="${list.title}"></a><span class="mx-1 badge rounded-pill bg-primary" th:if="${#lists.size(list.mainPostComents) > 0}">[[${#lists.size(list.mainPostComents)}]] </span></td>
                 <td th:if="${list.user != null}" th:text="${list.user.nickname}"></td>
                 <td th:text="${#temporals.format(list.createdDate, 'yyyy-MM-dd HH:mm')}"></td>
+                <td th:text="${list.user.is_holics}"></td>
             </tr>
         </tbody>
     </table>
 
     <div class="mt-1 mb-auto d-grid gap-1">
-        <a href="/mainpost/save" class="btn btn-outline-primary" id="button_save">게시글등록</a>
+        <a href="/mainpost/save"  th:classappend="${!(userinfo.getIs_holics())} ? 'disabled'" class="btn btn-outline-primary" id="button_save">게시글등록</a>
     </div>
 </div>
 

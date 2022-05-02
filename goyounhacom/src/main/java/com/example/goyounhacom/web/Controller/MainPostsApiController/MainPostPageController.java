@@ -1,6 +1,8 @@
 package com.example.goyounhacom.web.Controller.MainPostsApiController;
 
+import com.example.goyounhacom.Config.PrincipalDatails;
 import com.example.goyounhacom.Service.MainPostsService;
+import com.example.goyounhacom.Service.PrincipalDetailService;
 import com.example.goyounhacom.Service.UserService;
 import com.example.goyounhacom.domain.MainPosts.MainPost;
 import com.example.goyounhacom.domain.Users.User;
@@ -16,6 +18,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,6 +27,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -32,12 +36,14 @@ import java.security.Principal;
 public class MainPostPageController {
     private final MainPostsService mainPostsService;
     private final UserService userService;
+    private final PrincipalDetailService principalDetailService;
 
     @GetMapping("/mainlist")
-    public String mainpost(Model model, @PageableDefault(sort="id", direction = Sort.Direction.DESC, size = 5) Pageable pageable){
+    public String mainpost(@AuthenticationPrincipal PrincipalDatails principalDatails, Model model, @PageableDefault(sort="id", direction = Sort.Direction.DESC, size = 5) Pageable pageable){
         Page<MainPost> list = mainPostsService.pageList(pageable); //읽기전용으로.
-
+        User user = userService.getbyUsername(principalDatails.getUsername());
         model.addAttribute("main_post", list);
+        model.addAttribute("userinfo", user);
         return "MainPost";
     }
 
