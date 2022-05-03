@@ -45,9 +45,9 @@ public class UserService {
     }
 
     @Transactional
-    public Long updateUser(UserUpdateDto userUpdateDto, @AuthenticationPrincipal PrincipalDatails principalDatails, String username){
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new IllegalArgumentException("해당하는 회원이 없음"));
-        user.update(passwordEncoder.encode(userUpdateDto.getPassword()), userUpdateDto.getEmail(), userUpdateDto.getEmail());
+    public Long updateUser(UserUpdateDto userUpdateDto, @AuthenticationPrincipal PrincipalDatails principalDatails){
+        User user = userRepository.findByUsername(userUpdateDto.getUsername()).orElseThrow(() -> new IllegalArgumentException("해당하는 회원이 없음"));
+        user.update(passwordEncoder.encode(userUpdateDto.getPassword()), userUpdateDto.getEmail(), userUpdateDto.getNickname());
         principalDatails.setUser(user);
         return user.getId();
     }

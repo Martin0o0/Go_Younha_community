@@ -3,10 +3,12 @@ package com.example.goyounhacom.web.Controller.UserController;
 
 import com.example.goyounhacom.Config.PrincipalDatails;
 import com.example.goyounhacom.Service.UserService;
+import com.example.goyounhacom.web.Dto.UserDto.UserGetDto;
 import com.example.goyounhacom.web.Dto.UserDto.UserSaveDto;
 import com.example.goyounhacom.web.Dto.UserDto.UserUpdateDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -66,13 +68,22 @@ public class UserPageController {
         }
     }
 
-    @GetMapping("/update/")
-    public String userupdate(UserUpdateDto userUpdateDto){
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/update")
+    public String userupdate(UserUpdateDto userUpdateDto, Principal principal){
+        UserGetDto userGetDto = userService.findbyusername(principal.getName());
+        userUpdateDto.setUsername(userGetDto.getUsername());
+        userUpdateDto.setPassword(userGetDto.getPassword());
+        userUpdateDto.setEmail(userGetDto.getEmail());
+        userUpdateDto.setNickname(userGetDto.getNickname());
         return "user-update";
     }
 
+
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/update")
     public String userupdate(@Valid UserUpdateDto userUpdateDto, BindingResult bindingResult, @AuthenticationPrincipal PrincipalDatails principalDatails){
+
         if(bindingResult.hasErrors()){
             return "user-update";
         }

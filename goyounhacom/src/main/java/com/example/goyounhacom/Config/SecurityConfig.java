@@ -106,7 +106,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
+    public AuthenticationManager authenticationManagerBean() throws Exception { //세션 유지 => 회원 정보 수정 후에도 계속 유지됨.
         return super.authenticationManagerBean();
     }
 }

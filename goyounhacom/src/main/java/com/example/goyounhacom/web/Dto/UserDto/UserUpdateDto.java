@@ -40,4 +40,12 @@ public class UserUpdateDto {
         this.password = password;
     }
 
+    public void setEmail(String email){
+        this.email = email;
+    }
+
+    public void setNickname(String nickname){
+        this.nickname = nickname;
+    }
+
 }

@@ -43,11 +43,11 @@ public class PrincipalDatails implements UserDetails {
     }
 
     public String getEmail(){
-        return this.getEmail();
+        return user.getEmail();
     }
 
     public String getNickname(){
-        return this.getNickname();
+        return user.getNickname();
     }
 
     public void setUser(User user){
