@@ -76,6 +76,10 @@ public class MainPostsService {
         return id;
     }
 
+    @Transactional
+    public void updateviewcount(Long id){
+        mainPostRepository.updateviewcount(id);
+    }
 
 
 }

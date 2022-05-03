@@ -50,6 +50,10 @@
                     <p>created at</p>
                     <p>[[${#temporals.format(main_post.createdDate, 'yyyy-MM-dd HH:mm')}]]</p>
                 </div>
+                <div class="badge bg-light text-black p-2 text-center mx-2 my-auto">
+                    <p>조회수</p>
+                    <p>[[${main_post.viewcount}]]</p>
+                </div>
             </div>
             <div class="my-1">
                 <a th:href="@{|/mainpost/put/${main_post.id}|}" class="btn btn-sm btn-outline-secondary"

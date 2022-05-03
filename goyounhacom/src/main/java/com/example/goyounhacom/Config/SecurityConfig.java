@@ -47,10 +47,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 // URL별 권한 관리를 설정하는 옵션의 시작점
                 .antMatchers("/**").permitAll()
-                .anyRequest().authenticated() //나머지의 요청에 대해서는 인증받은 사람만 접속 가능.
+//                .anyRequest().authenticated() //나머지의 요청에 대해서는 인증받은 사람만 접속 가능.
                 .and()
-                .csrf().ignoringAntMatchers("/h2/**") //h2에 대해서만 crsf 끄기.
-                .and()
+                .csrf().ignoringAntMatchers("/h2/**", "/api/**")
+                .and()//h2에 대해서만 crsf 끄기.
                 .headers()
                 .addHeaderWriter(new StaticHeadersWriter("X-Content-Security-Policy", "script-src 'self'")) //header name 오류 방지.
                 .frameOptions().disable()
@@ -67,7 +67,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //세션 상태 유지 안함
 
 
-        http.addFilterAfter(jsonUsernamePasswordLoginFilter(), LogoutFilter.class);
+        http.addFilterAfter(jsonUsernamePasswordLoginFilter(), LogoutFilter.class); //필터링 후 추가.
 
     }
 
@@ -82,14 +82,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public LoginFailuereHandler loginFailuereHandler(){
         return new LoginFailuereHandler();
-    }
+    } //실패 핸들러
 
     @Bean
     public LoginSuccessHandler loginSuccessHandler(){
         return new LoginSuccessHandler();
-    }
-
-
+    } //성공 핸들러
+    
     @Bean
     public JsonUsernamePasswordAuthenticationFilter jsonUsernamePasswordLoginFilter(){
         JsonUsernamePasswordAuthenticationFilter jsonUsernamePasswordLoginFilter = new JsonUsernamePasswordAuthenticationFilter(objectMapper);

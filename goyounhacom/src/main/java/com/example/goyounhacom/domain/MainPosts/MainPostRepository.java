@@ -13,8 +13,8 @@ import java.util.List;
 public interface MainPostRepository extends JpaRepository<MainPost, Long> {
     List<MainPost> findByTitleContaining(String keyword); //Json객체로 반환.
 
-//    @Modifying
-//    @Query("update MainPost p set p.viewcount = p.viewcount + 1 where p.id = :id") //조회수 증가
-//    int updateviewcount(int id);
+    @Modifying
+    @Query("update MainPost p set p.viewcount = p.viewcount + 1 where p.id = :id") //조회수 증가
+    int updateviewcount(Long id);
 
 }

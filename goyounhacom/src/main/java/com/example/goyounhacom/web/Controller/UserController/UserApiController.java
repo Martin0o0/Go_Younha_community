@@ -47,10 +47,13 @@ public class UserApiController {
         log.info("수정된 이메일 : {}", userUpdateDto.getEmail());
         log.info("수정된 닉네임 : {}", userUpdateDto.getNickname());
         return "수정된 회원번호 : " + userService.update(id, userUpdateDto);
-
-
     }
 
+
+    @PutMapping("/updateholics/{id}")
+    public String updateholics(@PathVariable Long id){
+        return "홀릭스 등업 회원 번호 : " + userService.updateholics(id);
+    }
 
 
     @GetMapping("/get")

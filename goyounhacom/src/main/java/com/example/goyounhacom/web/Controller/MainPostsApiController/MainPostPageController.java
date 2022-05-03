@@ -51,6 +51,7 @@ public class MainPostPageController {
     public String mainpostcoment(@PathVariable Long id, Model model, CommentSaveDto commentSaveDto){
         MainPostGetDto post = mainPostsService.getMainpost(id);
         model.addAttribute("main_post", post);
+        mainPostsService.updateviewcount(id);
         return "MainPost_comment";
     }
 

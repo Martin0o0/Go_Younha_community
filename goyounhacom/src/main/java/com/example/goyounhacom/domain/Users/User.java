@@ -61,6 +61,10 @@ public class User extends BaseTimeEntity {
 
     }
 
+    public void setIs_holics(){
+        this.is_holics = true;
+        this.no_holics = this.getId();
+    }
 
     public String getRoleKey(){
         return this.role.getKey();

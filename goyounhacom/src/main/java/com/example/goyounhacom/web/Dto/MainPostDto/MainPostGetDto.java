@@ -24,6 +24,8 @@ public class MainPostGetDto {
 
     private User user;
 
+    private int viewcount;
+
     private List<MainPostComment> list;
 
     private Set<User> like;
@@ -35,6 +37,7 @@ public class MainPostGetDto {
         this.createdDate = entity.getCreatedDate();
         this.modifiedDate = entity.getModifiedDate();
         this.user = entity.getUser();
+        this.viewcount = entity.getViewcount();
         this.list = entity.getMainPostComents();
         this.like = entity.getLike();
     }

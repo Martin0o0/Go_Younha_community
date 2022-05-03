@@ -48,14 +48,22 @@ public class UserService {
     public Long updateUser(UserUpdateDto userUpdateDto, @AuthenticationPrincipal PrincipalDatails principalDatails){
         User user = userRepository.findByUsername(userUpdateDto.getUsername()).orElseThrow(() -> new IllegalArgumentException("해당하는 회원이 없음"));
         user.update(passwordEncoder.encode(userUpdateDto.getPassword()), userUpdateDto.getEmail(), userUpdateDto.getNickname());
-        principalDatails.setUser(user);
+        principalDatails.setUser(user); //세션유지를 위해 User정보를 의존성 주입으로 넣어준다.
         return user.getId();
     }
+
 
 
     @Transactional
     public List<UserGetDto> findByAll() { //전체조회
         return userRepository.findAll().stream().map(dto -> new UserGetDto(dto)).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public Long updateholics(Long id){
+        User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당하는 회원이 없음"));
+        user.setIs_holics();
+        return id;
     }
 
 
