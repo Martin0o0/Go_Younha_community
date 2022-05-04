@@ -49,12 +49,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/**").permitAll()
 //                .anyRequest().authenticated() //나머지의 요청에 대해서는 인증받은 사람만 접속 가능.
                 .and()
-                .csrf().ignoringAntMatchers("/h2/**", "/api/**")
+                .csrf().ignoringAntMatchers("/api/**")
                 .and()//h2에 대해서만 crsf 끄기.
-                .headers()
-                .addHeaderWriter(new StaticHeadersWriter("X-Content-Security-Policy", "script-src 'self'")) //header name 오류 방지.
-                .frameOptions().disable()
-                .and()
                 .formLogin()
                 .loginPage("/auth/login")
                 .loginProcessingUrl("/auth/login")
