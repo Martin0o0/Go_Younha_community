@@ -80,6 +80,7 @@
     <h2 class="text-center">[[${#lists.size(main_post.list)}]]개의 답변이 있음</h2>
     <hr>
     <div class="card my-3" th:each="commentlist : ${main_post.list}">
+        <a th:id="|comment_${commentlist.id}|"></a>
         <div class="card-header" th:if="${commentlist.user != null}" th:text="${commentlist.user.nickname}"></div>
         <div class="card-body">
             <div class="card-text" style="white-space: pre-line;">[[${commentlist.content}]]</div>
@@ -107,7 +108,7 @@
             </div>
             <div class="my-1">
                 <a href="#" class="btn btn-sm btn-outline-secondary" id="recommend"
-                   th:data-uri="@{|/mainpost/comment/like/${main_post.id}|}">
+                   th:data-uri="@{|/mainpost/comment/like/${commentlist.id}|}">
                     추천
                     <span class="badge rounded-pill bg-info" th:text="${#lists.size(commentlist.like)}"></span>
                 </a>

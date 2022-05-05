@@ -45,7 +45,7 @@ public class CommentPageController {
             return "MainPost_comment";
         }
         Long postid = commentService.saveComment(id, commentSaveDto.getContent(), user);
-        return "redirect:/mainpost/comment/"+ id;
+        return "redirect:/mainpost/comment/"+ id + "#comment_" + postid;
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -71,7 +71,7 @@ public class CommentPageController {
         }
         long savenum = commentService.modify(id, commentSaveDto.getContent());
         log.info("저장된 글 번호 : {}", savenum);
-        return "redirect:/mainpost/comment/" + Dto.getMainPost().getId();
+        return "redirect:/mainpost/comment/" + Dto.getMainPost().getId() + "#comment_" + savenum;
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -92,7 +92,7 @@ public class CommentPageController {
         User user = this.userService.getbyUsername(principal.getName());
         CommentGetDto commentGetDto = commentService.getComment(id);
         this.commentService.like(id, user);
-        return "redirect:/mainpost/comment/" + commentGetDto.getMainPost().getId();
+        return "redirect:/mainpost/comment/" + commentGetDto.getMainPost().getId() + "#comment_" + id;
     }
 
 
