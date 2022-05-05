@@ -3,10 +3,15 @@ package com.example.goyounhacom.Service;
 
 import com.example.goyounhacom.domain.HelloPosts.HelloPost;
 import com.example.goyounhacom.domain.HelloPosts.HelloPostRepository;
+import com.example.goyounhacom.domain.MainPosts.MainPost;
+import com.example.goyounhacom.domain.Users.User;
 import com.example.goyounhacom.web.Dto.HelloPostsDto.HelloPostsGetDto;
 import com.example.goyounhacom.web.Dto.HelloPostsDto.HelloPostsSaveDto;
 import com.example.goyounhacom.web.Dto.HelloPostsDto.HelloPostsUpdateDto;
+import com.example.goyounhacom.web.Dto.MainPostDto.MainPostGetDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -26,12 +31,24 @@ public class HelloPostsService {
     }
 
     @Transactional
+    public Long save(String title, String content, User user){
+       HelloPostsSaveDto helloPostsSaveDto = new HelloPostsSaveDto(title, content, user);
+       return helloPostRepository.save(helloPostsSaveDto.toEntity()).getId();
+    }
+
+    @Transactional
     public Long update(Long id, HelloPostsUpdateDto helloPostsUpdateDto){
         HelloPost posts = helloPostRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당하는 게시글이 없다. No : " + id));
-        posts.update(helloPostsUpdateDto.getTitle(), helloPostsUpdateDto.getContent(), helloPostsUpdateDto.getUsername());
+        posts.update(helloPostsUpdateDto.getTitle(), helloPostsUpdateDto.getContent());
         return id;
     }
 
+    @Transactional
+    public Long modify(Long id, String title, String content){
+        HelloPost post = helloPostRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당하는 게시글이 없다. No : " + id));
+        post.update(title, content);
+        return id;
+    }
 
     @Transactional
     public HelloPostsGetDto findbyid(Long No){
@@ -40,10 +57,16 @@ public class HelloPostsService {
         return new HelloPostsGetDto(entity);
     }
 
+//    @Transactional
+//    public List<HelloPostsGetDto> findbyuserid(String userid){
+//        List<HelloPostsGetDto> list = helloPostRepository.findByUsername(userid).stream().map(dto -> new HelloPostsGetDto(dto)).collect(Collectors.toList());
+//        return list;
+//    }
+
     @Transactional
-    public List<HelloPostsGetDto> findbyuserid(String userid){
-        List<HelloPostsGetDto> list = helloPostRepository.findByUsername(userid).stream().map(dto -> new HelloPostsGetDto(dto)).collect(Collectors.toList());
-        return list;
+    public HelloPostsGetDto getHelloPosts(Long id) {
+        HelloPost post= helloPostRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없다."));
+        return new HelloPostsGetDto(post);
     }
 
 
@@ -60,6 +83,13 @@ public class HelloPostsService {
     public List<HelloPostsGetDto> findByAll(){
         return  helloPostRepository.findAll().stream().map(dto -> new HelloPostsGetDto(dto)).collect(Collectors.toList());
     }
+
+    @org.springframework.transaction.annotation.Transactional(readOnly = true)
+    public Page<HelloPost> pageList(Pageable pageable){ //page<T>로 지정하면 바드시 파라미터로 pageable한것으로 해주어야 한다고 함.
+        Page<HelloPost> list = helloPostRepository.findAll(pageable);
+        return list;
+    }
+
 
 
 

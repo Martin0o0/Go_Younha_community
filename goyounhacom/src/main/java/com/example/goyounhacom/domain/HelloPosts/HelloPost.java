@@ -1,6 +1,7 @@
 package com.example.goyounhacom.domain.HelloPosts;
 
 
+import com.example.goyounhacom.domain.Users.User;
 import com.example.goyounhacom.domain.baseTimeEntity.BaseTimeEntity;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,23 +24,21 @@ public class HelloPost extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
-    @Column(nullable = false)
-    private String username;
 
-//    @Column(columnDefinition = "integer default 0", nullable = true)
-//    private Integer viewcount;
+    @ManyToOne //등업게시판은 오직 한명의 유저만이 작성할 수 있다.
+    private User user;
+
 
     @Builder
-    public HelloPost(String title, String content, String username){
+    public HelloPost(String title, String content, User user){
         this.title = title;
         this.content = content;
-        this.username = username;
+        this.user = user;
     }
 
-    public void update(String title, String content, String username){
+    public void update(String title, String content){
         this.title = title;
         this.content = content;
-        this.username = username;
     }
 
 

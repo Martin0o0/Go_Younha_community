@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>자유게시판</title>
+    <title>등업게시판</title>
 
     <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
 </head>
@@ -12,7 +12,7 @@
 <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/">자유게시판</a>
+            <a class="navbar-brand" href="/">등업게시판</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbar"
                     aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,6 +26,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{|/auth/sign-up|}">회원가입</a>
+                        <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{|/auth/update|}">회원정보 수정</a>
                     </li>
                 </ul>
             </div>
@@ -40,42 +41,40 @@
             <th scope="col">제목</th>
             <th scope="col">작성자</th>
             <th scope="col">작성일시</th>
-            <th scope="col">홀릭스인가?</th>
         </tr>
         </thead>
         <tbody>
-            <tr th:each="list, loop : ${main_post}" class="text-center">
-                <td th:text="${main_post.getTotalElements - (main_post.number * main_post.size) - loop.index}"></td>
-                <th class="text-start"><a th:href="@{|/mainpost/comment/${list.id}|}" th:text="${list.title}"></a><span class="mx-1 badge rounded-pill bg-primary" th:if="${#lists.size(list.mainPostComents) > 0}">[[${#lists.size(list.mainPostComents)}]] </span></td>
-                <td th:if="${list.user != null}" th:text="${list.user.nickname}"></td>
-                <td th:text="${#temporals.format(list.createdDate, 'yyyy-MM-dd HH:mm')}"></td>
-                <td th:text="${list.user.is_holics}"></td>
-            </tr>
+        <tr th:each="list, loop : ${hello_post}" class="text-center">
+            <td th:text="${hello_post.getTotalElements - (hello_post.number * hello_post.size) - loop.index}"></td>
+            <th class="text-start"><a th:href="@{|/hellopost/application/${list.id}|}" th:text="${list.title}"></a></td>
+            <td th:if="${list.user != null}" th:text="${list.user.nickname}"></td>
+            <td th:text="${#temporals.format(list.createdDate, 'yyyy-MM-dd HH:mm')}"></td>
+        </tr>
         </tbody>
     </table>
 
     <div class="mt-1 mb-auto d-grid gap-1">
-        <a href="/mainpost/save"  th:classappend="${!(userinfo.getIs_holics())} ? 'disabled'" class="btn btn-outline-primary" id="button_save">게시글등록</a>
+        <a href="/hellopost/save" class="btn btn-outline-primary" id="button_save">게시글등록</a>
     </div>
 </div>
 
 <div class="container">
-    <div th:if="${!main_post.isEmpty()}">
+    <div th:if="${!hello_post.isEmpty()}">
         <ul class="pagination justify-content-center">
-            <li class="page-item" th:classappend="${!main_post.hasPrevious} ? 'disabled'">
+            <li class="page-item" th:classappend="${!hello_post.hasPrevious} ? 'disabled'">
                 <a class="page-link"
-                   th:href="@{|?page=${main_post.number-1}|}">
+                   th:href="@{|?page=${hello_post.number-1}|}">
                     <span>이전</span>
                 </a>
             </li>
-            <li th:each="page: ${#numbers.sequence(0, main_post.totalPages-1)}"
-                th:if="${page >= main_post.number - 5 and page <= main_post.number + 5}"
-                th:classappend="${page == main_post.number} ? 'active'"
+            <li th:each="page: ${#numbers.sequence(0, hello_post.totalPages-1)}"
+                th:if="${page >= hello_post.number - 5 and page <= hello_post.number + 5}"
+                th:classappend="${page == hello_post.number} ? 'active'"
                 class="page-item">
                 <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}"></a>
             </li>
-            <li class="page-item" th:classappend="${!main_post.hasNext} ? 'disabled'">
-                <a class="page-link" th:href="@{|?page=${main_post.number+1}|}">
+            <li class="page-item" th:classappend="${!hello_post.hasNext} ? 'disabled'">
+                <a class="page-link" th:href="@{|?page=${hello_post.number+1}|}">
                     <span>다음</span>
                 </a>
             </li>

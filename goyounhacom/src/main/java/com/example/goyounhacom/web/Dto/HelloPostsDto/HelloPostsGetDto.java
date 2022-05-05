@@ -1,6 +1,7 @@
 package com.example.goyounhacom.web.Dto.HelloPostsDto;
 
 import com.example.goyounhacom.domain.HelloPosts.HelloPost;
+import com.example.goyounhacom.domain.Users.User;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -14,7 +15,7 @@ public class HelloPostsGetDto {
 
     private String content;
 
-    private String username;
+    private User user;
 
     private LocalDateTime createdDate;
 
@@ -25,7 +26,7 @@ public class HelloPostsGetDto {
         this.id = entity.getId();
         this.title = entity.getTitle();
         this.content = entity.getContent();
-        this.username = entity.getUsername();
+        this.user = entity.getUser();
         this.createdDate = entity.getCreatedDate();
         this.modifiedDate = entity.getModifiedDate();
     }

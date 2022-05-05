@@ -77,6 +77,7 @@ public class MainPostPageController {
 
     }
 
+
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/put/{id}")
     public String mainpostput(@PathVariable Long id, Principal principal, MainPostSaveDto mainPostSaveDto){
