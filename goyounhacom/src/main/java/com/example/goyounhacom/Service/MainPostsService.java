@@ -81,5 +81,11 @@ public class MainPostsService {
         mainPostRepository.updateviewcount(id);
     }
 
+    @Transactional
+    public Page<MainPost> search(String title, String content, Pageable pageable){
+        Page<MainPost> list = mainPostRepository.findByTitleContainingOrContentContaining(title, content, pageable);
+        return list;
+    }
+
 
 }

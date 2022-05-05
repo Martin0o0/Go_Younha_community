@@ -39,11 +39,12 @@ public class MainPostPageController {
     private final PrincipalDetailService principalDetailService;
 
     @GetMapping("/mainlist")
-    public String mainpost(@AuthenticationPrincipal PrincipalDatails principalDatails, Model model, @PageableDefault(sort="id", direction = Sort.Direction.DESC, size = 5) Pageable pageable){
-        Page<MainPost> list = mainPostsService.pageList(pageable); //읽기전용으로.
+    public String mainpost(@AuthenticationPrincipal PrincipalDatails principalDatails, Model model, @PageableDefault(sort="id", direction = Sort.Direction.DESC, size = 5) Pageable pageable, @RequestParam(required = false, defaultValue = "") String search){
+        Page<MainPost> list = mainPostsService.search(search, search, pageable); //읽기전용으로.
         User user = userService.getbyUsername(principalDatails.getUsername());
         model.addAttribute("main_post", list);
         model.addAttribute("userinfo", user);
+        model.addAttribute("search", search);
         return "MainPost";
     }
 

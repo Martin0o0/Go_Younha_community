@@ -33,6 +33,19 @@
     </nav>
 </header>
 <div class="container my-4">
+    <form th:action="@{/mainpost/mainlist}" method="GET">
+        <div class="input-group my-3">
+                    <span class="input-group-text"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                         fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                      </svg>
+                      </span>
+            <input type="text" name="key" id="search_value" class="form-control"
+                   placeholder="제목" th:value="${search}">
+            <span class="input-group-btn"><button class="btn btn-outline-success"
+                                                  type="submit" id="btn_search">검색 </button> </span>
+        </div>
+    </form>
     <table class="table">
         <thead>
         <tr class="text-center">
@@ -64,7 +77,7 @@
         <ul class="pagination justify-content-center">
             <li class="page-item" th:classappend="${!main_post.hasPrevious} ? 'disabled'">
                 <a class="page-link"
-                   th:href="@{|?page=${main_post.number-1}|}">
+                   th:data-page="${main_post.number-1}">
                     <span>이전</span>
                 </a>
             </li>
@@ -72,16 +85,21 @@
                 th:if="${page >= main_post.number - 5 and page <= main_post.number + 5}"
                 th:classappend="${page == main_post.number} ? 'active'"
                 class="page-item">
-                <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}"></a>
+                <a th:text="${page}" class="page-link" th:data-url="${page}"></a>
             </li>
             <li class="page-item" th:classappend="${!main_post.hasNext} ? 'disabled'">
-                <a class="page-link" th:href="@{|?page=${main_post.number+1}|}">
+                <a class="page-link" th:data-page="${main_post.number+1}">
                     <span>다음</span>
                 </a>
             </li>
         </ul>
     </div>
+    <form th:action="@{/mainpost/mainlist}" method="get" id="searchForm">
+        <input type="hidden" id="search" name="search" th:value="${search}">
+        <input type="hidden" id="page" name="page" th:value="${main_post.number}">
+    </form>
 </div>
+<script th:src="@{/js/mainpost.js}"></script>
 <script th:src="@{/js/bootstrap.js}"></script>
 </body>
 </html>
