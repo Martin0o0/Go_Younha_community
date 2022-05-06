@@ -63,6 +63,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //세션 상태 유지 안함
 
 
+        http.rememberMe().tokenValiditySeconds(60 * 60 * 7).userDetailsService(principalDetailService); //유저 쿠키 유지.
+
+
         http.addFilterAfter(jsonUsernamePasswordLoginFilter(), LogoutFilter.class); //필터링 후 추가.
 
     }
