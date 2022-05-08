@@ -39,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/h2-console/**");
+        web.ignoring().antMatchers("/css/**", "/image/**", "/js/**");
     }
 
     @Override
@@ -47,7 +47,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 // URL별 권한 관리를 설정하는 옵션의 시작점
                 .antMatchers("/**").permitAll()
-//                .anyRequest().authenticated() //나머지의 요청에 대해서는 인증받은 사람만 접속 가능.
+                .anyRequest().authenticated()
+                    // 나머지의 요청에 대해서는 인증받은 사람만 접속 가능.
                 .and()
                 .csrf().ignoringAntMatchers("/api/**")
                 .and()//h2에 대해서만 crsf 끄기.
