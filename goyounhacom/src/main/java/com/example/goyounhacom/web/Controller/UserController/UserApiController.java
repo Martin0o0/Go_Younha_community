@@ -55,6 +55,11 @@ public class UserApiController {
         return "홀릭스 등업 회원 번호 : " + userService.updateholics(id);
     }
 
+    @PutMapping("/updateAdmin/{username}")
+    public void updateAdmin(@PathVariable String username){
+        userService.updateAdmin(username);
+    }
+
 
     @GetMapping("/get")
     public List<UserGetDto> findbyall() {

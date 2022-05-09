@@ -66,6 +66,11 @@ public class UserService {
         return id;
     }
 
+    @Transactional
+    public void updateAdmin(String username){
+        User entity = userRepository.findByUsername(username).orElseThrow(() -> new IllegalArgumentException("해당하는 유저 아이디는 없습니다. " + username));
+        entity.setRoleAdmin();
+    }
 
     @Transactional
     public UserGetDto findbyid(Long No) { //회원번호로 조회
@@ -92,6 +97,7 @@ public class UserService {
         userRepository.delete(user);
         return "회원번호" + No + "는 삭제되었습니다.";
     }
+
 
 
 
