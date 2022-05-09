@@ -1,23 +1,36 @@
 package com.example.goyounhacom.web.Controller.Admin;
 
 
+import com.example.goyounhacom.Service.UserService;
+import com.example.goyounhacom.web.Dto.UserDto.UserGetDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.RedirectView;
+
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/admin")
 public class AdminPageController {
+    private final UserService userService;
 
-    @GetMapping("/")
-    public RedirectView viewAdmin(Model model){
-        return new RedirectView("admin/admin");
+
+    @GetMapping("/login")
+    public String login(){
+        return "log-in-form";
+    }
+
+    @GetMapping()
+    public String viewAdmin(Model model){
+        return "admin/Admin";
     }
 
     @GetMapping("/postlist")
@@ -28,7 +41,22 @@ public class AdminPageController {
 
     @GetMapping("/users")
     public String viewaccount(Model model){
-        model.addAttribute("users", "admin/users");
-        return "admin/usersindex";
+        List<UserGetDto> list = userService.findByAll();
+        model.addAttribute("userGetDto", list);
+        return "admin/adminusersindex";
     }
+
+    @GetMapping("/userinfo/{id}")
+    public String moreinfouser(@PathVariable Long id, Model model){
+        UserGetDto userGetDto = userService.findbyid(id);
+        model.addAttribute("user", userGetDto);
+        return "admin/User-info";
+    }
+
+    @DeleteMapping("/delete/user/{id}")
+    public String deletebyid(@PathVariable Long id) {
+        log.info("{}", userService.deletebyid(id));
+        return "rediect:/admin/users";
+    }
+
 }

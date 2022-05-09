@@ -4,6 +4,8 @@ import com.example.goyounhacom.domain.Users.Role;
 import com.example.goyounhacom.domain.Users.User;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 
 @Getter
 public class UserGetDto {
@@ -16,6 +18,7 @@ public class UserGetDto {
     private Boolean is_holics;
     private Long no_holics;
     private Role role;
+    private LocalDateTime createdDate;
 
     public UserGetDto(User entity){
         this.id = entity.getId();
@@ -26,5 +29,6 @@ public class UserGetDto {
         this.is_holics = entity.getIs_holics();
         this.no_holics = entity.getNo_holics();
         this.role = entity.getRole();
+        this.createdDate = entity.getCreatedDate();
     }
 }
