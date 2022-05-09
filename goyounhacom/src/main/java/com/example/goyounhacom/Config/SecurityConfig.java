@@ -47,6 +47,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 // URL별 권한 관리를 설정하는 옵션의 시작점
                 .antMatchers("/**").permitAll()
+                .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                     // 나머지의 요청에 대해서는 인증받은 사람만 접속 가능.
                 .and()

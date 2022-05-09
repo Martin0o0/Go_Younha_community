@@ -64,7 +64,7 @@
     </table>
 
     <div class="mt-1 mb-auto d-grid gap-1">
-        <a href="/mainpost/save"  th:classappend="${!(userinfo.getIs_holics())} ? 'disabled'" class="btn btn-outline-primary" id="button_save">게시글등록</a>
+        <a href="/mainpost/save"  sec:authorize="isAuthenticated()" th:classappend="${!(userinfo.getIs_holics())} ? 'disabled'" class="btn btn-outline-primary" id="button_save">게시글등록</a>
     </div>
 </div>
 

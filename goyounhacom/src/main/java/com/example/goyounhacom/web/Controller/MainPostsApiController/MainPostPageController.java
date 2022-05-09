@@ -28,6 +28,7 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Optional;
+import java.util.OptionalInt;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -41,9 +42,11 @@ public class MainPostPageController {
     @GetMapping("/mainlist")
     public String mainpost(@AuthenticationPrincipal PrincipalDatails principalDatails, Model model, @PageableDefault(sort="id", direction = Sort.Direction.DESC, size = 5) Pageable pageable, @RequestParam(required = false, defaultValue = "") String search){
         Page<MainPost> list = mainPostsService.search(search, search, pageable); //읽기전용으로.
-        User user = userService.getbyUsername(principalDatails.getUsername());
+        if(principalDatails != null){
+            User user = userService.getbyUsername(principalDatails.getUsername());
+            model.addAttribute("userinfo", user);
+        }
         model.addAttribute("main_post", list);
-        model.addAttribute("userinfo", user);
         model.addAttribute("search", search);
         return "MainPost";
     }
