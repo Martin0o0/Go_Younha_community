@@ -23,11 +23,6 @@ public class AdminPageController {
     private final UserService userService;
 
 
-    @GetMapping("/login")
-    public String login(){
-        return "log-in-form";
-    }
-
     @GetMapping()
     public String viewAdmin(Model model){
         return "admin/Admin";
@@ -57,6 +52,19 @@ public class AdminPageController {
     public String deletebyid(@PathVariable Long id) {
         log.info("{}", userService.deletebyid(id));
         return "rediect:/admin/users";
+    }
+
+    @GetMapping("/updateholics/{id}")
+    public String updateholics(@PathVariable Long id){
+        log.info("등업된 회원번호 : {} ", userService.updateholics(id));
+        return "redirect:/admin/userinfo/" + id;
+    }
+
+    @GetMapping("/updateAdmin/{username}")
+    public String updateAdmin(@PathVariable String username){
+        long id = userService.updateAdmin(username);
+        log.info("등업된 회원번호 : {} ", id);
+        return "redirect:/admin/userinfo/" + id;
     }
 
 }

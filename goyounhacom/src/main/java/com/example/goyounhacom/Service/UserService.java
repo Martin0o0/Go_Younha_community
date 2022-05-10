@@ -67,9 +67,10 @@ public class UserService {
     }
 
     @Transactional
-    public void updateAdmin(String username){
+    public Long updateAdmin(String username){
         User entity = userRepository.findByUsername(username).orElseThrow(() -> new IllegalArgumentException("해당하는 유저 아이디는 없습니다. " + username));
         entity.setRoleAdmin();
+        return entity.getId();
     }
 
     @Transactional

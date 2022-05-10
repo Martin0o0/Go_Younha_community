@@ -53,12 +53,13 @@
             <label for="nickname" class="form-label">닉네임</label>
             <input type="text" id="nickname" th:value="${user.nickname}" class="form-control" readonly>
         </div>
-        <a th:href="@{|/api/auth/user/updateholics/${user.id}|}" class="btn btn-info my-2">홀릭스로 등업</a>
-        <a th:href="@{|/api/auth/user/updateAdmin/${user.username}|}" class="btn btn-primary">관리자로 승격</a>
-        <a th:href="@{|/admin/delete/user/${user.id}|}" class="btn btn-primary">계정 삭제</a>
+        <a href="#" th:data-uri="@{|/admin/updateholics/${user.id}|}" id="updateholics" class="btn btn-info my-2">홀릭스로 등업</a>
+        <a href="#" th:data-uri="@{|/admin/updateAdmin/${user.username}|}" id="updateadmin" class="btn btn-primary">관리자로 승격</a>
+        <a th:href="@{|/admin/delete/user/${user.id}|}" class="btn btn-danger">계정 삭제</a>
     </form>
 </div>
 </div>
+<script th:src="@{/js/user-info.js}"></script>
 <script th:src="@{/js/bootstrap.js}"></script>
 </body>
 </html>

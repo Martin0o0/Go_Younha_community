@@ -50,12 +50,12 @@ public class UserApiController {
     }
 
 
-    @PutMapping("/updateholics/{id}")
+    @GetMapping("/updateholics/{id}")
     public String updateholics(@PathVariable Long id){
         return "홀릭스 등업 회원 번호 : " + userService.updateholics(id);
     }
 
-    @PutMapping("/updateAdmin/{username}")
+    @GetMapping("/updateAdmin/{username}")
     public void updateAdmin(@PathVariable String username){
         userService.updateAdmin(username);
     }
