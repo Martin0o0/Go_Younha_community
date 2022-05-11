@@ -4,6 +4,7 @@ import com.example.goyounhacom.domain.HelloPosts.HelloPost;
 import com.example.goyounhacom.domain.MainPosts.MainPost;
 import com.example.goyounhacom.domain.MainPosts.MainPostComment;
 import com.example.goyounhacom.domain.Users.User;
+import com.example.goyounhacom.web.Dto.MainPostDto.FileDto.MainPostFileDto;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -22,6 +23,8 @@ public class MainPostGetDto {
 
     private LocalDateTime modifiedDate;
 
+    private Long fileId;
+
     private User user;
 
     private int viewcount;
@@ -30,15 +33,18 @@ public class MainPostGetDto {
 
     private Set<User> like;
 
+
     public MainPostGetDto(MainPost entity) {
         this.id = entity.getId();
         this.title = entity.getTitle();
         this.content = entity.getContent();
         this.createdDate = entity.getCreatedDate();
         this.modifiedDate = entity.getModifiedDate();
+        this.fileId = entity.getFileId();
         this.user = entity.getUser();
         this.viewcount = entity.getViewcount();
         this.list = entity.getMainPostComents();
         this.like = entity.getLike();
+
     }
 }

@@ -41,6 +41,10 @@
         <div class="card-header" th:if="${main_post.user != null}" th:text="${main_post.user.nickname}"></div>
         <div class="card-body">
             <h6 class="card-text">[[${main_post.content}]]</h6>
+            <div th:if="${main_post.fileId != null}">
+                <strong>첨부파일 : </strong>
+                <a class="card-text" th:href="@{'/mainpost/download/' + ${main_post.fileId}}" th:text="${filename}"></a>
+            </div>
             <div class="d-flex justify-content-end">
                 <div th:if="${main_post.modifiedDate != null}" class="badge bg-light text-dark p-2 text-center mx-2 my-auto">
                     <p>modified at</p>

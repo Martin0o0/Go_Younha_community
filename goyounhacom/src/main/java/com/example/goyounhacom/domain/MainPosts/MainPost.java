@@ -1,8 +1,8 @@
 package com.example.goyounhacom.domain.MainPosts;
 
+import com.example.goyounhacom.domain.Photo.Photo;
 import com.example.goyounhacom.domain.Users.User;
 import com.example.goyounhacom.domain.baseTimeEntity.BaseTimeEntity;
-import com.example.goyounhacom.web.Dto.UserDto.UserGetDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +26,10 @@ public class MainPost extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
+    @Column(nullable = true)
+    private Long fileId; //파일번호.
+
+
     @ManyToOne //여러개의 글이 한명의 작성자로 부터 생성 될 수 있기 때문에.
     private User user;
 
@@ -34,13 +38,17 @@ public class MainPost extends BaseTimeEntity {
     @OneToMany(mappedBy = "mainPost", cascade = CascadeType.REMOVE) //mappedby => 참조엔티티 속성명, cascade => 게시글 삭제하면 그 예하 묶인 놈들 싸그리 삭제함.
     private List<MainPostComment> mainPostComents; //1:N방식이니까. 부모엔티티가 자식엔티티를 여러개 가질 수 있어
 
+
+
+
     @ManyToMany //대등관계
     private Set<User> like;
 
     @Builder
-    public MainPost(String title, String content, User user){
+    public MainPost(String title, String content, Long fileId,  User user){
         this.title = title;
         this.content = content;
+        this.fileId = fileId;
         this.user = user;
     }
 
@@ -48,4 +56,6 @@ public class MainPost extends BaseTimeEntity {
         this.title = title;
         this.content = content;
     }
+
+
 }

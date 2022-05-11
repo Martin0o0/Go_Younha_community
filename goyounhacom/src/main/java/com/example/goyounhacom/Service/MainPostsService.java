@@ -39,12 +39,13 @@ public class MainPostsService {
     @Transactional
     public MainPostGetDto getMainpost(Long id) {
         MainPost posts = mainPostRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없다."));
+
         return new MainPostGetDto(posts);
     }
 
     @Transactional
-    public Long save(String title, String content, User user) {
-        MainPostSaveDto mainPostSaveDto = new MainPostSaveDto(title, content, user);
+    public Long save(String title, String content, Long fileId, User user) {
+        MainPostSaveDto mainPostSaveDto = new MainPostSaveDto(title, content, fileId ,user);
         return mainPostRepository.save(mainPostSaveDto.toEntity()).getId();
         //반환값은 HelloPost가 된다. getId를 통해 등록된 글 번호를 가져오자.
     }

@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -23,19 +24,24 @@ public class MainPostSaveDto {
     @Size(max=400, message = "400자 이내로 적어주세요.")
     private String content;
 
+//    private MultipartFile uploadfile;
+    private Long fileId;
     private User user;
 
     @Builder
-    public MainPostSaveDto(String title, String content, User user){
+    public MainPostSaveDto(String title, String content,Long fileId, User user){
         this.title = title;
         this.content = content;
+        this.fileId = fileId;
         this.user = user;
+
     }
 
     public MainPost toEntity(){
         return MainPost.builder()
                 .title(title)
                 .content(content)
+                .fileId(fileId)
                 .user(user)
                 .build();
     }
