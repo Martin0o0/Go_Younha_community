@@ -48,11 +48,11 @@ public class AdminPageController {
         return "admin/User-info";
     }
 
-    @DeleteMapping("/delete/user/{id}")
-    public String deletebyid(@PathVariable Long id) {
-        log.info("{}", userService.deletebyid(id));
-        return "rediect:/admin/users";
-    }
+//    @DeleteMapping("/delete/user/{id}")
+//    public String deletebyid(@PathVariable Long id) {
+//        log.info("{}", userService.deletebyid(id));
+//        return "rediect:/admin/users";
+//    }
 
     @GetMapping("/updateholics/{id}")
     public String updateholics(@PathVariable Long id){
@@ -66,5 +66,12 @@ public class AdminPageController {
         log.info("등업된 회원번호 : {} ", id);
         return "redirect:/admin/userinfo/" + id;
     }
+
+    @GetMapping("/deleteuser/{userid}")
+    public String deleteuser(@PathVariable Long userid){
+        userService.deletebyid(userid);
+        return "redirect:/admin/users";
+    }
+
 
 }

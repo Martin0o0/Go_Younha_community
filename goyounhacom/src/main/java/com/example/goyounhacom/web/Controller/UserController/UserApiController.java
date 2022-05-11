@@ -2,6 +2,7 @@ package com.example.goyounhacom.web.Controller.UserController;
 
 
 import com.example.goyounhacom.Service.UserService;
+import com.example.goyounhacom.domain.Users.User;
 import com.example.goyounhacom.domain.Users.UserRepository;
 import com.example.goyounhacom.web.Dto.HelloPostsDto.HelloPostsSaveDto;
 import com.example.goyounhacom.web.Dto.UserDto.UserGetDto;
@@ -61,6 +62,8 @@ public class UserApiController {
     }
 
 
+
+
     @GetMapping("/get")
     public List<UserGetDto> findbyall() {
         return userService.findByAll();
@@ -76,10 +79,14 @@ public class UserApiController {
         return userService.findbyusername(userid);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public String deletebyid(@PathVariable Long id) {
-        return userService.deletebyid(id);
-    }
+//    @DeleteMapping("/delete/{id}")
+//    public String deletebyid(@PathVariable Long id) {
+//        return userService.deletebyid(id);
+//    }
+//
+
+
+
 
 
 }

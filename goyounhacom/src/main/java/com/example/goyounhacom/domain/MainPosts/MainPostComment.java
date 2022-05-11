@@ -27,11 +27,11 @@ public class MainPostComment extends BaseTimeEntity {
 
     @ManyToOne
 //    @JoinColumn(name = "mainpost_id")
-    @JsonBackReference
+    @JsonBackReference //순환참조 방지.
     private MainPost mainPost; //자식이니까 N:1방식이다.
 
     @ManyToMany //마찬가지로 대등관계이므로
-    Set<User> like;
+    private Set<User> like;
 
 
     @Builder
@@ -39,6 +39,17 @@ public class MainPostComment extends BaseTimeEntity {
         this.content = content;
         this.user = user;
         this.mainPost = mainPost;
+    }
+
+    @Override
+    public String toString() {
+        return "MainPostComment{" +
+                "id=" + id +
+                ", content='" + content + '\'' +
+                ", user=" + user +
+                ", mainPost=" + mainPost +
+                ", like=" + like +
+                '}';
     }
 
     public void update(String content){

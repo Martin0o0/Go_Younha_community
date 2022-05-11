@@ -11,3 +11,12 @@ updateadmin.addEventListener('click', function (event) {
         location.href = this.dataset.uri;
     }
 });
+
+
+const deleteuser = document.querySelector("#deleteuser");
+deleteuser.addEventListener('click', function (event) {
+    if(window.confirm("계정을 소멸합니까?")){
+        location.href = this.dataset.uri;
+
+    }
+});

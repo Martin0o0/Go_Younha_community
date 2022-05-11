@@ -2,6 +2,11 @@ package com.example.goyounhacom.Service;
 
 import com.example.goyounhacom.Config.PrincipalDatails;
 import com.example.goyounhacom.domain.HelloPosts.HelloPost;
+import com.example.goyounhacom.domain.HelloPosts.HelloPostRepository;
+import com.example.goyounhacom.domain.MainPosts.MainPost;
+import com.example.goyounhacom.domain.MainPosts.MainPostComment;
+import com.example.goyounhacom.domain.MainPosts.MainPostCommentRepository;
+import com.example.goyounhacom.domain.MainPosts.MainPostRepository;
 import com.example.goyounhacom.domain.Users.User;
 import com.example.goyounhacom.domain.Users.UserRepository;
 import com.example.goyounhacom.web.Dto.HelloPostsDto.HelloPostsGetDto;
@@ -9,6 +14,7 @@ import com.example.goyounhacom.web.Dto.UserDto.UserGetDto;
 import com.example.goyounhacom.web.Dto.UserDto.UserSaveDto;
 import com.example.goyounhacom.web.Dto.UserDto.UserUpdateDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,12 +24,19 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final MainPostRepository mainPostRepository;
+    private final MainPostCommentRepository mainPostCommentRepository;
+    private final HelloPostRepository helloPostRepository;
+    private final CommentService commentService;
+    private final HelloPostsService helloPostsService;
+    private final MainPostsService mainPostsService;
 
     @Transactional
     public Long save(UserSaveDto userSaveDto) {
@@ -93,11 +106,34 @@ public class UserService {
     }
 
     @Transactional
-    public String deletebyid(Long No) { //회원번호로 삭제
+    public void deletebyid(Long No) { //회원번호로 삭제
         User user = userRepository.findById(No).orElseThrow(() -> new IllegalArgumentException("해당하는 회원번호가 없다. 삭제할 수 없음."));
-        userRepository.delete(user);
-        return "회원번호" + No + "는 삭제되었습니다.";
+        //log.info("boolean ? {}", mainPostCommentRepository.existsByUser(user));
+        if(mainPostCommentRepository.existsByUser(user)){ //이친구가 쓴 댓글부터 지우고
+            List<MainPostComment> list = mainPostCommentRepository.findByUser(user);
+            for(int i = 0; i < list.size(); i++){
+                commentService.delete(list.get(i).getId());
+//                log.info("댓글 리스트 : {}", list.get(i).toString());
+            }
+        }
+
+        if(helloPostRepository.existsByUser(user)){ //등업 게시판 지우고.
+            HelloPost helloPost = helloPostRepository.findByUser(user);
+            helloPostsService.deletebyid(helloPost.getId());
+        }
+
+        if(mainPostRepository.existsById(user.getId())){ //자유게시글 지우고
+            List<MainPost> list = mainPostRepository.findByUser(user);
+            for(int i = 0; i < list.size(); i++){
+                mainPostsService.delete(list.get(i).getId());
+            }
+        }
+
+      userRepository.delete(user);
     }
+
+
+
 
 
 

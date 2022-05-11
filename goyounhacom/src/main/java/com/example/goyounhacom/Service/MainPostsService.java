@@ -57,6 +57,13 @@ public class MainPostsService {
     }
 
     @Transactional
+    public void deleteLike(Long id, User user){ //좋아요 삭제.
+        MainPost mainpost = mainPostRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없다."));
+        mainpost.getLike().remove(user);
+        this.mainPostRepository.save(mainpost);
+    }
+
+    @Transactional
     public Long modify(Long id, String title, String content) {
         MainPost post = mainPostRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당하는 게시글이 없다. No : " + id));
         post.update(title, content);
@@ -86,6 +93,4 @@ public class MainPostsService {
         Page<MainPost> list = mainPostRepository.findByTitleContainingOrContentContaining(title, content, pageable);
         return list;
     }
-
-
 }

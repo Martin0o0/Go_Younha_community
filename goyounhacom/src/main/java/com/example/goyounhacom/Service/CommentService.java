@@ -62,5 +62,12 @@ public class CommentService {
         this.mainPostCommentRepository.save(mainPostComment);
     }
 
+    @Transactional
+    void deleteLike(Long id, User user){ //좋아요 삭제.
+        MainPostComment mainPost = mainPostCommentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없다."));
+        mainPost.getLike().remove(user);
+        this.mainPostCommentRepository.save(mainPost);
+    }
+
 
 }

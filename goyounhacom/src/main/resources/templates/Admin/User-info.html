@@ -55,7 +55,7 @@
         </div>
         <a href="#" th:data-uri="@{|/admin/updateholics/${user.id}|}" id="updateholics" class="btn btn-info my-2">홀릭스로 등업</a>
         <a href="#" th:data-uri="@{|/admin/updateAdmin/${user.username}|}" id="updateadmin" class="btn btn-primary">관리자로 승격</a>
-        <a th:href="@{|/admin/delete/user/${user.id}|}" class="btn btn-danger">계정 삭제</a>
+        <a href="#" th:data-uri="@{|/admin/deleteuser/${user.id}|}" id="deleteuser" class="btn btn-danger">계정 삭제</a>
     </form>
 </div>
 </div>
