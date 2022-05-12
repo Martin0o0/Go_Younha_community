@@ -28,10 +28,13 @@
             <label for="file" class="form-label">업로드할 파일</label>
             <input type="file" id="file" name="file" class="form-control">
         </div>
+        <div id="uploadResult">
+            <img th:src="@{/image/DSC06223.jpg}" class="img-fluid" alt="...">
+        </div>
         <input type="submit" value="저장하기" class="btn btn-primary my-2">
     </form>
 
 </div>
+<script th:src="@{/js/mainpost-save.js}"></script>
 <script th:src="@{/js/bootstrap.js}"></script>
 </body>
-</html>

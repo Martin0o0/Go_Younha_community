@@ -6,13 +6,11 @@ import com.example.goyounhacom.Service.MainPostsService;
 import com.example.goyounhacom.Service.PrincipalDetailService;
 import com.example.goyounhacom.Service.UserService;
 import com.example.goyounhacom.domain.MainPosts.MainPost;
-import com.example.goyounhacom.domain.Photo.MD5Generator;
 import com.example.goyounhacom.domain.Users.User;
 import com.example.goyounhacom.web.Dto.MainPostDto.CommentDto.CommentSaveDto;
 import com.example.goyounhacom.web.Dto.MainPostDto.FileDto.MainPostFileDto;
 import com.example.goyounhacom.web.Dto.MainPostDto.MainPostGetDto;
 import com.example.goyounhacom.web.Dto.MainPostDto.MainPostSaveDto;
-import com.example.goyounhacom.web.Dto.UserDto.UserGetDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.InputStreamResource;
@@ -41,9 +39,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.Principal;
-import java.util.List;
-import java.util.Optional;
-import java.util.OptionalInt;
+import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -88,7 +84,7 @@ public class MainPostPageController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/save")
     public String mainpostsave(@RequestParam("file") MultipartFile files,@Valid MainPostSaveDto mainPostSaveDto, BindingResult bindingResult, Principal principal) { //BindingResult 매개변수는 @Valid 애너테이션으로 인해 검증이 수행된 결과를 의미하는 객체이다.
-
+        log.info("파일 형식 : {}", files.getContentType());
         User user = userService.getbyUsername(principal.getName());
         if (bindingResult.hasErrors()) {
             return "MainPost_save";
@@ -97,7 +93,8 @@ public class MainPostPageController {
         try {
             String originalFileName = files.getOriginalFilename();
             log.info("파일 이름 : {}", originalFileName);
-            String filename = new MD5Generator(originalFileName).toString();
+            UUID uuid = UUID.randomUUID();
+            String filename = uuid.toString() + "_" + originalFileName; //파일 이름 중복 방지.
             log.info("변조된 파일 이름 : {} ", filename);
             String savePath = System.getProperty("user.dir") + "/files";
             if (!new File(savePath).exists()) {
@@ -116,6 +113,7 @@ public class MainPostPageController {
             fileDto.setOriginalFilename(originalFileName);
             fileDto.setFilename(filename);
             fileDto.setFilePath(filePath);
+            fileDto.setFiletype(files.getContentType());
             log.info(fileDto.toString());
             Long fileId = fileService.saveFile(fileDto);
             mainPostSaveDto.setFileId(fileId);
@@ -135,10 +133,25 @@ public class MainPostPageController {
         Path path = Paths.get(fileDto.getFilePath());
         Resource resource = new InputStreamResource(Files.newInputStream(path));
         return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType("application/octet-stream"))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileDto.getOriginalFilename() + "\"")
-                .body(resource);
+                .body(resource); //inline = 이미지 표출, attachment = 이미지 저장.
     }
+
+    @GetMapping("/display/{fileId}")
+    public ResponseEntity<Resource> fileDisplay(@PathVariable Long fileId) throws IOException{
+        MainPostFileDto fileDto = fileService.getFile(fileId);
+        Path path = Paths.get(fileDto.getFilePath());
+        log.info("{}", path);
+        log.info("{}", path.toString());
+        Resource resource = new InputStreamResource(Files.newInputStream(path));
+        return ResponseEntity.ok()
+                .header("Content-type" , Files.probeContentType(path))
+                .body(resource); //표출해라.
+
+    }
+
+
+
 
 
     @PreAuthorize("isAuthenticated()")
@@ -176,6 +189,7 @@ public class MainPostPageController {
         if (Dto.getUser().getUsername().equals(principal.getName()) == false) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없음");
         }
+
         long deletenum = mainPostsService.delete(id);
         log.info("삭제된 글 번호 : {}", deletenum);
         return "redirect:/";

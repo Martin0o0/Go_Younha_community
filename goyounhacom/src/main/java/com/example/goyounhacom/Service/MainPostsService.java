@@ -4,6 +4,7 @@ package com.example.goyounhacom.Service;
 import com.example.goyounhacom.domain.HelloPosts.HelloPost;
 import com.example.goyounhacom.domain.MainPosts.MainPost;
 import com.example.goyounhacom.domain.MainPosts.MainPostRepository;
+import com.example.goyounhacom.domain.Photo.PhotoRepository;
 import com.example.goyounhacom.domain.Users.User;
 import com.example.goyounhacom.web.Dto.HelloPostsDto.HelloPostsGetDto;
 import com.example.goyounhacom.web.Dto.HelloPostsDto.HelloPostsSaveDto;
@@ -11,6 +12,7 @@ import com.example.goyounhacom.web.Dto.MainPostDto.MainPostGetDto;
 import com.example.goyounhacom.web.Dto.MainPostDto.MainPostSaveDto;
 import com.example.goyounhacom.web.Dto.UserDto.UserGetDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,10 +21,13 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class MainPostsService {
     private final MainPostRepository mainPostRepository;
+    private final PhotoRepository photoRepository;
+    private final FileService fileService;
 
     @Transactional
     public Long save(MainPostSaveDto mainPostSaveDto) {
@@ -80,6 +85,10 @@ public class MainPostsService {
     @Transactional
     public Long delete(Long id){
         MainPost posts = mainPostRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 게시글이 없다. 삭제할 수 없음."));
+        if(photoRepository.existsById(posts.getFileId())){
+            fileService.DeleteFile(posts.getFileId());
+            log.info("삭제된 파일 ID : {} ", posts.getFileId());
+        }
         mainPostRepository.delete(posts);
         return id;
     }

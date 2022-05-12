@@ -1,5 +1,6 @@
 package com.example.goyounhacom.Service;
 
+import com.example.goyounhacom.domain.MainPosts.MainPostComment;
 import com.example.goyounhacom.domain.Photo.Photo;
 import com.example.goyounhacom.domain.Photo.PhotoRepository;
 import com.example.goyounhacom.web.Dto.MainPostDto.FileDto.MainPostFileDto;
@@ -32,6 +33,12 @@ public class FileService {
                 .filePath(file.getFilePath())
                 .build();
         return fileDto;
+    }
+
+    @Transactional
+    public void DeleteFile(Long id){
+        Photo photo = photoRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 게시글이 없다. 삭제할 수 없음."));
+        photoRepository.delete(photo);
     }
 }
 

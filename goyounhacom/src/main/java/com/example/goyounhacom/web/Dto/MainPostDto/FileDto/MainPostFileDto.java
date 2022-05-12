@@ -14,14 +14,16 @@ public class MainPostFileDto {
     private String originalFilename;
     private String filename;
     private String filePath;
+    private String filetype;
 
 
 
     @Builder
-    public MainPostFileDto(String origFilename, String filename, String filePath) {
+    public MainPostFileDto(String origFilename, String filename, String filePath, String fileType) {
         this.originalFilename = origFilename;
         this.filename = filename;
         this.filePath = filePath;
+        this.filetype = fileType;
     }
 
 
@@ -30,9 +32,9 @@ public class MainPostFileDto {
                 .originalFilename(originalFilename)
                 .filename(filename)
                 .filePath(filePath)
+                .filetype(filetype)
                 .build();
     }
-
 
     @Override
     public String toString() {
@@ -40,6 +42,7 @@ public class MainPostFileDto {
                 "originalFilename='" + originalFilename + '\'' +
                 ", filename='" + filename + '\'' +
                 ", filePath='" + filePath + '\'' +
+                ", filetype='" + filetype + '\'' +
                 '}';
     }
 }
