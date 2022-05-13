@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -26,6 +27,7 @@ public class FileService {
     @Transactional
     public MainPostFileDto getFile(Long id) {
         Photo file = photoRepository.findById(id).get();
+
 
         MainPostFileDto fileDto = MainPostFileDto.builder()
                 .origFilename(file.getOriginalFilename())

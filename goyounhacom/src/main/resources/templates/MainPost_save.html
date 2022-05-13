@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>게시판 등록</title>
+    <title th:text="${posttype}"></title>
     <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
 </head>
 <body>
 <div class="container my-4">
-    <h5 class="my-3 border-bottom pb-2">게시글 등록</h5>
+    <h5 class="my-3 border-bottom pb-2" th:text="${posttype}"></h5>
     <form th:object="${mainPostSaveDto}" method="post" enctype="multipart/form-data">
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
         <!--CSRF 값을 수동으로 추가하기 위해서는 위와 같이 해야한다. 이것은 스프링 시큐리티의 규칙이다.-->
@@ -25,16 +25,16 @@
             <textarea th:field="*{content}" class="form-control" rows="10"></textarea>
         </div>
         <div class="mb-2">
-            <label for="file" class="form-label">업로드할 파일</label>
-            <input type="file" id="file" name="file" class="form-control">
+            <label for="file" class="form-label" >업로드할 파일</label>
+            <input type="file" id="file"  name="file" accept="image/*" class="form-control">
+            <img id="Preview" src="#" class="img-fluid" alt="미리보기" hidden="true">
+            <img th:if="${fileid} != null" id="pastview" th:src="@{|/mainpost/display/${fileid}|}" class="img-fluid" alt="기존사진보기">
         </div>
-        <div id="uploadResult">
-            <img th:src="@{/image/DSC06223.jpg}" class="img-fluid" alt="...">
-        </div>
+
         <input type="submit" value="저장하기" class="btn btn-primary my-2">
     </form>
 
 </div>
-<script th:src="@{/js/mainpost-save.js}"></script>
+<script th:src="@{/js/mainpost-save.js}"  type="text/javascript"></script>
 <script th:src="@{/js/bootstrap.js}"></script>
 </body>

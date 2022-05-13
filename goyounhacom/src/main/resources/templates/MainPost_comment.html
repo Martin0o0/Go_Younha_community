@@ -39,18 +39,23 @@
     <h2 class="border-bottom py-3">[[${main_post.title}]]</h2>
     <div class="card border-dark my-3">
         <div class="card-header" th:if="${main_post.user != null}" th:text="${main_post.user.nickname}"></div>
+        <img th:src="@{'/mainpost/display/' + ${main_post.getFileId()}}" id="displayimage"
+             th:if="${main_post.getFileId() != null}" class="card-img-top" alt="이미지">
         <div class="card-body">
+
             <h6 class="card-text">[[${main_post.content}]]</h6>
             <div th:if="${main_post.fileId != null}">
                 <strong>첨부파일 : </strong>
                 <a class="card-text" th:href="@{'/mainpost/download/' + ${main_post.fileId}}" th:text="${filename}"></a>
             </div>
             <div class="d-flex justify-content-end">
-                <div th:if="${main_post.modifiedDate != null}" class="badge bg-light text-dark p-2 text-center mx-2 my-auto">
+                <div th:if="${main_post.modifiedDate != null}"
+                     class="badge bg-light text-dark p-2 text-center mx-2 my-auto">
                     <p>modified at</p>
                     <p th:text="${#temporals.format(main_post.modifiedDate, 'yyyy-MM-dd HH:mm')}"></p>
                 </div>
-                <div th:if="${main_post.createdDate != null}" class="badge bg-light text-black p-2 text-center mx-2 my-auto">
+                <div th:if="${main_post.createdDate != null}"
+                     class="badge bg-light text-black p-2 text-center mx-2 my-auto">
                     <p>created at</p>
                     <p>[[${#temporals.format(main_post.createdDate, 'yyyy-MM-dd HH:mm')}]]</p>
                 </div>
@@ -64,15 +69,11 @@
                    sec:authorize="isAuthenticated()"
                    th:if="${main_post.user != null and #authentication.getPrincipal().getUsername() == main_post.user.username}"
                    th:text="수정"></a>
-            </div>
-            <div class="my-1">
                 <a href="#" th:data-uri="@{|/mainpost/delete/${main_post.id}|}" id="deletebtn"
-                   class="btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()"
+                   class="btn btn-sm btn-outline-danger" sec:authorize="isAuthenticated()"
                    th:if="${main_post.user.username != null and #authentication.getPrincipal().getUsername() == main_post.user.username}"
                    th:text="삭제"></a>
-            </div>
-            <div class="my-1">
-                <a href="#" class="btn btn-sm btn-outline-secondary" id="recommend"
+                <a href="#" class="btn btn-sm btn-outline-info" id="recommend"
                    th:data-uri="@{|/mainpost/like/${main_post.id}|}">
                     추천
                     <span class="badge rounded-pill bg-info" th:text="${#lists.size(main_post.like)}"></span>
@@ -89,11 +90,13 @@
         <div class="card-body">
             <div class="card-text" style="white-space: pre-line;">[[${commentlist.content}]]</div>
             <div class="d-flex justify-content-end">
-                <div th:if="${commentlist.modifiedDate != null}" class="badge bg-light text-dark p-2 text-center mx-2 my-auto">
+                <div th:if="${commentlist.modifiedDate != null}"
+                     class="badge bg-light text-dark p-2 text-center mx-2 my-auto">
                     <p>modified at</p>
                     <p th:text="${#temporals.format(commentlist.modifiedDate, 'yyyy-MM-dd HH:mm')}"></p>
                 </div>
-                <div th:if="${commentlist.createdDate != null}" class="badge bg-light text-black p-2 text-center mx-2 my-auto">
+                <div th:if="${commentlist.createdDate != null}"
+                     class="badge bg-light text-black p-2 text-center mx-2 my-auto">
                     <p>created at</p>
                     <p>[[${#temporals.format(commentlist.createdDate, 'yyyy-MM-dd HH:mm')}]]</p>
                 </div>
@@ -103,15 +106,11 @@
                    sec:authorize="isAuthenticated()"
                    th:if="${commentlist.user != null and #authentication.getPrincipal().getUsername() == commentlist.user.username}"
                    th:text="수정"></a>
-            </div>
-            <div class="my-1">
                 <a href="#" th:data-uri="@{|/mainpost/comment/delete/${commentlist.id}|}" id="deletebtn"
-                   class="btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()"
+                   class="btn btn-sm btn-outline-danger" sec:authorize="isAuthenticated()"
                    th:if="${commentlist.user != null and #authentication.getPrincipal().getUsername() == commentlist.user.username}"
                    th:text="삭제"></a>
-            </div>
-            <div class="my-1">
-                <a href="#" class="btn btn-sm btn-outline-secondary" id="recommend"
+                <a href="#" class="btn btn-sm btn-outline-info" id="recommend"
                    th:data-uri="@{|/mainpost/comment/like/${commentlist.id}|}">
                     추천
                     <span class="badge rounded-pill bg-info" th:text="${#lists.size(commentlist.like)}"></span>
