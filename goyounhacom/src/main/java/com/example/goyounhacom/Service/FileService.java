@@ -42,6 +42,13 @@ public class FileService {
         Photo photo = photoRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 게시글이 없다. 삭제할 수 없음."));
         photoRepository.delete(photo);
     }
+
+    @Transactional
+    public Long modify(Long id, MainPostFileDto mainPostFileDto){
+        Photo photo = photoRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 게시글이 없다. 삭제할 수 없음."));
+        photo.update(mainPostFileDto.getOriginalFilename(), mainPostFileDto.getFilename(), mainPostFileDto.getFilePath(), mainPostFileDto.getFiletype());
+        return id;
+    }
 }
 
 

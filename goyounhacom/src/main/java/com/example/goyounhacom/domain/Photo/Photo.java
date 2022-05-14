@@ -40,4 +40,11 @@ public class Photo extends BaseTimeEntity {
         this.filetype = filetype;
     }
 
+    public void update(String originalFilename, String filename, String filePath, String filetype){
+        this.originalFilename = originalFilename;
+        this.filename = filename;
+        this.filePath = filePath;
+        this.filetype = filetype;
+    }
+
 }

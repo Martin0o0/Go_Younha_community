@@ -186,7 +186,7 @@ public class MainPostPageController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/put/{id}")
-    public String mainpostupdate(@PathVariable Long id, @Valid MainPostSaveDto mainPostSaveDto, BindingResult bindingResult, Principal principal, Model model) { //BindingResult 매개변수는 @Valid 애너테이션으로 인해 검증이 수행된 결과를 의미하는 객체이다.
+    public String mainpostupdate(@RequestParam("file") MultipartFile files, @PathVariable Long id, @Valid MainPostSaveDto mainPostSaveDto, BindingResult bindingResult, Principal principal, Model model) { //BindingResult 매개변수는 @Valid 애너테이션으로 인해 검증이 수행된 결과를 의미하는 객체이다.
         MainPostGetDto Dto = mainPostsService.getMainpost(id);
         model.addAttribute("posttype", "게시글 수정");
         model.addAttribute("fileid", Dto.getFileId());
@@ -196,6 +196,40 @@ public class MainPostPageController {
         if (Dto.getUser().getUsername().equals(principal.getName()) == false) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없음");
         }
+        Long fileId = Dto.getFileId();
+        try {
+            if (files.isEmpty() == false) {
+                String originalFileName = files.getOriginalFilename();
+                log.info("파일 이름 : {}", originalFileName);
+                UUID uuid = UUID.randomUUID();
+                String filename = uuid.toString() + "_" + originalFileName; //파일 이름 중복 방지.
+                log.info("변조된 파일 이름 : {} ", filename);
+                String savePath = System.getProperty("user.dir") + "/files";
+                if (!new File(savePath).exists()) {
+                    try {
+                        new File(savePath).mkdir();
+                    } catch (Exception e) {
+                        e.getStackTrace();
+                    }
+                }
+                String filePath = savePath + "/" + filename;
+                log.info("파일 경로 : {} ", filePath);
+                files.transferTo(new File(filePath));
+
+                MainPostFileDto fileDto = new MainPostFileDto();
+                fileDto.setOriginalFilename(originalFileName);
+                fileDto.setFilename(filename);
+                fileDto.setFilePath(filePath);
+                fileDto.setFiletype(files.getContentType());
+                log.info(fileDto.toString());
+                fileId = fileService.modify(fileId, fileDto);
+            }
+            mainPostSaveDto.setFileId(fileId);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         long savenum = mainPostsService.modify(id, mainPostSaveDto.getTitle(), mainPostSaveDto.getContent());
         log.info("저장된 글 번호 : {}", savenum);
         return "redirect:/mainpost/comment/" + id;
