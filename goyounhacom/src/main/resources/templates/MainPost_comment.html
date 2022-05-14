@@ -108,7 +108,7 @@
                    th:text="수정"></a>
                 <a href="#" th:data-uri="@{|/mainpost/comment/delete/${commentlist.id}|}" id="deletebtn"
                    class="btn btn-sm btn-outline-danger" sec:authorize="isAuthenticated()"
-                   th:if="${ (commentlist.user != null and #authentication.getPrincipal().getUsername() == commentlist.user.username)}"
+                   th:if="${ (commentlist.user != null and #authentication.getPrincipal().getUsername() == commentlist.user.username) or userinfo.getRoleKey() == 'ROLE_ADMIN'}"
                    th:text="삭제"></a>
                 <a href="#" class="btn btn-sm btn-outline-info" id="recommend"
                    th:data-uri="@{|/mainpost/comment/like/${commentlist.id}|}">

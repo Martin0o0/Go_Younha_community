@@ -78,11 +78,19 @@ public class CommentPageController {
     @GetMapping("/comment/delete/{id}")
     public String commentdelete(@PathVariable Long id, Principal principal){
         CommentGetDto commentGetDto = commentService.getComment(id);
-        if(commentGetDto.getUser().getUsername().equals(principal.getName()) == false){
+        User user = userService.getbyUsername(principal.getName());
+        if(user.getRoleKey().contentEquals("ROLE_ADMIN")){
+            long deletenum = commentService.delete(id);
+            return "redirect:/mainpost/comment/" + commentGetDto.getMainPost().getId();
+        }
+        else if(commentGetDto.getUser().getUsername().equals(principal.getName()) == true){
+            long deletenum = commentService.delete(id);
+            return "redirect:/mainpost/comment/" + commentGetDto.getMainPost().getId();
+        }
+        else{
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제 권한이 없음");
         }
-        long deletenum = commentService.delete(id);
-        return "redirect:/mainpost/comment/" + commentGetDto.getMainPost().getId();
+
     }
 
 
