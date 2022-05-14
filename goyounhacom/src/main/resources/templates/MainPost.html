@@ -2,8 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>자유게시판</title>
 
     <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
@@ -33,38 +32,41 @@
     </nav>
 </header>
 <div class="container my-4">
-        <div class="input-group my-3">
+    <div class="input-group my-3">
                     <span class="input-group-text"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                                          fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                         <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
                       </svg>
                       </span>
-            <input type="text" name="key" id="search_value" class="form-control"
-                   placeholder="제목" th:value="${search}">
-            <span class="input-group-btn"><button class="btn btn-outline-success"
-                                                  type="submit" id="btn_search">검색 </button> </span>
+        <input type="text" name="key" id="search_value" class="form-control"
+               placeholder="제목" th:value="${search}">
+        <span class="input-group-btn"><button class="btn btn-outline-success"
+                                              type="submit" id="btn_search">검색 </button> </span>
+    </div>
+    <hr>
+    <div th:each="list, loop : ${main_post}">
+        <div class="card my-1">
+            <p class="card-header">
+                <span class="text-start">#[[${main_post.getTotalElements - (main_post.number * main_post.size) - loop.index}]]</span>
+            </p>
+            <div class="card-body">
+                <h3 class="card-title"><a th:href="@{|/mainpost/comment/${list.id}|}"
+                                           th:text="${list.title}"></a>
+                </h3>
+                <h6 class="card-subtitle mb-2 text-muted" th:if="${list.user != null}"
+                    th:text="${list.user.nickname}"></h6>
+                <p class="card-text col-2 text-truncate">[[${list.content}]]</p>
+                <p><span
+                        class="badge rounded-pill bg-info bg-opacity-75" th:if="${#lists.size(list.mainPostComents) > 0}">+[[${#lists.size(list.mainPostComents)}]]</span></p>
+            </div>
+            <div class="card-footer text-muted" th:text="${#temporals.format(list.createdDate, 'yyyy-MM-dd HH:mm')}">
+            </div>
         </div>
-    <table class="table">
-        <thead>
-        <tr class="text-center">
-            <th scope="col">번호</th>
-            <th scope="col">제목</th>
-            <th scope="col">작성자</th>
-            <th scope="col">작성일시</th>
-        </tr>
-        </thead>
-        <tbody>
-            <tr th:each="list, loop : ${main_post}" class="text-center">
-                <td th:text="${main_post.getTotalElements - (main_post.number * main_post.size) - loop.index}"></td>
-                <th class="text-start"><a th:href="@{|/mainpost/comment/${list.id}|}" th:text="${list.title}"></a><span class="mx-1 badge rounded-pill bg-primary" th:if="${#lists.size(list.mainPostComents) > 0}">[[${#lists.size(list.mainPostComents)}]] </span></td>
-                <td th:if="${list.user != null}" th:text="${list.user.nickname}"></td>
-                <td th:text="${#temporals.format(list.createdDate, 'yyyy-MM-dd HH:mm')}"></td>
-            </tr>
-        </tbody>
-    </table>
+    </div>
 
     <div class="mt-1 mb-auto d-grid gap-1">
-        <a href="/mainpost/save"  sec:authorize="isAuthenticated()" th:classappend="${!(userinfo.getIs_holics())} ? 'disabled'" class="btn btn-outline-primary" id="button_save">게시글등록</a>
+        <a href="/mainpost/save" sec:authorize="isAuthenticated()"
+           th:classappend="${!(userinfo.getIs_holics())} ? 'disabled'" class="btn btn-outline-primary" id="button_save">게시글등록</a>
     </div>
 </div>
 
@@ -95,7 +97,7 @@
         <input type="hidden" id="page" name="page" th:value="${main_post.number}">
     </form>
 </div>
-<script th:src="@{/js/mainpost.js}"  type="text/javascript"></script>
+<script th:src="@{/js/mainpost.js}" type="text/javascript"></script>
 <script th:src="@{/js/bootstrap.js}"></script>
 </body>
 </html>

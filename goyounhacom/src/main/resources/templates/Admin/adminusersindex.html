@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>회원관리</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
 </head>
 <body>
@@ -27,10 +29,10 @@
 </header>
 <h3 class="text-center">사용자를 관리합니다.</h3>
 <div class="container">
-
-        <table class="table table-bordered table-striped table-responsive">
+    <div class="table-responsive">
+        <table class="table overflow-auto">
             <thead>
-            <tr class="text-center">
+            <tr class="text-center w-100">
                 <th scope="col">회원번호</th>
                 <th scope="col">회원명</th>
                 <th scope="col">닉네임</th>
@@ -40,7 +42,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="list, loop : ${userGetDto}" class="text-center">
+            <tr th:each="list, loop : ${userGetDto}" class="text-center w-100">
                 <td th:text="${list.id}"></td>
                 <th class="text-start"><a th:href="@{|/admin/userinfo/${list.id}|}" th:text="${list.username}"></a>
                 </td>
@@ -52,7 +54,7 @@
             </tr>
             </tbody>
         </table>
-
+    </div>
 </div>
 <script th:src="@{/js/bootstrap.js}"></script>
 </body>
