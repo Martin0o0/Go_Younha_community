@@ -31,8 +31,8 @@
         <div class="mb-2">
             <label for="file" class="form-label" >업로드할 파일</label>
             <input type="file" id="file"  name="file" accept="image/*" class="form-control">
-            <img id="Preview" src="#" class="img-fluid" alt="미리보기" hidden="true">
-            <img th:if="${fileid} != null" id="pastview" th:src="@{|/mainpost/display/${fileid}|}" class="img-fluid" alt="기존사진보기">
+            <img id="Preview" src="#" class="img-fluid my-3" alt="미리보기" hidden="true">
+            <img th:if="${fileid} != null"  id="pastview" th:src="@{|/mainpost/display/${fileid}|}" class="img-fluid my-3" alt="기존사진보기">
         </div>
 
         <input type="submit" value="저장하기" class="btn btn-primary my-2">

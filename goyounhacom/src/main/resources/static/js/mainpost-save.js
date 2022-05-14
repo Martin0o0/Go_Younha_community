@@ -11,7 +11,9 @@ function readURL(input) {
         reader.onload = function (e) {
             let view = document.querySelector("#Preview");
             let pastview = document.querySelector("#pastview");
-            pastview.hidden = true;
+            if(pastview != null){
+                pastview.hidden = true;
+            }
             view.hidden = false;
             console.dir(view);
             view.src = e.target.result;

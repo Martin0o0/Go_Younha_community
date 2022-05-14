@@ -65,9 +65,13 @@ public class MainPostPageController {
     }
 
     @GetMapping("/comment/{id}")
-    public String mainpostcoment(@PathVariable Long id, Model model, CommentSaveDto commentSaveDto) {
+    public String mainpostcoment(@PathVariable Long id, Model model, CommentSaveDto commentSaveDto, @AuthenticationPrincipal PrincipalDatails principalDatails) {
         MainPostGetDto post = mainPostsService.getMainpost(id);
         model.addAttribute("main_post", post);
+        if (principalDatails != null) {
+            User user = userService.getbyUsername(principalDatails.getUsername());
+            model.addAttribute("userinfo", user);
+        }
 
         if(post.getFileId() != null){
             MainPostFileDto filedto = fileService.getFile(post.getFileId());
@@ -242,13 +246,23 @@ public class MainPostPageController {
     @GetMapping("/delete/{id}")
     public String mainpoostdelete(@PathVariable Long id, Principal principal) {
         MainPostGetDto Dto = mainPostsService.getMainpost(id);
-        if (Dto.getUser().getUsername().equals(principal.getName()) == false) {
+        User user = userService.getbyUsername(principal.getName());
+        log.info("{ROLE : {}, is true ? {} ",user.getRoleKey() , user.getRoleKey().contentEquals("ROLE_ADMIN"));
+
+        if(user.getRoleKey().contentEquals("ROLE_ADMIN")){
+            long deletenum = mainPostsService.delete(id);
+            log.info("삭제된 글 번호 : {}", deletenum);
+            return "redirect:/";
+        }
+        else if(Dto.getUser().getUsername().equals(principal.getName()) == true){
+            long deletenum = mainPostsService.delete(id);
+            log.info("삭제된 글 번호 : {}", deletenum);
+            return "redirect:/";
+        }
+        else{
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없음");
         }
 
-        long deletenum = mainPostsService.delete(id);
-        log.info("삭제된 글 번호 : {}", deletenum);
-        return "redirect:/";
     }
 
     @PreAuthorize("isAuthenticated()")

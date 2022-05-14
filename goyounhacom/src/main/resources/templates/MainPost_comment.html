@@ -39,15 +39,15 @@
     <h2 class="border-bottom py-3">[[${main_post.title}]]</h2>
     <div class="card border-dark my-3">
         <div class="card-header" th:if="${main_post.user != null}" th:text="${main_post.user.nickname}"></div>
+        <div th:if="${main_post.fileId != null}" class="mx-2 my-2">
+            <strong>첨부파일 : </strong>
+            <a class="card-text" th:href="@{'/mainpost/download/' + ${main_post.fileId}}" th:text="${filename}"></a>
+        </div>
         <img th:src="@{'/mainpost/display/' + ${main_post.getFileId()}}" id="displayimage"
-             th:if="${main_post.getFileId() != null}" class="card-img-top" alt="이미지">
+             th:if="${main_post.getFileId() != null}" class="card-img-top my-3" alt="이미지">
         <div class="card-body">
 
             <h6 class="card-text">[[${main_post.content}]]</h6>
-            <div th:if="${main_post.fileId != null}">
-                <strong>첨부파일 : </strong>
-                <a class="card-text" th:href="@{'/mainpost/download/' + ${main_post.fileId}}" th:text="${filename}"></a>
-            </div>
             <div class="d-flex justify-content-end">
                 <div th:if="${main_post.modifiedDate != null}"
                      class="badge bg-light text-dark p-2 text-center mx-2 my-auto">
@@ -71,7 +71,7 @@
                    th:text="수정"></a>
                 <a href="#" th:data-uri="@{|/mainpost/delete/${main_post.id}|}" id="deletebtn"
                    class="btn btn-sm btn-outline-danger" sec:authorize="isAuthenticated()"
-                   th:if="${main_post.user.username != null and #authentication.getPrincipal().getUsername() == main_post.user.username}"
+                   th:if="${(main_post.user.username != null and #authentication.getPrincipal().getUsername() == main_post.user.username) or userinfo.getRoleKey() == 'ROLE_ADMIN' }"
                    th:text="삭제"></a>
                 <a href="#" class="btn btn-sm btn-outline-info" id="recommend"
                    th:data-uri="@{|/mainpost/like/${main_post.id}|}">
@@ -108,7 +108,7 @@
                    th:text="수정"></a>
                 <a href="#" th:data-uri="@{|/mainpost/comment/delete/${commentlist.id}|}" id="deletebtn"
                    class="btn btn-sm btn-outline-danger" sec:authorize="isAuthenticated()"
-                   th:if="${commentlist.user != null and #authentication.getPrincipal().getUsername() == commentlist.user.username}"
+                   th:if="${ (commentlist.user != null and #authentication.getPrincipal().getUsername() == commentlist.user.username)}"
                    th:text="삭제"></a>
                 <a href="#" class="btn btn-sm btn-outline-info" id="recommend"
                    th:data-uri="@{|/mainpost/comment/like/${commentlist.id}|}">

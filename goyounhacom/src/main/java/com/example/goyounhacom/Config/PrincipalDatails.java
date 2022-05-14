@@ -38,6 +38,7 @@ public class PrincipalDatails implements UserDetails {
         return user.getUsername();
     }
 
+
     public User getUser(){
         return this.getUser();
     }

@@ -85,7 +85,7 @@ public class MainPostsService {
     @Transactional
     public Long delete(Long id){
         MainPost posts = mainPostRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 게시글이 없다. 삭제할 수 없음."));
-        if(photoRepository.existsById(posts.getFileId())){
+        if(posts.getFileId() != null && photoRepository.existsById(posts.getFileId())){
             fileService.DeleteFile(posts.getFileId());
             log.info("삭제된 파일 ID : {} ", posts.getFileId());
         }
