@@ -48,6 +48,12 @@ public class MainPostsService {
         return new MainPostGetDto(posts);
     }
 
+    public MainPost getMainPostId(Long id){
+        MainPost entity = mainPostRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당하는 게시글은 없습니다. " + id));
+        return entity;
+    }
+
+
     @Transactional
     public Long save(String title, String content, Long fileId, User user) {
         MainPostSaveDto mainPostSaveDto = new MainPostSaveDto(title, content, fileId ,user);

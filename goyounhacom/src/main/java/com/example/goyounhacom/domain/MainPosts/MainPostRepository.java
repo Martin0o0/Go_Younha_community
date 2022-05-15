@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface MainPostRepository extends JpaRepository<MainPost, Long> {
     //List<MainPost> findByTitleContainingOrContentContaining(String keyword); //Json객체로 반환.
@@ -17,6 +18,8 @@ public interface MainPostRepository extends JpaRepository<MainPost, Long> {
     Page<MainPost> findByTitleContainingOrContentContaining(String title, String content,  Pageable pageable);
 
     List<MainPost> findByUser(User user);
+
+    Optional<MainPost> findById(Long postid);
 
     @Modifying
     @Query("update MainPost p set p.viewcount = p.viewcount + 1 where p.id = :id") //조회수 증가

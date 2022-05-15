@@ -39,8 +39,6 @@ public class MainPost extends BaseTimeEntity {
     private List<MainPostComment> mainPostComents; //1:N방식이니까. 부모엔티티가 자식엔티티를 여러개 가질 수 있어
 
 
-
-
     @ManyToMany //대등관계
     private Set<User> like;
 
