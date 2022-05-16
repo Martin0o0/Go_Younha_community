@@ -6,5 +6,5 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ScrapRepository extends JpaRepository<Scrap, ScrapId> {
-    List<Scrap> findAllByUser(Long userid);
+    List<Scrap> findAllByUserId(Long userid);
 }

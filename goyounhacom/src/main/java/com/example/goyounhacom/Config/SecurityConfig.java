@@ -52,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     // 나머지의 요청에 대해서는 인증받은 사람만 접속 가능.
                 .and()
                 .csrf().ignoringAntMatchers("/api/**")
-                .and()//h2에 대해서만 crsf 끄기.
+                .and()
                 .formLogin()
                 .loginPage("/auth/login")
                 .loginProcessingUrl("/auth/login")

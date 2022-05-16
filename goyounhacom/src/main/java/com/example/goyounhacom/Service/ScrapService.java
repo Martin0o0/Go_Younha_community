@@ -21,8 +21,9 @@ public class ScrapService {
     private final UserService userService;
     private final MainPostsService mainPostsService;
 
+    @Transactional
     public List<Scrap> getList(Long userid){
-        List<Scrap> scraps = scrapRepository.findAllByUser(userid);
+        List<Scrap> scraps = scrapRepository.findAllByUserId(userid);
         return scraps;
     }
 
@@ -32,6 +33,14 @@ public class ScrapService {
          MainPost mainPost = mainPostsService.getMainPostId(postid);
          Scrap scrap = new Scrap(user, mainPost);
          scrapRepository.save(scrap);
+    }
+
+    @Transactional
+    public void delete(String username, Long postid){
+        User user = userService.getbyUsername(username);
+        MainPost mainPost = mainPostsService.getMainPostId(postid);
+        Scrap scrap = new Scrap(user, mainPost);
+        scrapRepository.delete(scrap);
     }
 
 }

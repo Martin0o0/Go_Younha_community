@@ -17,14 +17,16 @@ import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
-@RestController("/api/auth/user")
+@RestController
+@RequestMapping("/api/auth/user")
 public class ScrapController {
     private final UserService userService;
     private final ScrapService scrapService;
 
 
-    @GetMapping("/srcap/{userid}")
+    @GetMapping("/scrap/{userid}")
     public List<MainPostGetDto> scrapList(@PathVariable Long userid){
+        log.info("회원번호 : {}", userid);
         List<Scrap> list = scrapService.getList(userid);
 
         List<MainPostGetDto> postlist= new ArrayList<>();
@@ -34,11 +36,20 @@ public class ScrapController {
         return postlist;
     }
 
-//    @PostMapping("/scrap/{username}")
-//    public Long savepost(@PathVariable String username, @RequestParam Long postid){
-//
-//
-//    }
+    @PostMapping("/scrap/{username}")
+    public void savepost(@PathVariable String username, @RequestParam Long postid) {
+        scrapService.save(username, postid);
+        log.info("{}의 스크랩에 등록된  게시글 번호 : {}", username, postid);
+    }
+
+    @DeleteMapping("/scrap/{username}")
+    public void deletepost(@PathVariable String username, @RequestParam Long postid){
+        scrapService.delete(username, postid);
+        log.info("{}의 스크랩에 제거된 게시글 번호 : {} ", username, postid);
+    }
+
+
+
 
 
 

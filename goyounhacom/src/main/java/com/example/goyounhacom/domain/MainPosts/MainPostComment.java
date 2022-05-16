@@ -27,7 +27,7 @@ public class MainPostComment extends BaseTimeEntity {
 
     @ManyToOne
     //부모 객체의 식별자에 해당하는 참조키로 설정하는 어노테이션
-//    @JoinColumn(name = "mainpost_id")
+    @JoinColumn
     @JsonBackReference //순환참조 방지.
     private MainPost mainPost; //자식이니까 N:1방식이다.
 

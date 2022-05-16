@@ -36,7 +36,7 @@
 </header>
 
 <div class="container my-4">
-    <h2 class="border-bottom py-3">[[${main_post.title}]]</h2>
+    <h2 class="border-bottom py-3 offset-md-1 col-md-10">[[${main_post.title}]]</h2>
     <div class="card border-dark my-3  offset-md-1 col-md-10">
         <div class="card-header" th:if="${main_post.user != null}" th:text="${main_post.user.nickname}"></div>
         <div th:if="${main_post.fileId != null}" class="mx-2 my-2">
@@ -73,11 +73,11 @@
             </a>
         </div>
     </div>
-    <hr>
-    <h2 class="text-center">[[${#lists.size(main_post.list)}]]개의 답변이 있음</h2>
-    <hr>
-    <form th:action="@{|/mainpost/comment/post/${main_post.id}|}" th:object="${commentSaveDto}" method="post"
-          class="my-3">
+    <hr class="offset-md-1 col-md-10">
+    <h2 class="text-center offset-md-1 col-md-10">[[${#lists.size(main_post.list)}]]개의 답변이 있음</h2>
+    <hr class="offset-md-1 col-md-10">
+    <form  th:action="@{|/mainpost/comment/post/${main_post.id}|}" th:object="${commentSaveDto}" method="post"
+          class="my-3 offset-md-1 col-md-10">
         <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
             <div th:each="err : ${#fields.allErrors()}" th:text="${err}"/>
         </div>

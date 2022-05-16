@@ -7,10 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @IdClass(ScrapId.class)
@@ -22,12 +19,14 @@ public class Scrap implements Serializable { //id가 두개인 경우이므로 i
     @Id
     @ManyToOne
     @JsonBackReference
+    @JoinColumn //외래키 맵핑
     private User user;
 
 
     @Id
     @ManyToOne
     @JsonBackReference
+    @JoinColumn //외래키 맵핑
     private MainPost mainPost;
 
     @Builder
@@ -35,6 +34,4 @@ public class Scrap implements Serializable { //id가 두개인 경우이므로 i
         this.user = user;
         this.mainPost = mainPost;
     }
-
-
 }

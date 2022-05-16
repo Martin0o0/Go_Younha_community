@@ -39,12 +39,6 @@ public class HelloPostsApiController {
         return helloPostsService.findByAll();
     }
 
-//
-//    @GetMapping("/get/id/{id}")
-//    public HelloPostsGetDto getbyid(@PathVariable Long id) {
-//        helloPostsService.updateviewcount(id); //게시글 조회
-//        return helloPostsService.findbyid(id);
-//    }
 
 
     @GetMapping("/get/key/{key}")
@@ -58,11 +52,6 @@ public class HelloPostsApiController {
         return "삭제된 글 번호 : " + helloPostsService.deletebyid(id);
 
     }
-
-//    @GetMapping("/get/userid/{userid}")
-//    public List<HelloPostsGetDto> findbyuserid(@PathVariable String userid){
-//        return helloPostsService.findbyuserid(userid);
-//    }
 
 
 }
