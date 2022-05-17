@@ -37,7 +37,7 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="offcanvasNavbarDropdown">
                             <li><a class="dropdown-item" th:href="@{|/auth/update|}">회원정보 수정</a></li>
-                            <li><a class="dropdown-item" href="#">게시글 스크랩</a></li>
+                            <li><a class="dropdown-item" th:href="@{|/auth/user/scrap/${user_info.getId()}|}">게시글 스크랩</a></li>
                             <li sec:authorize="isAuthenticated()">
                                 <hr class="dropdown-divider">
                             </li>

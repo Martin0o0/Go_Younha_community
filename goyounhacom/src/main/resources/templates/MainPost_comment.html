@@ -71,6 +71,10 @@
                 추천
                 <span class="badge rounded-pill bg-info" th:text="${#lists.size(main_post.like)}"></span>
             </a>
+            <a href="#" class="btn btn-sm btn-outline-info" id="scrap" sec:authorize="isAuthenticated()"
+               th:data-uri="@{|/api/auth/user/scrap/${#authentication.getPrincipal().getUsername()}?postid=${main_post.id}|}">
+                스크랩
+            </a>
         </div>
     </div>
     <hr class="mx-auto col-md-10">

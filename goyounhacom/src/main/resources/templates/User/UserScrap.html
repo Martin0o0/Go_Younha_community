@@ -33,7 +33,8 @@
 </header>
 <div class="container my-4">
     <div class="nav nav-tabs" id="nav-tab" role="tablist">
-        <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-mainpost" type="button"
+        <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-mainpost"
+                type="button"
                 role="tab" aria-controls="nav-mainpost" aria-selected="true">자유게시판
         </button>
         <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button"
@@ -43,42 +44,58 @@
     </nav>
     <div class="tab-content" id="nav-tabContent">
         <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-
-
-
-
-
-
+            <div th:each="list, loop : ${main_post_scrap}">
+                <div class="card my-2">
+                    <p class="card-header d-flex justify-content-between">
+                        <span>#[[${main_post_scrap.getTotalElements - (main_post_scrap.number * main_post_scrap.size) - loop.index}]]</span>
+                        <button type="button" class="btn-close" aria-label="Close"></button>
+                    </p>
+                    <div class="card-body">
+                        <h3 class="card-title"><a th:href="@{|/mainpost/comment/${list.id}|}"
+                                                  th:text="${list.title}"></a>
+                        </h3>
+                        <h6 class="card-subtitle mb-2 text-muted" th:if="${list.user != null}"
+                            th:text="${list.user.nickname}"></h6>
+                        <p class="card-text col-2 text-truncate">[[${list.content}]]</p>
+                        <p><span
+                                class="badge rounded-pill bg-info bg-opacity-75"
+                                th:if="${#lists.size(list.mainPostComents) > 0}">+[[${#lists.size(list.mainPostComents)}]]</span>
+                        </p>
+                    </div>
+                    <div class="card-footer text-muted"
+                         th:text="${#temporals.format(list.createdDate, 'yyyy-MM-dd HH:mm')}">
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div th:if="${!main_post_scrap.isEmpty()}">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item" th:classappend="${!main_post_scrap.hasPrevious} ? 'disabled'">
+                            <a class="page-link"
+                               th:data-page="${main_post_scrap.number-1}">
+                                <span>이전</span>
+                            </a>
+                        </li>
+                        <li th:each="page: ${#numbers.sequence(0, main_post_scrap.totalPages-1)}"
+                            th:if="${page >= main_post_scrap.number - 5 and page <= main_post_scrap.number + 5}"
+                            th:classappend="${page == main_post_scrap.number} ? 'active'"
+                            class="page-item">
+                            <a th:text="${page}" class="page-link" th:data-url="${page}"></a>
+                        </li>
+                        <li class="page-item" th:classappend="${!main_post_scrap.hasNext} ? 'disabled'">
+                            <a class="page-link" th:data-page="${main_post_scrap.number+1}">
+                                <span>다음</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
         <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">...</div>
 
     </div>
 </div>
-
-<div class="container">
-    <div th:if="${!main_post.isEmpty()}">
-        <ul class="pagination justify-content-center">
-            <li class="page-item" th:classappend="${!main_post.hasPrevious} ? 'disabled'">
-                <a class="page-link"
-                   th:data-page="${main_post.number-1}">
-                    <span>이전</span>
-                </a>
-            </li>
-            <li th:each="page: ${#numbers.sequence(0, main_post.totalPages-1)}"
-                th:if="${page >= main_post.number - 5 and page <= main_post.number + 5}"
-                th:classappend="${page == main_post.number} ? 'active'"
-                class="page-item">
-                <a th:text="${page}" class="page-link" th:data-url="${page}"></a>
-            </li>
-            <li class="page-item" th:classappend="${!main_post.hasNext} ? 'disabled'">
-                <a class="page-link" th:data-page="${main_post.number+1}">
-                    <span>다음</span>
-                </a>
-            </li>
-        </ul>
-    </div>
-</div>
-<script th:src="@{/js/mainpost.js}" type="text/javascript"></script>
+<!--<script th:src="@{/js/mainpost.js}" type="text/javascript"></script>-->
 <script th:src="@{/js/bootstrap.js}"></script>
 </body>
 </html>

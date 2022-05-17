@@ -1,6 +1,7 @@
 package com.example.goyounhacom.web.Controller.UserController;
 
 
+import com.example.goyounhacom.Service.ScrapService;
 import com.example.goyounhacom.Service.UserService;
 import com.example.goyounhacom.domain.Users.User;
 import com.example.goyounhacom.domain.Users.UserRepository;
@@ -23,6 +24,8 @@ import java.util.List;
 public class UserApiController {
 
     private final UserService userService;
+
+    private final ScrapService scrapService;
 
     @PostMapping("/sign-up")
     public String signup(@RequestBody UserSaveDto userSaveDto) {
@@ -62,6 +65,18 @@ public class UserApiController {
     }
 
 
+    @PostMapping("/scrap/{username}")
+    public void savepost(@PathVariable String username, @RequestParam Long postid) {
+        scrapService.save(username, postid);
+        log.info("{}의 스크랩에 등록된  게시글 번호 : {}", username, postid);
+    }
+
+    @DeleteMapping("/scrap/{username}")
+    public void deletepost(@PathVariable String username, @RequestParam Long postid){
+        scrapService.delete(username, postid);
+        log.info("{}의 스크랩에 제거된 게시글 번호 : {} ", username, postid);
+    }
+
 
 
     @GetMapping("/get")
@@ -78,13 +93,6 @@ public class UserApiController {
     public UserGetDto findbyusername(@PathVariable String userid) {
         return userService.findbyusername(userid);
     }
-
-//    @DeleteMapping("/delete/{id}")
-//    public String deletebyid(@PathVariable Long id) {
-//        return userService.deletebyid(id);
-//    }
-//
-
 
 
 

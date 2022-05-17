@@ -73,7 +73,7 @@ public class MainPostPageController {
             model.addAttribute("userinfo", user);
         }
 
-        if(post.getFileId() != null){
+        if (post.getFileId() != null) {
             MainPostFileDto filedto = fileService.getFile(post.getFileId());
             model.addAttribute("filename", filedto.getOriginalFilename());
         }
@@ -92,7 +92,7 @@ public class MainPostPageController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/save")
-    public String mainpostsave(@RequestParam("file") MultipartFile files,@Valid MainPostSaveDto mainPostSaveDto, BindingResult bindingResult, Principal principal,Model model) { //BindingResult 매개변수는 @Valid 애너테이션으로 인해 검증이 수행된 결과를 의미하는 객체이다.
+    public String mainpostsave(@RequestParam("file") MultipartFile files, @Valid MainPostSaveDto mainPostSaveDto, BindingResult bindingResult, Principal principal, Model model) { //BindingResult 매개변수는 @Valid 애너테이션으로 인해 검증이 수행된 결과를 의미하는 객체이다.
         model.addAttribute("posttype", "게시글 등록");
         model.addAttribute("fileid", null);
         log.info("파일 형식 : {}", files.getContentType());
@@ -102,7 +102,7 @@ public class MainPostPageController {
         }
         try {
             Long fileId = null;
-            if(files.isEmpty() == false) {
+            if (files.isEmpty() == false) {
                 String originalFileName = files.getOriginalFilename();
                 log.info("파일 이름 : {}", originalFileName);
                 UUID uuid = UUID.randomUUID();
@@ -150,27 +150,23 @@ public class MainPostPageController {
     }
 
 
-
     @GetMapping("/display/{fileId}")
-    public ResponseEntity<Resource> fileDisplay(@PathVariable Long fileId) throws IOException{
+    public ResponseEntity<Resource> fileDisplay(@PathVariable Long fileId) throws IOException {
         MainPostFileDto fileDto = fileService.getFile(fileId);
         Path path = Paths.get(fileDto.getFilePath());
         log.info("{}", path);
         log.info("{}", path.toString());
         Resource resource = new InputStreamResource(Files.newInputStream(path));
         return ResponseEntity.ok()
-                .header("Content-type" , Files.probeContentType(path))
+                .header("Content-type", Files.probeContentType(path))
                 .body(resource); //표출해라.
 
     }
 
 
-
-
-
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/put/{id}")
-    public String mainpostput(@PathVariable Long id, Principal principal, MainPostSaveDto mainPostSaveDto,Model model) {
+    public String mainpostput(@PathVariable Long id, Principal principal, MainPostSaveDto mainPostSaveDto, Model model) {
         model.addAttribute("posttype", "게시글 수정");
         MainPostGetDto Dto = mainPostsService.getMainpost(id);
         if (Dto.getUser().getUsername().equals(principal.getName()) == false) {
@@ -178,11 +174,10 @@ public class MainPostPageController {
         }
         mainPostSaveDto.setTitle(Dto.getTitle());
         mainPostSaveDto.setContent(Dto.getContent());
-        if(Dto.getFileId() != null){
+        if (Dto.getFileId() != null) {
             mainPostSaveDto.setFileId(Dto.getFileId());
             model.addAttribute("fileid", Dto.getFileId());
-        }
-        else{
+        } else {
             model.addAttribute("fileid", null);
         }
         return "MainPost_save";
@@ -226,7 +221,13 @@ public class MainPostPageController {
                 fileDto.setFilePath(filePath);
                 fileDto.setFiletype(files.getContentType());
                 log.info(fileDto.toString());
-                fileId = fileService.modify(fileId, fileDto);
+                if(fileId != null){
+                    fileId = fileService.modify(fileId, fileDto);
+                }
+                else{
+                    fileId = fileService.saveFile(fileDto);
+                }
+
             }
             mainPostSaveDto.setFileId(fileId);
 
@@ -234,12 +235,11 @@ public class MainPostPageController {
             e.printStackTrace();
         }
 
-        long savenum = mainPostsService.modify(id, mainPostSaveDto.getTitle(), mainPostSaveDto.getContent());
+
+        long savenum = mainPostsService.modify(id, mainPostSaveDto.getTitle(), mainPostSaveDto.getContent(), fileId);
         log.info("저장된 글 번호 : {}", savenum);
         return "redirect:/mainpost/comment/" + id;
     }
-
-
 
 
     @PreAuthorize("isAuthenticated()")
@@ -247,19 +247,17 @@ public class MainPostPageController {
     public String mainpoostdelete(@PathVariable Long id, Principal principal) {
         MainPostGetDto Dto = mainPostsService.getMainpost(id);
         User user = userService.getbyUsername(principal.getName());
-        log.info("{ROLE : {}, is true ? {} ",user.getRoleKey() , user.getRoleKey().contentEquals("ROLE_ADMIN"));
+        log.info("{ROLE : {}, is true ? {} ", user.getRoleKey(), user.getRoleKey().contentEquals("ROLE_ADMIN"));
 
-        if(user.getRoleKey().contentEquals("ROLE_ADMIN")){
+        if (user.getRoleKey().contentEquals("ROLE_ADMIN")) {
             long deletenum = mainPostsService.delete(id);
             log.info("삭제된 글 번호 : {}", deletenum);
             return "redirect:/";
-        }
-        else if(Dto.getUser().getUsername().equals(principal.getName()) == true){
+        } else if (Dto.getUser().getUsername().equals(principal.getName()) == true) {
             long deletenum = mainPostsService.delete(id);
             log.info("삭제된 글 번호 : {}", deletenum);
             return "redirect:/";
-        }
-        else{
+        } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없음");
         }
 

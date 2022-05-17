@@ -76,9 +76,9 @@ public class MainPostsService {
     }
 
     @Transactional
-    public Long modify(Long id, String title, String content) {
+    public Long modify(Long id, String title, String content, Long fileId) {
         MainPost post = mainPostRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당하는 게시글이 없다. No : " + id));
-        post.update(title, content);
+        post.update(title, content, fileId);
         return id;
     }
 

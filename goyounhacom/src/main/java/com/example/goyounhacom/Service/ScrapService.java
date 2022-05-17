@@ -7,10 +7,13 @@ import com.example.goyounhacom.domain.Scrap.ScrapRepository;
 import com.example.goyounhacom.domain.Users.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.querydsl.QPageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Slf4j
@@ -21,9 +24,9 @@ public class ScrapService {
     private final UserService userService;
     private final MainPostsService mainPostsService;
 
-    @Transactional
-    public List<Scrap> getList(Long userid){
-        List<Scrap> scraps = scrapRepository.findAllByUserId(userid);
+    @Transactional(readOnly = true)
+    public Page<Scrap> getList(Long userid, Pageable pageable){
+        Page<Scrap> scraps = scrapRepository.findAllByUserId(userid, pageable);
         return scraps;
     }
 

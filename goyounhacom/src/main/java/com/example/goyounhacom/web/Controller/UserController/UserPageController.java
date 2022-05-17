@@ -2,6 +2,7 @@ package com.example.goyounhacom.web.Controller.UserController;
 
 
 import com.example.goyounhacom.Config.PrincipalDatails;
+import com.example.goyounhacom.Service.ScrapService;
 import com.example.goyounhacom.Service.UserService;
 import com.example.goyounhacom.web.Dto.UserDto.UserGetDto;
 import com.example.goyounhacom.web.Dto.UserDto.UserSaveDto;
@@ -12,10 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -27,6 +25,8 @@ import java.security.Principal;
 public class UserPageController {
 
     private final UserService userService;
+
+    private final ScrapService scrapService;
 
     @GetMapping("/login")
     public String login(){
@@ -76,7 +76,7 @@ public class UserPageController {
         userUpdateDto.setPassword(userGetDto.getPassword());
         userUpdateDto.setEmail(userGetDto.getEmail());
         userUpdateDto.setNickname(userGetDto.getNickname());
-        return "user-update";
+        return "User/user-update";
     }
 
 
@@ -85,12 +85,15 @@ public class UserPageController {
     public String userupdate(@Valid UserUpdateDto userUpdateDto, BindingResult bindingResult, @AuthenticationPrincipal PrincipalDatails principalDatails){
 
         if(bindingResult.hasErrors()){
-            return "user-update";
+            return "User/user-update";
         }
 
         long status = userService.updateUser(userUpdateDto, principalDatails);
         return "redirect:/";
     }
+
+
+
 
 
 }

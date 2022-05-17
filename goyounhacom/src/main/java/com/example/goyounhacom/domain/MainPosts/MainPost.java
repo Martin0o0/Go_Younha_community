@@ -50,9 +50,10 @@ public class MainPost extends BaseTimeEntity {
         this.user = user;
     }
 
-    public void update(String title, String content){
+    public void update(String title, String content, Long fileId){
         this.title = title;
         this.content = content;
+        this.fileId = fileId;
     }
 
 
