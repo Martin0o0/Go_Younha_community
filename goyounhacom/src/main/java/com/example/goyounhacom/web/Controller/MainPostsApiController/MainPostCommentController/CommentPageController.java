@@ -42,10 +42,11 @@ public class CommentPageController {
         if(bindingResult.hasErrors()){
             MainPostGetDto mainPostGetDto = mainPostsService.getMainpost(id);
             model.addAttribute("main_post", mainPostGetDto);
+            model.addAttribute("userinfo", user);
             return "MainPost_comment";
         }
         Long postid = commentService.saveComment(id, commentSaveDto.getContent(), user);
-        return "redirect:/mainpost/comment/"+ id + "#comment_" + postid;
+        return "redirect:/mainpost/comment/"+ id + "#comment_" + postid; //앵커
     }
 
     @PreAuthorize("isAuthenticated()")

@@ -47,12 +47,4 @@ public class ScrapController {
         scrapService.delete(username, postid);
         log.info("{}의 스크랩에 제거된 게시글 번호 : {} ", username, postid);
     }
-
-
-
-
-
-
-
-
 }

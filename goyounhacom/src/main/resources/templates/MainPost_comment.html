@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>답변</title>
+    <title></title>
     <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
 </head>
 <body>
@@ -36,8 +36,8 @@
 </header>
 
 <div class="container my-4">
-    <h2 class="border-bottom py-3 offset-md-1 col-md-10">[[${main_post.title}]]</h2>
-    <div class="card border-dark my-3  offset-md-1 col-md-10">
+    <h2 class="border-bottom py-3 mx-auto col-md-10">[[${main_post.title}]]</h2>
+    <div class="card border-dark my-3  mx-auto col-md-10">
         <div class="card-header" th:if="${main_post.user != null}" th:text="${main_post.user.nickname}"></div>
         <div th:if="${main_post.fileId != null}" class="mx-2 my-2">
             <strong>첨부파일 : </strong>
@@ -73,20 +73,25 @@
             </a>
         </div>
     </div>
-    <hr class="offset-md-1 col-md-10">
-    <h2 class="text-center offset-md-1 col-md-10">[[${#lists.size(main_post.list)}]]개의 답변이 있음</h2>
-    <hr class="offset-md-1 col-md-10">
+    <hr class="mx-auto col-md-10">
+    <h2 class="text-center mx-auto col-md-10">[[${#lists.size(main_post.list)}]]개의 답변이 있음</h2>
+    <hr class="mx-auto col-md-10">
     <form  th:action="@{|/mainpost/comment/post/${main_post.id}|}" th:object="${commentSaveDto}" method="post"
-          class="my-3 offset-md-1 col-md-10">
+          class="my-3 mx-auto col-md-10">
         <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
             <div th:each="err : ${#fields.allErrors()}" th:text="${err}"/>
         </div>
-        <label for="content" class="form-label">댓글</label>
+<!--        <label for="content" class="form-label">댓글</label>-->
         <textarea sec:authorize="isAnonymous()" disabled rows="1" class="form-control">로그인 후 이용해 주세요.</textarea>
-        <textarea sec:authorize="isAuthenticated()" th:field="*{content}" rows="1" class="form-control"></textarea>
-        <input sec:authorize="isAuthenticated()" type="submit" class="btn btn-primary my-2" value="답글등록">
+<!--        <textarea sec:authorize="isAuthenticated()" th:field="*{content}" rows="1" class="form-control"></textarea>-->
+        <div class="input-group mb-3" sec:authorize="isAuthenticated()">
+            <input type="text" class="form-control" th:field="*{content}" placeholder="댓글을 입력해주세요." aria-describedby="button-addon2">
+            <input class="btn btn-outline-secondary" type="submit" id="button-addon2" value="댓글 등록">
+        </div>
+
+<!--        <input sec:authorize="isAuthenticated()" type="submit" class="btn btn-primary my-2" value="답글등록">-->
     </form>
-    <div class="card my-3   offset-md-1 col-md-10" th:each="commentlist : ${main_post.list}">
+    <div class="card border-info my-3 mx-auto col-md-10" th:each="commentlist : ${main_post.list}">
         <a th:id="|comment_${commentlist.id}|"></a>
         <div class="card-header" th:if="${commentlist.user != null}" th:text="${commentlist.user.nickname}"></div>
         <div class="card-body">
