@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -45,5 +46,6 @@ public class ScrapService {
         Scrap scrap = new Scrap(user, mainPost);
         scrapRepository.delete(scrap);
     }
+
 
 }

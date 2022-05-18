@@ -83,7 +83,7 @@
                 th:if="${page >= main_post.number - 5 and page <= main_post.number + 5}"
                 th:classappend="${page == main_post.number} ? 'active'"
                 class="page-item">
-                <a th:text="${page}" class="page-link" th:data-url="${page}"></a>
+                <a th:text="${page}" class="page-link" th:data-page="${page}"></a>
             </li>
             <li class="page-item" th:classappend="${!main_post.hasNext} ? 'disabled'">
                 <a class="page-link" th:data-page="${main_post.number+1}">

@@ -6,6 +6,7 @@ import com.example.goyounhacom.Service.ScrapService;
 import com.example.goyounhacom.Service.UserService;
 import com.example.goyounhacom.domain.MainPosts.MainPost;
 import com.example.goyounhacom.domain.Scrap.Scrap;
+import com.example.goyounhacom.domain.Users.User;
 import com.example.goyounhacom.web.Dto.MainPostDto.MainPostGetDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,11 +33,15 @@ public class ScrapPageController {
 
 
     @GetMapping("/scrap/{userid}")
-    public String scrapList(Model model, @PathVariable Long userid, @PageableDefault(size = 5)Pageable pageable){
+    public String scrapList( @AuthenticationPrincipal PrincipalDatails principalDatails , Model model, @PathVariable Long userid, @PageableDefault(size = 5)Pageable pageable){
         log.info("회원번호 : {}", userid);
         Page<Scrap> list = scrapService.getList(userid, pageable);
         Page<MainPost> postlist = list.map(dto -> dto.getMainPost());
         model.addAttribute("main_post_scrap", postlist);
+        if (principalDatails != null) {
+            User user = userService.getbyUsername(principalDatails.getUsername());
+            model.addAttribute("userinfo", user);
+        }
 
         //Pagealbe로 변환.
         return "User/UserScrap";

@@ -48,7 +48,7 @@
                 <div class="card my-2">
                     <p class="card-header d-flex justify-content-between">
                         <span>#[[${main_post_scrap.getTotalElements - (main_post_scrap.number * main_post_scrap.size) - loop.index}]]</span>
-                        <button type="button" class="btn-close" aria-label="Close"></button>
+                        <button sec:authorize="isAuthenticated()" type="button" class="btn-close" aria-label="Close" th:data-userid="${userinfo.getId()}" th:data-uri="@{|/api/auth/user/scrap/${#authentication.getPrincipal().getUsername()}?postid=${list.id}|}" id="delete"></button>
                     </p>
                     <div class="card-body">
                         <h3 class="card-title"><a th:href="@{|/mainpost/comment/${list.id}|}"
@@ -72,7 +72,7 @@
                     <ul class="pagination justify-content-center">
                         <li class="page-item" th:classappend="${!main_post_scrap.hasPrevious} ? 'disabled'">
                             <a class="page-link"
-                               th:data-page="${main_post_scrap.number-1}">
+                               th:href="@{|?page=${main_post_scrap.number-1}|}">
                                 <span>이전</span>
                             </a>
                         </li>
@@ -80,10 +80,10 @@
                             th:if="${page >= main_post_scrap.number - 5 and page <= main_post_scrap.number + 5}"
                             th:classappend="${page == main_post_scrap.number} ? 'active'"
                             class="page-item">
-                            <a th:text="${page}" class="page-link" th:data-url="${page}"></a>
+                            <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}"></a>
                         </li>
                         <li class="page-item" th:classappend="${!main_post_scrap.hasNext} ? 'disabled'">
-                            <a class="page-link" th:data-page="${main_post_scrap.number+1}">
+                            <a class="page-link" th:href="@{|?page=${main_post_scrap.number+1}|}">
                                 <span>다음</span>
                             </a>
                         </li>
@@ -95,7 +95,7 @@
 
     </div>
 </div>
-<!--<script th:src="@{/js/mainpost.js}" type="text/javascript"></script>-->
+<script th:src="@{/js/userscrap.js}" type="text/javascript"></script>
 <script th:src="@{/js/bootstrap.js}"></script>
 </body>
 </html>

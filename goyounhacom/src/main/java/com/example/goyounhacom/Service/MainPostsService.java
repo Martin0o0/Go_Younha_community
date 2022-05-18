@@ -5,6 +5,8 @@ import com.example.goyounhacom.domain.HelloPosts.HelloPost;
 import com.example.goyounhacom.domain.MainPosts.MainPost;
 import com.example.goyounhacom.domain.MainPosts.MainPostRepository;
 import com.example.goyounhacom.domain.Photo.PhotoRepository;
+import com.example.goyounhacom.domain.Scrap.Scrap;
+import com.example.goyounhacom.domain.Scrap.ScrapRepository;
 import com.example.goyounhacom.domain.Users.User;
 import com.example.goyounhacom.web.Dto.HelloPostsDto.HelloPostsGetDto;
 import com.example.goyounhacom.web.Dto.HelloPostsDto.HelloPostsSaveDto;
@@ -28,6 +30,8 @@ public class MainPostsService {
     private final MainPostRepository mainPostRepository;
     private final PhotoRepository photoRepository;
     private final FileService fileService;
+    private final ScrapRepository scrapRepository;
+
 
     @Transactional
     public Long save(MainPostSaveDto mainPostSaveDto) {
@@ -94,6 +98,12 @@ public class MainPostsService {
         if(posts.getFileId() != null && photoRepository.existsById(posts.getFileId())){
             fileService.DeleteFile(posts.getFileId());
             log.info("삭제된 파일 ID : {} ", posts.getFileId());
+        }
+        if(scrapRepository.existsByMainPostId(id)){
+            List<Scrap> list = scrapRepository.findAllByMainPostId(id);
+            for(int i = 0; i < list.size(); i++){
+                scrapRepository.delete(list.get(i));
+            }
         }
         mainPostRepository.delete(posts);
         return id;

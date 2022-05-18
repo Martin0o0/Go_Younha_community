@@ -7,6 +7,8 @@ import com.example.goyounhacom.domain.MainPosts.MainPost;
 import com.example.goyounhacom.domain.MainPosts.MainPostComment;
 import com.example.goyounhacom.domain.MainPosts.MainPostCommentRepository;
 import com.example.goyounhacom.domain.MainPosts.MainPostRepository;
+import com.example.goyounhacom.domain.Scrap.Scrap;
+import com.example.goyounhacom.domain.Scrap.ScrapRepository;
 import com.example.goyounhacom.domain.Users.User;
 import com.example.goyounhacom.domain.Users.UserRepository;
 import com.example.goyounhacom.web.Dto.HelloPostsDto.HelloPostsGetDto;
@@ -15,6 +17,8 @@ import com.example.goyounhacom.web.Dto.UserDto.UserSaveDto;
 import com.example.goyounhacom.web.Dto.UserDto.UserUpdateDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -37,6 +41,7 @@ public class UserService {
     private final CommentService commentService;
     private final HelloPostsService helloPostsService;
     private final MainPostsService mainPostsService;
+    private final ScrapRepository scrapRepository;
 
     @Transactional
     public Long save(UserSaveDto userSaveDto) {
@@ -129,6 +134,12 @@ public class UserService {
             }
         }
 
+        if(scrapRepository.existsByUserId(user.getId())){ //마지막으로 스크랩게시판 삭제.
+            List<Scrap> list = scrapRepository.findAllByUserId(user.getId(), null).getContent();
+            for(int i = 0; i < list.size(); i++){
+                scrapRepository.delete(list.get(i));
+            }
+        }
       userRepository.delete(user);
     }
 
