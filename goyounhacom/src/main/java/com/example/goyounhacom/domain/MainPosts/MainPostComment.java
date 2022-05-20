@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -31,12 +32,17 @@ public class MainPostComment extends BaseTimeEntity {
     @JsonBackReference //순환참조 방지.
     private MainPost mainPost; //자식이니까 N:1방식이다.
 
+
+    @OneToMany(mappedBy = "mainPostComment", cascade = CascadeType.REMOVE, orphanRemoval = true) //mappedby => 참조엔티티 속성명, cascade => 게시글 삭제하면 그 예하 묶인 놈들 싸그리 삭제함.
+    private List<Recomment> mainPostComents; //1:N방식이니까. 부모엔티티가 자식엔티티를 여러개 가질 수 있어
+
+
     @ManyToMany //마찬가지로 대등관계이므로
     private Set<User> like;
 
 
     @Builder
-    public MainPostComment(String title, String content, User user, MainPost mainPost){
+    public MainPostComment(String content, User user, MainPost mainPost){
         this.content = content;
         this.user = user;
         this.mainPost = mainPost;

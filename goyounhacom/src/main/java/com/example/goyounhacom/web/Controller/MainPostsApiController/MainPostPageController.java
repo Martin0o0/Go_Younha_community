@@ -1,13 +1,12 @@
 package com.example.goyounhacom.web.Controller.MainPostsApiController;
 
 import com.example.goyounhacom.Config.PrincipalDatails;
-import com.example.goyounhacom.Service.FileService;
-import com.example.goyounhacom.Service.MainPostsService;
-import com.example.goyounhacom.Service.PrincipalDetailService;
-import com.example.goyounhacom.Service.UserService;
+import com.example.goyounhacom.Service.*;
 import com.example.goyounhacom.domain.MainPosts.MainPost;
+import com.example.goyounhacom.domain.MainPosts.Recomment;
 import com.example.goyounhacom.domain.Users.User;
 import com.example.goyounhacom.web.Dto.MainPostDto.CommentDto.CommentSaveDto;
+import com.example.goyounhacom.web.Dto.MainPostDto.CommentDto.RecommentSaveDto;
 import com.example.goyounhacom.web.Dto.MainPostDto.FileDto.MainPostFileDto;
 import com.example.goyounhacom.web.Dto.MainPostDto.MainPostGetDto;
 import com.example.goyounhacom.web.Dto.MainPostDto.MainPostSaveDto;
@@ -39,6 +38,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -51,6 +51,7 @@ public class MainPostPageController {
     private final UserService userService;
     private final PrincipalDetailService principalDetailService;
     private final FileService fileService;
+    private final RecommentService recommentService;
 
     @GetMapping("/mainlist")
     public String mainpost(@AuthenticationPrincipal PrincipalDatails principalDatails, Model model, @PageableDefault(sort = "id", direction = Sort.Direction.DESC, size = 5) Pageable pageable, @RequestParam(required = false, defaultValue = "") String search) {
@@ -65,7 +66,7 @@ public class MainPostPageController {
     }
 
     @GetMapping("/comment/{id}")
-    public String mainpostcoment(@PathVariable Long id, Model model, CommentSaveDto commentSaveDto, @AuthenticationPrincipal PrincipalDatails principalDatails) {
+    public String mainpostcoment(@PathVariable Long id, Model model,@RequestParam(required = false) Long errorpoint, @RequestParam(required = false) String iserror ,@ModelAttribute  CommentSaveDto commentSaveDto, @ModelAttribute  RecommentSaveDto recommentSaveDto ,@AuthenticationPrincipal PrincipalDatails principalDatails) {
         MainPostGetDto post = mainPostsService.getMainpost(id);
         model.addAttribute("main_post", post);
         if (principalDatails != null) {
@@ -76,6 +77,19 @@ public class MainPostPageController {
         if (post.getFileId() != null) {
             MainPostFileDto filedto = fileService.getFile(post.getFileId());
             model.addAttribute("filename", filedto.getOriginalFilename());
+        }
+
+        if(recommentService.existbymainpostid(id)){
+            List<Recomment> list = recommentService.findallbymainpostid(id);
+            model.addAttribute("recomment", list);
+        }
+        if(errorpoint != null && iserror != null){
+            model.addAttribute("errorpoint", errorpoint);
+            model.addAttribute("iserror", iserror);
+        }
+        else {
+            model.addAttribute("errorpoint", null);
+            model.addAttribute("iserror", null);
         }
         mainPostsService.updateviewcount(id);
         return "MainPost_comment";

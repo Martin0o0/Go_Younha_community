@@ -2,10 +2,13 @@ package com.example.goyounhacom.web.Controller.MainPostsApiController.MainPostCo
 
 import com.example.goyounhacom.Service.CommentService;
 import com.example.goyounhacom.Service.MainPostsService;
+import com.example.goyounhacom.Service.RecommentService;
 import com.example.goyounhacom.Service.UserService;
+import com.example.goyounhacom.domain.MainPosts.Recomment;
 import com.example.goyounhacom.domain.Users.User;
 import com.example.goyounhacom.web.Dto.MainPostDto.CommentDto.CommentGetDto;
 import com.example.goyounhacom.web.Dto.MainPostDto.CommentDto.CommentSaveDto;
+import com.example.goyounhacom.web.Dto.MainPostDto.CommentDto.RecommentSaveDto;
 import com.example.goyounhacom.web.Dto.MainPostDto.MainPostGetDto;
 import com.example.goyounhacom.web.Dto.UserDto.UserGetDto;
 import com.example.goyounhacom.web.Dto.UserDto.UserSaveDto;
@@ -23,6 +26,7 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.validation.Valid;
 import javax.xml.stream.events.Comment;
 import java.security.Principal;
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -32,17 +36,24 @@ public class CommentPageController {
     private final CommentService commentService;
     private final MainPostsService mainPostsService;
     private final UserService userService;
+    private final RecommentService recommentService;
 
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/comment/post/{id}")
-    public String createComment(@PathVariable long id, Model model, @Valid CommentSaveDto commentSaveDto, BindingResult bindingResult, Principal principal){
+    public String createComment(@PathVariable long id, Model model,@ModelAttribute @Valid CommentSaveDto commentSaveDto ,BindingResult bindingResult, RecommentSaveDto recommentSaveDto ,Principal principal){
         //현재 로그인한 사용자에 대한 정보를 알기 위해서는 스프링 시큐리티가 제공하는 Principal 객체를 사용해야 한다.
         User user = userService.getbyUsername(principal.getName());
         if(bindingResult.hasErrors()){
             MainPostGetDto mainPostGetDto = mainPostsService.getMainpost(id);
             model.addAttribute("main_post", mainPostGetDto);
             model.addAttribute("userinfo", user);
+            if(recommentService.existbymainpostid(id)){
+                List<Recomment> list = recommentService.findallbymainpostid(id);
+                model.addAttribute("recomment", list);
+            }
+            model.addAttribute("iserror", null);
+            model.addAttribute("errorpoint", null);
             return "MainPost_comment";
         }
         Long postid = commentService.saveComment(id, commentSaveDto.getContent(), user);
@@ -51,7 +62,7 @@ public class CommentPageController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/comment/put/{id}")
-    public String commentmodify(CommentSaveDto commentSaveDto, @PathVariable Long id, Principal principal){
+    public String commentmodify(CommentSaveDto commentSaveDto,  @PathVariable Long id, Principal principal){
         CommentGetDto commentGetDto = commentService.getComment(id);
         if(commentGetDto.getUser().getUsername().equals(principal.getName()) == false){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없음");
