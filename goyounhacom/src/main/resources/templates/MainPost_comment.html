@@ -116,7 +116,6 @@
                         <input class="btn btn-outline-secondary" type="submit" id="button-addon2" value="답글 등록">
                     </div>
                 </form>
-                <p th:text="${iserror}"></p>
             </div>
             <div class="card-footer my-1">
                 <a th:href="@{|/mainpost/comment/put/${commentlist.id}|}" class="btn btn-sm btn-outline-secondary"
@@ -146,7 +145,6 @@
                 </div>
                 <div class="card mx-1 w-100">
                     <div class="card-header" th:text="${recommentlist.getUser().getUsername()}">
-
                     </div>
                     <div class="card-body">
                         <blockquote class="blockquote mb-0">
@@ -154,6 +152,16 @@
                             <footer class="blockquote-footer" th:text="${#temporals.format(recommentlist.modifiedDate, 'yyyy-MM-dd HH:mm')}">
                             </footer>
                         </blockquote>
+                    </div>
+                    <div class="card-footer my-1">
+                        <a th:href="@{|/mainpost/recomment/put/${recommentlist.id}|}" class="btn btn-sm btn-outline-secondary"
+                           sec:authorize="isAuthenticated()"
+                           th:if="${recommentlist.user != null and #authentication.getPrincipal().getUsername() == recommentlist.user.username}"
+                           th:text="수정"></a>
+                        <a href="#" th:data-uri="@{|/mainpost/recomment/delete/${recommentlist.id}|}" id="deletebtn"
+                           class="btn btn-sm btn-outline-danger" sec:authorize="isAuthenticated()"
+                           th:if="${ (recommentlist.user != null and #authentication.getPrincipal().getUsername() == recommentlist.user.username) or userinfo.getRoleKey() == 'ROLE_ADMIN'}"
+                           th:text="삭제"></a>
                     </div>
                 </div>
             </div>

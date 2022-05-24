@@ -34,24 +34,30 @@
         </div>
     </div>
     <form th:action="@{|/auth/sign-up|}" th:object="${userSaveDto}" method="post">
-        <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}"> <!--경고문-->
-            <div th:each="err : ${#fields.allErrors()}" th:text="${err}"/>
-        </div>
         <div class="mb-3">
             <label for="username" class="form-label">사용자ID</label>
-            <input type="text" th:field="*{username}" class="form-control">
+            <input type="text" th:field="*{username}" th:errorclass="field-error"  class="form-control">
+            <div class="alert alert-danger field-error" role="alert" th:errors="*{username}"> <!--경고문-->
+            </div>
+
         </div>
         <div class="mb-3">
             <label for="password" class="form-label">비밀번호</label>
-            <input type="password" th:field="*{password}" class="form-control">
+            <input type="password"  th:errorclass="field-error"  th:field="*{password}" class="form-control">
+            <div class="alert alert-danger field-error" th:errors="*{password}" role="alert"> <!--경고문-->
+            </div>
         </div>
         <div class="mb-3">
             <label for="email" class="form-label">이메일</label>
-            <input type="email" th:field="*{email}" class="form-control">
+            <input type="email"  th:errorclass="field-error" th:field="*{email}" class="form-control">
+            <div class="alert alert-danger field-error"  th:errors="*{email}" role="alert"> <!--경고문-->
+            </div>
         </div>
         <div class="mb-3">
             <label for="nickname" class="form-label">닉네임</label>
-            <input type="text" th:field="*{nickname}" class="form-control">
+            <input type="text" th:errorclass="field-error"  th:field="*{nickname}" class="form-control">
+            <div class="alert alert-danger field-error"  th:errors="*{nickname}" role="alert" > <!--경고문-->
+            </div>
         </div>
         <button type="submit" class="btn btn-primary">회원가입</button>
     </form>

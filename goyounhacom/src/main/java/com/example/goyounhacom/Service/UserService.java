@@ -48,6 +48,9 @@ public class UserService {
         if (userRepository.existsByUsername(userSaveDto.getUsername())) {
             return (long) -1;
         }
+        else if(userRepository.existsByNickname(userSaveDto.getNickname())){
+            return (long) -2;
+        }
         else {
             String hashpw = passwordEncoder.encode(userSaveDto.getPassword());
             userSaveDto.setPassword(hashpw);

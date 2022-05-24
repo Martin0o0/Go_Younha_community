@@ -8,6 +8,7 @@ import com.example.goyounhacom.domain.MainPosts.RecommentRepository;
 import com.example.goyounhacom.domain.Users.User;
 import com.example.goyounhacom.domain.Users.UserRepository;
 import com.example.goyounhacom.web.Dto.MainPostDto.CommentDto.CommentSaveDto;
+import com.example.goyounhacom.web.Dto.MainPostDto.CommentDto.RecommentGetDto;
 import com.example.goyounhacom.web.Dto.MainPostDto.CommentDto.RecommentSaveDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
@@ -42,5 +43,25 @@ public class RecommentService {
     public List<Recomment> findallbymainpostid(Long id){
         Sort sort = Sort.by(Sort.Direction.DESC, "mainPostComment");
         return recommentRepository.findAllByMainpostid(id, sort);
+    }
+
+    @Transactional
+    public RecommentGetDto getRecomment(Long id){
+        Recomment recomment = recommentRepository.getById(id);
+        return new RecommentGetDto(recomment);
+    }
+
+    @Transactional
+    public Long modify(Long id, String content){
+        Recomment recomment = recommentRepository.getById(id);
+        recomment.update(content);
+        return id;
+    }
+
+    @Transactional
+    public Long delete(Long id){
+        Recomment recomment = recommentRepository.getById(id);
+        recommentRepository.delete(recomment);
+        return id;
     }
 }

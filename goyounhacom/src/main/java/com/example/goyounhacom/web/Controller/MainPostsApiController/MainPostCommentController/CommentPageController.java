@@ -102,7 +102,6 @@ public class CommentPageController {
         else{
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제 권한이 없음");
         }
-
     }
 
 

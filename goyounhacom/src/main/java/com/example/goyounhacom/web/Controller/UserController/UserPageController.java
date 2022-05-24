@@ -52,7 +52,11 @@ public class UserPageController {
         log.info("회원번호 : {}", status);
 
         if(status == -1){
-            bindingResult.reject("signupFailed", "이미 등록된 사용자입니다.");
+            bindingResult.rejectValue("username", "signupfailed", "이미 등록된 아이디 입니다.");
+            return "sign-up-form";
+        }
+        else if(status == -2){
+            bindingResult.rejectValue("nickname", "signupfailed", "이미 등록된 닉네임입니다.");
             return "sign-up-form";
         }
         else {
