@@ -18,10 +18,6 @@ import javax.validation.constraints.Size;
 public class HelloPostsSaveDto {
 
 
-    @NotEmpty(message = "제목은 필수입니다.")
-    @Size(max=100, message = "100자 이하로 해주세요.")
-    private String title;
-
     @NotEmpty(message = "내용을 적어주세요.")
     @Size(max=400, message = "400자 이내로 적어주세요.")
     private String content;
@@ -29,15 +25,14 @@ public class HelloPostsSaveDto {
     private User user;
 
     @Builder
-    public HelloPostsSaveDto(String title, String content, User user){
-        this.title = title;
+    public HelloPostsSaveDto(String content, User user){
         this.content = content;
         this.user = user;
     }
 
     public HelloPost toEntity(){
         return HelloPost.builder()
-                .title(title)
+                .title("등업신청")
                 .content(content)
                 .user(user)
                 .build();

@@ -24,10 +24,8 @@ public class HelloPost extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
-
     @ManyToOne //등업게시판은 오직 한명의 유저만이 작성할 수 있다.
     private User user;
-
 
     @Builder
     public HelloPost(String title, String content, User user){
@@ -36,11 +34,7 @@ public class HelloPost extends BaseTimeEntity {
         this.user = user;
     }
 
-    public void update(String title, String content){
-        this.title = title;
+    public void update(String content){
         this.content = content;
     }
-
-
-
 }

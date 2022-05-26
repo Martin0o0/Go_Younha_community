@@ -1,6 +1,7 @@
 package com.example.goyounhacom.web.Controller.HelloPostsController;
 
 
+import com.example.goyounhacom.Config.PrincipalDatails;
 import com.example.goyounhacom.Service.HelloPostsService;
 import com.example.goyounhacom.Service.UserService;
 import com.example.goyounhacom.domain.HelloPosts.HelloPost;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -45,9 +47,14 @@ public class HelloPostPageController {
     }
 
     @GetMapping("/application/{id}")
-    public String HelloPostApply(@PathVariable Long id, Model model){
+    public String HelloPostApply(@PathVariable Long id, Model model, @AuthenticationPrincipal PrincipalDatails principalDatails){
         HelloPostsGetDto helloPostsGetDto = helloPostsService.findbyid(id);
         model.addAttribute("hello_post", helloPostsGetDto);
+        if(principalDatails != null){
+            User user = userService.getbyUsername(principalDatails.getUsername());
+            model.addAttribute("userinfo", user);
+
+        }
         return "HelloPost_apply";
     }
 
@@ -55,7 +62,6 @@ public class HelloPostPageController {
     @PreAuthorize("isAuthenticated()") //로그인 필요
     @GetMapping("/save")
     public String hellopostpage(HelloPostsSaveDto helloPostsSaveDto){
-        log.info("저장된 글 : {}", helloPostsSaveDto.getTitle());
         log.info("저장된 글 내용 : {} ", helloPostsSaveDto.getContent());
         return "HelloPost_save";
     }
@@ -64,12 +70,11 @@ public class HelloPostPageController {
     @PostMapping("/save")
     public String hellopostsave(@Valid HelloPostsSaveDto helloPostsSaveDto, BindingResult bindingResult, Principal principal){
         User user = userService.getbyUsername(principal.getName());
-        log.info("저장된 글 : {}", helloPostsSaveDto.getTitle());
         log.info("저장된 글 내용 : {} ", helloPostsSaveDto.getContent());
         if(bindingResult.hasErrors()){
             return  "HelloPost_save";
         }
-        long savenum = helloPostsService.save(helloPostsSaveDto.getTitle(), helloPostsSaveDto.getContent(), user);
+        long savenum = helloPostsService.save(helloPostsSaveDto.getContent(), user);
         log.info("저장된 글 번호 : {}", savenum);
         return "redirect:/hellopost/hellolist";
 
@@ -83,7 +88,6 @@ public class HelloPostPageController {
         if(helloPostsGetDto.getUser().getUsername().equals(principal.getName()) == false){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없음");
         }
-        helloPostsSaveDto.setTitle(helloPostsGetDto.getTitle());
         helloPostsSaveDto.setContent(helloPostsGetDto.getContent());
         return "HelloPost_save";
     }
@@ -99,7 +103,7 @@ public class HelloPostPageController {
         if(Dto.getUser().getUsername().equals(principal.getName()) == false){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없음");
         }
-        long savenum = helloPostsService.modify(id, helloPostsSaveDto.getTitle(), helloPostsSaveDto.getContent());
+        long savenum = helloPostsService.modify(id, helloPostsSaveDto.getContent());
         log.info("수정된 글 번호 : {}", savenum);
         return "redirect:/hellopost/application/" + id;
     }
@@ -114,6 +118,13 @@ public class HelloPostPageController {
         long deletenum = helloPostsService.deletebyid(id);
         log.info("삭제된 글 번호 : {}", deletenum);
         return "redirect:/";
+    }
+
+
+    @GetMapping("/updateholics/{id}")
+    public String updateholics(@PathVariable Long id){
+        log.info("홀릭스 등업 회원 번호 : {}" ,userService.updateholics(id));
+        return "redirect:/hellopost/hellolist";
     }
 
 }

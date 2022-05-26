@@ -31,29 +31,29 @@ public class HelloPostsService {
     }
 
     @Transactional
-    public Long save(String title, String content, User user){
-       HelloPostsSaveDto helloPostsSaveDto = new HelloPostsSaveDto(title, content, user);
+    public Long save(String content, User user){
+       HelloPostsSaveDto helloPostsSaveDto = new HelloPostsSaveDto(content, user);
        return helloPostRepository.save(helloPostsSaveDto.toEntity()).getId();
     }
 
     @Transactional
     public Long update(Long id, HelloPostsUpdateDto helloPostsUpdateDto){
         HelloPost posts = helloPostRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당하는 게시글이 없다. No : " + id));
-        posts.update(helloPostsUpdateDto.getTitle(), helloPostsUpdateDto.getContent());
+        posts.update(helloPostsUpdateDto.getContent());
         return id;
     }
 
     @Transactional
-    public Long modify(Long id, String title, String content){
+    public Long modify(Long id, String content){
         HelloPost post = helloPostRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당하는 게시글이 없다. No : " + id));
-        post.update(title, content);
+        post.update(content);
         return id;
     }
+
 
     @Transactional
     public HelloPostsGetDto findbyid(Long No){
         HelloPost entity = helloPostRepository.findById(No).orElseThrow(() -> new IllegalArgumentException("해당하는 게시글이 없습니다. No : " + No));
-
         return new HelloPostsGetDto(entity);
     }
 

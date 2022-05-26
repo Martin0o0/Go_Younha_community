@@ -39,17 +39,13 @@
         <thead>
         <tr class="text-center">
             <th scope="col">번호</th>
-            <th scope="col">제목</th>
             <th scope="col">작성자</th>
-            <th scope="col">작성일시</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="list, loop : ${hello_post}" class="text-center">
             <td th:text="${hello_post.getTotalElements - (hello_post.number * hello_post.size) - loop.index}"></td>
-            <th class="text-start"><a th:href="@{|/hellopost/application/${list.id}|}" th:text="${list.title}"></a></td>
-            <td th:if="${list.user != null}" th:text="${list.user.nickname}"></td>
-            <td th:text="${#temporals.format(list.createdDate, 'yyyy-MM-dd HH:mm')}"></td>
+            <td th:if="${list.user != null}"><a th:href="@{|/hellopost/application/${list.id}|}" th:text="${list.user.nickname}"></a></td>
         </tr>
         </tbody>
     </table>

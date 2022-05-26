@@ -22,14 +22,12 @@ public class HelloPostsApiController {
 
     @PostMapping("/post")
     public String save(@RequestBody HelloPostsSaveDto helloPostsSaveDto){
-        log.info("글 제목 : {}", helloPostsSaveDto.getTitle());
         log.info("글 내용 : {}", helloPostsSaveDto.getContent());
         return "등록된 글 번호 : " + helloPostsService.save(helloPostsSaveDto);
     }
 
     @PutMapping("/put/{id}")
     public String udpate(@PathVariable Long id, @RequestBody HelloPostsUpdateDto helloPostsUpdateDto){
-        log.info("수정 글 제목 : {}", helloPostsUpdateDto.getTitle());
         log.info("수정 글 내용 : {}", helloPostsUpdateDto.getContent());
         return "수정된 글 번호 : " + helloPostsService.update(id, helloPostsUpdateDto);
     }

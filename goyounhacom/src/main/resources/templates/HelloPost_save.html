@@ -20,10 +20,10 @@
         </div>
         <div class="mb-3">
             <label for="title" class="form-label">제목</label>
-            <input type="text" th:field="*{title}" class="form-control">
+            <input type="text" name="등업신청" th:value="등업신청" class="form-control" disabled>
         </div>
         <div class="mb-3">
-            <label for="content" class="form-label">내용</label>
+            <label for="content" class="form-label">신청 동기를 적어주세요.</label>
             <textarea th:field="*{content}" class="form-control" rows="10"></textarea>
         </div>
         <input type="submit" value="저장하기" class="btn btn-primary my-2">

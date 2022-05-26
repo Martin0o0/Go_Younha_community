@@ -9,15 +9,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class HelloPostsUpdateDto {
 
-    private String title;
 
     private String content;
 
     private String username;
 
     @Builder
-    public HelloPostsUpdateDto(Long id, String title, String content, String username){
-        this.title = title;
+    public HelloPostsUpdateDto(Long id, String content, String username){
         this.content = content;
         this.username = username;
     }
