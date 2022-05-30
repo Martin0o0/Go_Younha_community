@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Go! younhacom</title>
+    <title>채팅방 리스트</title>
     <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
 </head>
 <body>
 <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/">Go! younhacom</a>
+            <a class="navbar-brand" href="/">채팅방 리스</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbar"
                     aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,7 +38,7 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="offcanvasNavbarDropdown">
                             <li><a class="dropdown-item" th:href="@{|/auth/update|}">회원정보 수정</a></li>
-                            <li><a class="dropdown-item" th:href="@{|/auth/user/scrap/${user_info.getId()}|}">게시글
+                            <li><a class="dropdown-item" th:href="@{|/auth/user/scrap/${userinfo.getId()}|}">게시글
                                 스크랩</a></li>
                             <li sec:authorize="isAuthenticated()">
                                 <hr class="dropdown-divider">
@@ -57,25 +57,21 @@
 </header>
 <div class="container">
     <div class="col-6">
-        <div id="username"  th:data-rol="${#authentication.principal.username}"></div>
-        <label><b>채팅방</b></label>
+        <div id="username" th:data-rol="${#authentication.principal.username}"></div>
+        <label><b>채팅방 리스트</b></label>
     </div>
     <div>
-        <div id="msgArea" class="col"></div>
-        <div class="col-6">
-            <div class="input-group mb-3">
-                <input type="text" id="msg" class="form-control" aria-label="Recipient's username" aria-describedby="button-addon2">
-                <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button" id="button-send">전송</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="d-grid gap-1 d-md-flex justify-content-md-end">
-        <button class="btn btn-primary me-md-2" type="button" id="disconn">퇴장</button>
+        <ul th:each="room : ${list}">
+            <li><a th:href="@{|/chat/room?roomId=${room.roomid}|}">[[${room.name}]]</a></li>
+        </ul>
     </div>
 </div>
-<script th:src="@{/js/chat.js}"></script>
+<form th:action="@{/chat/room}" method="post" id="createform">
+    <input type="text" name="name" class="form-control">
+    <button class="btn btn-secondary" id="createroombtn">개설하기</button>
+</form>
+</div>
+<script th:src="@{/js/rooms.js}"></script>
 <script th:src="@{/js/bootstrap.js}"></script>
 </body>
 </html>

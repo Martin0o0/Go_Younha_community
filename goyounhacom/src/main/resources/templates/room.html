@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Go! younhacom</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Go! younhacom</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbar"
+                    aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbar">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/hellopost/hellolist">등업신청</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/mainpost/mainlist">자유게시판</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{|/auth/login|}">로그인</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="isAnonymous()">
+                        <a class="nav-link" th:href="@{|/auth/sign-up|}">회원가입</a>
+                    </li>
+                    <li class="nav-item dropdown" sec:authorize="isAuthenticated()" id="userinfo"
+                        th:data-rol="${#authentication.principal.username}">
+                        <a class="nav-link dropdown-toggle" href="#" id="offcanvasNavbarDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            [[${#authentication.principal.username}]]
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="offcanvasNavbarDropdown">
+                            <li><a class="dropdown-item" th:href="@{|/auth/update|}">회원정보 수정</a></li>
+                            <li><a class="dropdown-item" th:href="@{|/auth/user/scrap/${userinfo.getId()}|}">게시글
+                                스크랩</a></li>
+                            <li sec:authorize="isAuthenticated()">
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li sec:authorize="isAuthenticated()"><a class="dropdown-item" th:href="@{|/auth/logout|}">로그아웃</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" sec:authorize="hasRole('ADMIN')" href="/admin">관리자 페이지</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+<div class="container">
+    <div class="col-6">
+        <div id="username"  th:data-rol="${#authentication.principal.username}"></div>
+        <label><b>[[${room.name}]]</b></label>
+    </div>
+    <div>
+        <div id="msgArea" class="col"></div>
+        <div class="col-6">
+            <div class="input-group mb-3">
+                <input type="text" id="msg" class="form-control" aria-label="Recipient's username"
+                       aria-describedby="button-addon2">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" id="button-send">전송</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="d-grid gap-1 d-md-flex justify-content-md-end">
+        <button class="btn btn-primary me-md-2" type="button" id="disconn">퇴장</button>
+    </div>
+</div>
+<script th:inline="javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+
+        let username = document.querySelector("#username");
+        username = username.dataset.rol;
+        console.log(username);
+
+        var roomName = [[${room.name}]];
+        var roomId = [[${room.roomid}]];
+
+        //
+
+        var sockJs = new SockJS("/stomp/chat");
+        const stomp = Stomp.over(sockJs);
+
+        stomp.connect({}, function () {
+            console.log("STOMP Connection");
+            stomp.subscribe("/sub/chat/room/" + roomId, function (chat) {
+                var content = JSON.parse(chat.body);
+                console.log(content);
+                var writer = content.writter;
+                var str = '';
+
+                let msgarea = document.querySelector("#msgArea");
+                if (writer == username) {
+                    let colnode = document.createElement("div");
+                    colnode.classList.add("col-6");
+                    let alertnode = document.createElement("div");
+                    alertnode.classList.add("alert", "alert-secondary");
+                    let messagenode = document.createElement("b");
+                    let messagetext = document.createTextNode(writer + " : " + content.message);
+                    messagenode.appendChild(messagetext);
+                    alertnode.appendChild(messagenode);
+                    colnode.appendChild(alertnode);
+                    msgarea.appendChild(colnode);
+                } else {
+                    let colnode = document.createElement("div");
+                    colnode.classList.add("col-6");
+                    let alertnode = document.createElement("div");
+                    alertnode.classList.add("alert", "alert-danger");
+                    let messagenode = document.createElement("b");
+                    let messagetext = document.createTextNode(writer + " : " + content.message);
+                    messagenode.appendChild(messagetext);
+                    alertnode.appendChild(messagenode);
+                    colnode.appendChild(alertnode);
+
+                    msgarea.appendChild(colnode);
+                }
+                //send(path, header, message)로 메세지를 보낼 수 있음
+            });
+            stomp.send('/pub/chat/enter', {}, JSON.stringify({roomId: roomId, writter: username}))
+
+        });
+        let sendbtn = document.querySelector("#button-send");
+        sendbtn.addEventListener("click", function(e){
+            let msg = document.getElementById("msg");
+
+            console.log(username + ":" + msg.value);
+            stomp.send("/pub/chat/message", {}, JSON.stringify({roomId: roomId,  writter: username, message: msg.value}));
+            msg.value = '';
+        })
+
+        let disconn = document.querySelector("#disconn");
+        disconn.addEventListener("click", function(){
+            stomp.send('/pub/chat/disconnect', {}, JSON.stringify({roomId: roomId, writter: username}));
+            stomp.disconnect(function(){
+                console.log("퇴장됨");
+                location.href = "/";
+            }, {});
+        });
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script th:src="@{/js/bootstrap.js}"></script>
+</body>
+</html>

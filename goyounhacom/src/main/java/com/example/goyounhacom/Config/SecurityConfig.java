@@ -26,7 +26,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration //하나 이상의 빈을 등록하기 위해 Configuration 선언 //환경설정파일을 뜻하는 어노테이션이기도 함.
 @EnableWebSecurity //스프링 시큐리티 설정 활성화
 @RequiredArgsConstructor
-@EnableGlobalMethodSecurity(prePostEnabled = true) //prePostEnabled = true 설정은 로그인 여부를 판별하기 위해 사용했던 @PreAuthorize 애너테이션을 사용하기 위해 반드시 필요하다.
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+//prePostEnabled = true 설정은 로그인 여부를 판별하기 위해 사용했던 @PreAuthorize 애너테이션을 사용하기 위해 반드시 필요하다.
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final PrincipalDetailService principalDetailService;
@@ -44,12 +45,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
+        http
+                .headers().frameOptions().sameOrigin().and()
+                .authorizeRequests()
                 // URL별 권한 관리를 설정하는 옵션의 시작점
                 .antMatchers("/**").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
-                    // 나머지의 요청에 대해서는 인증받은 사람만 접속 가능.
+                // 나머지의 요청에 대해서는 인증받은 사람만 접속 가능.
                 .and()
                 .csrf().ignoringAntMatchers("/api/**")
                 .and()
@@ -60,9 +63,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()//해당하는 로그인 페이지로 이동//폼 로그인 좆까라 선언.
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout"))
-                .logoutSuccessUrl("/")
-                .invalidateHttpSession(true);
-                //세션 상태 유지 안함
+                .logoutSuccessUrl("/");
+//                .invalidateHttpSession(true)
+//                //세션 상태 유지 안함
 
 
         http.rememberMe().tokenValiditySeconds(60 * 60 * 7).userDetailsService(principalDetailService); //유저 쿠키 유지.
@@ -81,17 +84,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public LoginFailuereHandler loginFailuereHandler(){
+    public LoginFailuereHandler loginFailuereHandler() {
         return new LoginFailuereHandler();
     } //실패 핸들러
 
     @Bean
-    public LoginSuccessHandler loginSuccessHandler(){
+    public LoginSuccessHandler loginSuccessHandler() {
         return new LoginSuccessHandler();
     } //성공 핸들러
-    
+
     @Bean
-    public JsonUsernamePasswordAuthenticationFilter jsonUsernamePasswordLoginFilter(){
+    public JsonUsernamePasswordAuthenticationFilter jsonUsernamePasswordLoginFilter() {
         JsonUsernamePasswordAuthenticationFilter jsonUsernamePasswordLoginFilter = new JsonUsernamePasswordAuthenticationFilter(objectMapper);
         jsonUsernamePasswordLoginFilter.setAuthenticationManager(authenticationManager());
         jsonUsernamePasswordLoginFilter.setAuthenticationSuccessHandler(loginSuccessHandler()); //성공핸들러 적용
