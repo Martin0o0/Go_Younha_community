@@ -2,9 +2,12 @@ package com.example.goyounhacom.chat;
 
 
 import com.example.goyounhacom.Config.PrincipalDatails;
+import com.example.goyounhacom.Service.ChatService;
 import com.example.goyounhacom.Service.UserService;
 import com.example.goyounhacom.domain.Users.User;
 import com.example.goyounhacom.domain.chat.ChatRepository;
+import com.example.goyounhacom.domain.chat.Message;
+import com.example.goyounhacom.domain.chat.RoomIdRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/chat")
@@ -27,6 +32,7 @@ public class RoomController {
 
     private final ChatRepository chatRepository;
     private final UserService userService;
+    private final ChatService chatService;
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/rooms")
@@ -46,7 +52,7 @@ public class RoomController {
     @PostMapping(value = "/room")
     public String create(@RequestParam String name, RedirectAttributes rttr){
 
-        log.info("# Create Chat Room , name: " + name);
+        log.info("# Create Message Room , name: " + name);
         rttr.addFlashAttribute("roomName", chatRepository.createChatRoomDTO(name)); //뒤에 쿼리문을 생성하지 않음.
 
         return "redirect:/chat/rooms";
@@ -60,10 +66,13 @@ public class RoomController {
         if (principalDatails != null) {
             User user = userService.getbyUsername(principalDatails.getUsername());
             model.addAttribute("userinfo", user);
-        }
-        log.info("# get Chat Room, roomID : " + roomId);
 
-        model.addAttribute("room", chatRepository.findRoomById(roomId));
+            model.addAttribute("room", chatService.findByroomname(roomId, user.getUsername()));
+            List<Message> list = chatService.findListMsg(roomId);
+            model.addAttribute("msglist", list);
+
+        }
+        log.info("# get Message Room, roomID : " + roomId);
         return "room";
     }
 }

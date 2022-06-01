@@ -6,11 +6,7 @@ import lombok.Setter;
 @Setter
 @Getter
 public class ChatMessageDto {
-
     private String roomId;
-
     private String writter;
-
     private String message;
-
 }

@@ -1,6 +1,9 @@
 package com.example.goyounhacom.chat;
 
+import com.example.goyounhacom.Service.ChatService;
+import com.example.goyounhacom.Service.UserService;
 import com.example.goyounhacom.web.Dto.MessageDto.ChatMessageDto;
+import com.example.goyounhacom.web.Dto.UserDto.UserGetDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -14,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class StompContoller {
     private final SimpMessagingTemplate template; //특정 브로커로 메시지를 전달해야함.
+    private final ChatService chatService;
+    private final UserService userService;
+
 
     //Client가 SEND할 수 있는 경로
     //stompConfig에서 설정한 applicationDestinationPrefixes와 @MessageMapping 경로가 병합됨
@@ -26,7 +32,13 @@ public class StompContoller {
 
     @MessageMapping(value = "/chat/message")
     public void message(ChatMessageDto message){
+        log.info("글쓴이 : {}", message.getWritter());
+        log.info("메시지 내용 : {}", message.getMessage());
+        log.info("방 번호 : {}", message.getRoomId());
+        chatService.messageinfo(message.getWritter(), message.getMessage(),message.getRoomId());
         template.convertAndSend("/sub/chat/room/" + message.getRoomId(), message); //이쪽으로 메시지가 전달된다.
+
+
     }
 
     @MessageMapping("/chat/disconnect")

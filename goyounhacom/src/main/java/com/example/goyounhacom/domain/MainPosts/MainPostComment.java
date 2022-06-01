@@ -36,7 +36,6 @@ public class MainPostComment extends BaseTimeEntity {
     @OneToMany(mappedBy = "mainPostComment", cascade = CascadeType.REMOVE, orphanRemoval = true) //mappedby => 참조엔티티 속성명, cascade => 게시글 삭제하면 그 예하 묶인 놈들 싸그리 삭제함.
     private List<Recomment> mainPostComents; //1:N방식이니까. 부모엔티티가 자식엔티티를 여러개 가질 수 있어
 
-
     @ManyToMany //마찬가지로 대등관계이므로
     private Set<User> like;
 

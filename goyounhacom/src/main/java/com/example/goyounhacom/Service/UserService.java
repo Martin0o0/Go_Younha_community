@@ -108,6 +108,12 @@ public class UserService {
     }
 
     @Transactional
+    public UserGetDto findbynickname(String nickname){
+        User entity = userRepository.findByNickname(nickname).orElseThrow(() -> new IllegalArgumentException("해당하는 닉네임을 가진 유저가 없습니다.."));
+        return new UserGetDto(entity);
+    }
+
+    @Transactional
     public User getbyUsername(String username){
         User entity = userRepository.findByUsername(username).orElseThrow(() -> new IllegalArgumentException("해당하는 유저 아이디는 없습니다. " + username));
         return entity;

@@ -16,6 +16,8 @@ public class ChatRepository {
 
     }
 
+
+
     public List<ChatRoomDto> findAllRooms(){
         List<ChatRoomDto> result = new ArrayList<>(chatRoomDtoMap.values());
         Collections.reverse(result); //최신순으로 해야함으로, 역순으로 돌리자.

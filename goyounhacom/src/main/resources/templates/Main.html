@@ -40,6 +40,7 @@
                             <li><a class="dropdown-item" th:href="@{|/auth/update|}">회원정보 수정</a></li>
                             <li><a class="dropdown-item" th:href="@{|/auth/user/scrap/${user_info.getId()}|}">게시글
                                 스크랩</a></li>
+                            <li><a class="dropdown-item" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBackdrop" aria-controls="offcanvasWithBackdrop">채팅방</a></li>
                             <li sec:authorize="isAuthenticated()">
                                 <hr class="dropdown-divider">
                             </li>
@@ -55,6 +56,17 @@
         </div>
     </nav>
 </header>
+<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasWithBackdrop" aria-labelledby="offcanvasWithBackdropLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasWithBackdropLabel">채팅방</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <ul class="list-group" sec:authorize="isAuthenticated()" th:each="roomlist : ${usernamelist}">
+            <li class="list-group-item"><a th:href="@{|chat/room?roomId=${roomlist.roomname}|}" th:text="${roomlist.username2}"></a></li>
+        </ul>
+    </div>
+</div>
 <div class="container-fluid">
     <div id="carouselExampleIndicators" class="carousel slide my-5 " data-bs-ride="carousel">
         <div class="carousel-indicators">

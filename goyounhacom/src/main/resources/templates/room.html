@@ -59,11 +59,18 @@
 <div class="container">
     <div class="col-6">
         <div id="username"  th:data-rol="${#authentication.principal.username}"></div>
-        <label><b>[[${room.name}]]</b></label>
     </div>
     <div>
-        <div id="msgArea" class="col"></div>
-        <div class="col-6">
+        <div class="col-10 mx-auto">
+            <div th:each="msglist : ${msglist}" >
+                <div class="alert alert-secondary justify-content-end" th:if="${msglist.writer == #authentication.principal.username}">
+                    <b>[[${msglist.writer}]] : [[${msglist.msg}]]</b>
+                </div>
+                <div class="alert alert-danger justify-content-start" th:if="${msglist.writer != #authentication.principal.username}">
+                    <b>[[${msglist.writer}]] : [[${msglist.msg}]]</b>
+                </div>
+            </div>
+            <div id="msgArea" class="col-10 mx-auto"></div>
             <div class="input-group mb-3">
                 <input type="text" id="msg" class="form-control" aria-label="Recipient's username"
                        aria-describedby="button-addon2">
@@ -72,6 +79,7 @@
                 </div>
             </div>
         </div>
+
     </div>
     <div class="d-grid gap-1 d-md-flex justify-content-md-end">
         <button class="btn btn-primary me-md-2" type="button" id="disconn">퇴장</button>
@@ -83,12 +91,7 @@
         let username = document.querySelector("#username");
         username = username.dataset.rol;
         console.log(username);
-
-        var roomName = [[${room.name}]];
-        var roomId = [[${room.roomid}]];
-
-        //
-
+        var roomId = [[${room.roomname}]];
         var sockJs = new SockJS("/stomp/chat");
         const stomp = Stomp.over(sockJs);
 
@@ -98,12 +101,11 @@
                 var content = JSON.parse(chat.body);
                 console.log(content);
                 var writer = content.writter;
-                var str = '';
 
                 let msgarea = document.querySelector("#msgArea");
                 if (writer == username) {
                     let colnode = document.createElement("div");
-                    colnode.classList.add("col-6");
+                    colnode.classList.add("justify-content-end");
                     let alertnode = document.createElement("div");
                     alertnode.classList.add("alert", "alert-secondary");
                     let messagenode = document.createElement("b");
@@ -114,7 +116,7 @@
                     msgarea.appendChild(colnode);
                 } else {
                     let colnode = document.createElement("div");
-                    colnode.classList.add("col-6");
+                    colnode.classList.add("justify-content-start");
                     let alertnode = document.createElement("div");
                     alertnode.classList.add("alert", "alert-danger");
                     let messagenode = document.createElement("b");
@@ -122,7 +124,6 @@
                     messagenode.appendChild(messagetext);
                     alertnode.appendChild(messagenode);
                     colnode.appendChild(alertnode);
-
                     msgarea.appendChild(colnode);
                 }
                 //send(path, header, message)로 메세지를 보낼 수 있음
@@ -133,7 +134,6 @@
         let sendbtn = document.querySelector("#button-send");
         sendbtn.addEventListener("click", function(e){
             let msg = document.getElementById("msg");
-
             console.log(username + ":" + msg.value);
             stomp.send("/pub/chat/message", {}, JSON.stringify({roomId: roomId,  writter: username, message: msg.value}));
             msg.value = '';

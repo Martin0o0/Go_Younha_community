@@ -12,14 +12,11 @@ import java.util.UUID;
 @Getter
 public class ChatRoomDto {
     private String roomid;
-    private String name;
-    private Set<WebSocketSession> sessions = new HashSet<>(); //세션을 셋으로 정의하여 오직 하나의 세션만 담을 수 있도록 함.
+    //private Set<WebSocketSession> sessions = new HashSet<>(); //세션을 셋으로 정의하여 오직 하나의 세션만 담을 수 있도록 함.
 
     public static ChatRoomDto create(String name){
         ChatRoomDto chatRoomDto = new ChatRoomDto();
-
         chatRoomDto.roomid = UUID.randomUUID().toString();
-        chatRoomDto.name = name;
         return chatRoomDto;
     }
 
