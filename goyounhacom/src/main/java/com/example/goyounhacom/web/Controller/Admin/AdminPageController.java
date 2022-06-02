@@ -1,10 +1,16 @@
 package com.example.goyounhacom.web.Controller.Admin;
 
 
+import com.example.goyounhacom.Service.NoticeService;
 import com.example.goyounhacom.Service.UserService;
+import com.example.goyounhacom.domain.Infomation.Notice;
 import com.example.goyounhacom.web.Dto.UserDto.UserGetDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,6 +27,7 @@ import java.util.List;
 @RequestMapping("/admin")
 public class AdminPageController {
     private final UserService userService;
+    private final NoticeService noticeService;
 
 
     @GetMapping()
@@ -40,6 +47,15 @@ public class AdminPageController {
         model.addAttribute("userGetDto", list);
         return "admin/adminusersindex";
     }
+
+    @GetMapping("/information")
+    public String viewinfo(Model model, @PageableDefault(sort="id", direction = Sort.Direction.DESC, size = 5) Pageable pageable){
+        Page<Notice> list = noticeService.pagelist(pageable);
+        model.addAttribute("notice", list);
+        return "admin/Notice";
+    }
+
+
 
     @GetMapping("/userinfo/{id}")
     public String moreinfouser(@PathVariable Long id, Model model){

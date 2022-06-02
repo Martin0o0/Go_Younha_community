@@ -54,7 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 // 나머지의 요청에 대해서는 인증받은 사람만 접속 가능.
                 .and()
-                .csrf().ignoringAntMatchers("/api/**")
+                .csrf().ignoringAntMatchers("/api/**") //api로 시작하는 엔드포인트는 csrf 인증을 무시한다.
                 .and()
                 .formLogin()
                 .loginPage("/auth/login")

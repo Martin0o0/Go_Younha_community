@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>회원관리</title>
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
 </head>
@@ -30,19 +29,19 @@
 <h3 class="text-center">사용자를 관리합니다.</h3>
 <div class="container">
     <div class="table-responsive">
-        <table class="table overflow-auto">
+        <table class="table">
             <thead>
-            <tr class="text-center w-100">
-                <th scope="col">회원번호</th>
-                <th scope="col">회원명</th>
-                <th scope="col">닉네임</th>
-                <th scope="col">홀릭스 여부</th>
+            <tr class="text-center">
+                <th scope="col">UserId</th>
+                <th scope="col">Username</th>
+                <th scope="col">Nickname</th>
+                <th scope="col">IsHolics?</th>
                 <th scope="col">ROLE</th>
-                <th scope="col">계정 생성 시간</th>
+                <th scope="col">CreateAccountTime</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="list, loop : ${userGetDto}" class="text-center w-100">
+            <tr th:each="list, loop : ${userGetDto}" class="text-center">
                 <td th:text="${list.id}"></td>
                 <th class="text-start"><a th:href="@{|/admin/userinfo/${list.id}|}" th:text="${list.username}"></a>
                 </td>

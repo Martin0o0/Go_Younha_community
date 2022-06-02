@@ -40,7 +40,9 @@
                             <li><a class="dropdown-item" th:href="@{|/auth/update|}">회원정보 수정</a></li>
                             <li><a class="dropdown-item" th:href="@{|/auth/user/scrap/${user_info.getId()}|}">게시글
                                 스크랩</a></li>
-                            <li><a class="dropdown-item" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBackdrop" aria-controls="offcanvasWithBackdrop">채팅방</a></li>
+                            <li><a class="dropdown-item" data-bs-toggle="offcanvas"
+                                   data-bs-target="#offcanvasWithBackdrop" aria-controls="offcanvasWithBackdrop">채팅방</a>
+                            </li>
                             <li sec:authorize="isAuthenticated()">
                                 <hr class="dropdown-divider">
                             </li>
@@ -56,14 +58,16 @@
         </div>
     </nav>
 </header>
-<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasWithBackdrop" aria-labelledby="offcanvasWithBackdropLabel">
+<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasWithBackdrop"
+     aria-labelledby="offcanvasWithBackdropLabel">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title" id="offcanvasWithBackdropLabel">채팅방</h5>
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
         <ul class="list-group" sec:authorize="isAuthenticated()" th:each="roomlist : ${usernamelist}">
-            <li class="list-group-item"><a th:href="@{|chat/room?roomId=${roomlist.roomname}|}" th:text="${roomlist.username2}"></a></li>
+            <li class="list-group-item"><a th:href="@{|chat/room?roomId=${roomlist.roomname}|}"
+                                           th:text="${roomlist.username2}"></a></li>
         </ul>
     </div>
 </div>
@@ -111,7 +115,6 @@
     </div>
 </div>
 <div class="container">
-
     <div class="p-5 my-5 bg-light rounded-3 col-md-10 mx-auto">
         <div class="container-fluid py-5">
             <h2 class="fw-bold">Go! younha 커뮤니티</h2>
@@ -121,9 +124,37 @@
             <a th:href="@{/auth/sign-up}" class="btn btn-primary btn-lg" type="button">시작하기</a>
         </div>
     </div>
+    <!-- 공지사항 및 인기게시판-->
 
-</div>
+    <div class="col-md-10 mx-auto mb-4">
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-header">
+                        공지사항
+                    </div>
+                    <ul class="list-group list-group-flush"> <!--공지사항-->
+                        <li class="list-group-item">An item</li>
+                        <li class="list-group-item">A second item</li>
+                        <li class="list-group-item">A third item</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-header">
+                        인기 게시글
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">An item</li>
+                        <li class="list-group-item">A second item</li>
+                        <li class="list-group-item">A third item</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<script th:src="@{/js/bootstrap.js}"></script>
+    <script th:src="@{/js/bootstrap.js}"></script>
 </body>
 </html>
