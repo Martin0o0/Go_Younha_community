@@ -59,7 +59,7 @@
         <img th:src="@{'/mainpost/display/' + ${main_post.getFileId()}}" id="displayimage"
              th:if="${main_post.getFileId() != null}" class="card-img-top my-3" alt="이미지">
         <div class="card-body">
-            <h6 class="card-text">[[${main_post.content}]]</h6>
+            <h6 class="card-text" th:utext="${@commonUtil.markdown(main_post.content)}"></h6>
         </div>
         <ul class="list-group list-group-flush">
             <li class="list-group-item" th:if="${main_post.createdDate != null}">created on
@@ -123,7 +123,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <div class="card-text" style="white-space: pre-line;">[[${commentlist.content}]]</div>
+                <div class="card-text" th:utext="${@commonUtil.markdown(commentlist.content)}"></div>
                 <h6 class="card-subtitle my-1 text-muted" th:if="${commentlist.modifiedDate != null}">modified at
                     [[${#temporals.format(commentlist.modifiedDate, 'yyyy-MM-dd HH:mm')}]]</h6>
             </div>
@@ -175,7 +175,7 @@
                     </div>
                     <div class="card-body">
                         <blockquote class="blockquote mb-0">
-                            <p th:text="${recommentlist.getContent()}"></p>
+                            <p th:utext="${@commonUtil.markdown(recommentlist.getContent())}"></p>
                             <footer class="blockquote-footer"
                                     th:text="${#temporals.format(recommentlist.modifiedDate, 'yyyy-MM-dd HH:mm')}">
                             </footer>

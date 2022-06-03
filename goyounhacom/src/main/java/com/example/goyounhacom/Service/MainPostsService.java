@@ -58,6 +58,7 @@ public class MainPostsService {
     }
 
 
+
     @Transactional
     public Long save(String title, String content, Long fileId, User user) {
         MainPostSaveDto mainPostSaveDto = new MainPostSaveDto(title, content, fileId ,user);

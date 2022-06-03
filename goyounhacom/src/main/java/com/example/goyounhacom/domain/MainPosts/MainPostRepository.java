@@ -25,4 +25,6 @@ public interface MainPostRepository extends JpaRepository<MainPost, Long> {
     @Query("update MainPost p set p.viewcount = p.viewcount + 1 where p.id = :id") //조회수 증가
     int updateviewcount(Long id);
 
+
+
 }

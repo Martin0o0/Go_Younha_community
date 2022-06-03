@@ -58,7 +58,7 @@
                 <p class="card-text col-2 text-truncate">[[${list.content}]]</p>
                 <p><span
                         class="badge rounded-pill bg-info bg-opacity-75"
-                        th:if="${#lists.size(list.mainPostComents) > 0}">[[${#lists.size(list.mainPostComents) + #lists.size(list.mainPostRecomment)}]]</span>
+                        th:if="${#lists.size(list.mainPostComents) > 0}">+[[${#lists.size(list.mainPostComents) + #lists.size(list.mainPostRecomment)}]]</span>
                 </p>
             </div>
             <div class="card-footer text-muted"
