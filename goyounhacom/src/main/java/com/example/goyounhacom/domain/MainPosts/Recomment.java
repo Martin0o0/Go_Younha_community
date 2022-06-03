@@ -3,6 +3,7 @@ package com.example.goyounhacom.domain.MainPosts;
 
 import com.example.goyounhacom.domain.Users.User;
 import com.example.goyounhacom.domain.baseTimeEntity.BaseTimeEntity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,20 +26,28 @@ public class Recomment extends BaseTimeEntity {
     private String content;
 
     @ManyToOne
+    @JoinColumn
+    @JsonBackReference //순환참조 방지.
     private User user;
 
     @ManyToOne
+    @JoinColumn
+    @JsonBackReference //순환참조 방지.
     private MainPostComment mainPostComment;
 
-    private Long mainpostid;
+    @ManyToOne
+    @JoinColumn
+    @JsonBackReference
+    private MainPost mainPost;
+
 
 
     @Builder
-    public Recomment(String content, User user, MainPostComment mainPostComment, Long mainpostid){
+    public Recomment(String content, User user, MainPostComment mainPostComment, MainPost mainPost){
         this.content = content;
         this.user = user;
         this.mainPostComment = mainPostComment;
-        this.mainpostid = mainpostid;
+        this.mainPost = mainPost;
     }
 
 
@@ -49,7 +58,7 @@ public class Recomment extends BaseTimeEntity {
                 ", content='" + content + '\'' +
                 ", user=" + user +
                 ", mainPostComment=" + mainPostComment +
-                ", mainpostid=" + mainpostid +
+                ", mainPost=" + mainPost +
                 '}';
     }
 

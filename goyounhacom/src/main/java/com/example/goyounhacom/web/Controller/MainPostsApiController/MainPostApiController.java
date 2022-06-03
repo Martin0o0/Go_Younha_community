@@ -2,6 +2,7 @@ package com.example.goyounhacom.web.Controller.MainPostsApiController;
 
 
 import com.example.goyounhacom.Service.MainPostsService;
+import com.example.goyounhacom.domain.MainPosts.MainPost;
 import com.example.goyounhacom.web.Dto.HelloPostsDto.HelloPostsGetDto;
 import com.example.goyounhacom.web.Dto.HelloPostsDto.HelloPostsSaveDto;
 import com.example.goyounhacom.web.Dto.MainPostDto.MainPostGetDto;
@@ -27,7 +28,7 @@ public class MainPostApiController {
     }
 
     @GetMapping("/get")
-    public List<MainPostGetDto> findbyAll(){
+    public List<MainPost> findbyAll(){
         return mainPostsService.findByAll();
     }
 }

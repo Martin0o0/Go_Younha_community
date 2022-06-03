@@ -51,15 +51,18 @@
             </p>
             <div class="card-body">
                 <h3 class="card-title"><a th:href="@{|/mainpost/comment/${list.id}|}"
-                                           th:text="${list.title}"></a>
+                                          th:text="${list.title}"></a>
                 </h3>
                 <h6 class="card-subtitle mb-2 text-muted" th:if="${list.user != null}"
                     th:text="${list.user.nickname}"></h6>
                 <p class="card-text col-2 text-truncate">[[${list.content}]]</p>
                 <p><span
-                        class="badge rounded-pill bg-info bg-opacity-75" th:if="${#lists.size(list.mainPostComents) > 0}">+[[${#lists.size(list.mainPostComents)}]]</span></p>
+                        class="badge rounded-pill bg-info bg-opacity-75"
+                        th:if="${#lists.size(list.mainPostComents) > 0}">[[${#lists.size(list.mainPostComents) + #lists.size(list.mainPostRecomment)}]]</span>
+                </p>
             </div>
-            <div class="card-footer text-muted" th:text="${#temporals.format(list.createdDate, 'yyyy-MM-dd HH:mm')}">
+            <div class="card-footer text-muted"
+                 th:text="${#temporals.format(list.createdDate, 'yyyy-MM-dd HH:mm')}">
             </div>
         </div>
     </div>

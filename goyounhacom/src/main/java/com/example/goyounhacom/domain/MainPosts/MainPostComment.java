@@ -24,6 +24,8 @@ public class MainPostComment extends BaseTimeEntity {
     private String content;
 
     @ManyToOne
+    @JoinColumn
+    @JsonBackReference //순환참조 방지.
     private User user;
 
     @ManyToOne

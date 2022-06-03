@@ -9,6 +9,10 @@ import com.example.goyounhacom.web.Dto.Imformation.NoticeSaveDto;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -31,6 +35,15 @@ public class NoticePageController {
     private final UserService userService;
     private final NoticeService noticeService;
 
+    @GetMapping("/noticelist")
+    public String UserNotice(Model model, @PageableDefault(sort="id", direction = Sort.Direction.DESC, size = 5) Pageable pageable){
+        Page<Notice> list = noticeService.pagelist(pageable);
+        model.addAttribute("notice", list);
+        return "UserNotice";
+    }
+
+
+
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/notice/save")
     public String NoticeSave(NoticeSaveDto noticeSaveDto, Model model){
@@ -50,8 +63,7 @@ public class NoticePageController {
         return "redirect:/admin/information";
     }
 
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping("/admin/notice/{id}")//어드민만 들어갈 수 있는 페이지.
+    @GetMapping("/notice/{id}")//공지사항 입장.
     public String adminNoticeInfo(@PathVariable Long id, Model model){
         Notice notice = noticeService.getById(id);
         model.addAttribute("notice", notice);
@@ -64,12 +76,15 @@ public class NoticePageController {
     public String adminNotice(@PathVariable Long id, Principal principal, Model model, NoticeSaveDto noticeSaveDto){
         model.addAttribute("posttype", "공지사항 수정");
         Notice notice = noticeService.getById(id);
-        if(notice.getUser().getUsername().equals(principal.getName()) == false){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한 없음");
+        User user = userService.getbyUsername(principal.getName());
+        if (user.getRoleKey().contentEquals("ROLE_ADMIN") || notice.getUser().getUsername().equals(principal.getName()) == true ) {
+            noticeSaveDto.setTitle(notice.getTitle());
+            noticeSaveDto.setContent(notice.getContent());
+            return "Notice_save";
         }
-        noticeSaveDto.setTitle(notice.getTitle());
-        noticeSaveDto.setContent(notice.getContent());
-        return "Notice_save";
+        else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없음");
+        }
     }
 
 
@@ -81,13 +96,35 @@ public class NoticePageController {
         if(bindingResult.hasErrors()){
             return "Notice_save";
         }
-        if(notice.getUser().getUsername().equals(principal.getName()) == false){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한 없음");
-        }
         User user = userService.getbyUsername(principal.getName());
-        noticeSaveDto.setUser(user);
-        noticeService.update(id, noticeSaveDto);
-        return "redirect:/admin/notice/"+id;
+
+        if (user.getRoleKey().contentEquals("ROLE_ADMIN") || notice.getUser().getUsername().equals(principal.getName()) == true ) {
+            noticeSaveDto.setUser(user);
+            noticeService.update(id, noticeSaveDto);
+            return "redirect:/admin/notice/"+id;
+        }
+        else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없음");
+        }
+
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/admin/notice/delete/{id}")
+    public String adminNoticeDelete(@PathVariable Long id, Principal principal){
+        Notice notice = noticeService.getById(id);
+        User user = userService.getbyUsername(principal.getName());
+        if (user.getRoleKey().contentEquals("ROLE_ADMIN")) {
+            long deletenum = noticeService.delete(id);
+            log.info("삭제된 글 번호 : {}", deletenum);
+            return "redirect:/admin/information";
+        } else if (notice.getUser().getUsername().equals(principal.getName()) == true) {
+            long deletenum = noticeService.delete(id);
+            log.info("삭제된 글 번호 : {}", deletenum);
+            return "redirect:/admin/information";
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없음");
+        }
     }
 
 }

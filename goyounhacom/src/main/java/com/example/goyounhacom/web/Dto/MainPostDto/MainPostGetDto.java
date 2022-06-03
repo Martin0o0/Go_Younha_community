@@ -3,6 +3,7 @@ package com.example.goyounhacom.web.Dto.MainPostDto;
 import com.example.goyounhacom.domain.HelloPosts.HelloPost;
 import com.example.goyounhacom.domain.MainPosts.MainPost;
 import com.example.goyounhacom.domain.MainPosts.MainPostComment;
+import com.example.goyounhacom.domain.MainPosts.Recomment;
 import com.example.goyounhacom.domain.Users.User;
 import com.example.goyounhacom.web.Dto.MainPostDto.FileDto.MainPostFileDto;
 import lombok.Getter;
@@ -31,6 +32,8 @@ public class MainPostGetDto {
 
     private List<MainPostComment> list;
 
+    private List<Recomment> recommentList;
+
     private Set<User> like;
 
 
@@ -44,6 +47,7 @@ public class MainPostGetDto {
         this.user = entity.getUser();
         this.viewcount = entity.getViewcount();
         this.list = entity.getMainPostComents();
+        this.recommentList = entity.getMainPostRecomment();
         this.like = entity.getLike();
 
     }

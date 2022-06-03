@@ -91,7 +91,7 @@
         </div>
     </div>
     <hr class="mx-auto col-md-10">
-    <h2 class="text-center mx-auto col-md-10">[[${#lists.size(main_post.list)}]]개의 답변이 있음</h2>
+    <h2 class="text-center mx-auto col-md-10">[[${#lists.size(main_post.list) + #lists.size(main_post.recommentList)}]]개의 답변이 있음</h2>
     <hr class="mx-auto col-md-10">
     <form th:action="@{|/mainpost/comment/post/${main_post.id}|}" th:object="${commentSaveDto}" method="post"
           class="my-3 mx-auto col-md-10">

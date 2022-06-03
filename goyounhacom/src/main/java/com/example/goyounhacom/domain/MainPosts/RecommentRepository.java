@@ -6,8 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface RecommentRepository extends JpaRepository<Recomment, Long> {
-    Boolean existsByMainpostid(Long id);
+    Boolean existsByMainPostId(Long id);
 
-    List<Recomment> findAllByMainpostid(Long id, Sort sort);
+    List<Recomment> findAllByMainPostId(Long id, Sort sort);
 
 }

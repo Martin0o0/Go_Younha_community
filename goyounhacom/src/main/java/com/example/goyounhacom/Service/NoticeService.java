@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotEmpty;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -29,7 +30,8 @@ public class NoticeService {
     @Transactional
     public Long update(Long id, NoticeSaveDto noticeSaveDto) {
         Notice notice = noticeRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당하는 게시글이 없다. No : " + id));
-        return noticeRepository.save(noticeSaveDto.toEntity()).getId();
+        notice.update(noticeSaveDto.getTitle(), noticeSaveDto.getContent());
+        return id;
     }
 
 
@@ -53,4 +55,10 @@ public class NoticeService {
         return notice;
     }
 
+
+    @Transactional
+    public List<Notice> findByTop3List(){
+        List<Notice> list = noticeRepository.findTop3ByOrderByIdDesc();
+        return list;
+    }
 }

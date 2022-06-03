@@ -41,8 +41,8 @@ public class MainPostsService {
 
 
     @Transactional
-    public List<MainPostGetDto> findByAll() {
-        return mainPostRepository.findAll().stream().map(dto -> new MainPostGetDto(dto)).collect(Collectors.toList());
+    public List<MainPost> findByAll() {
+        return mainPostRepository.findAll();
     }
 
     @Transactional

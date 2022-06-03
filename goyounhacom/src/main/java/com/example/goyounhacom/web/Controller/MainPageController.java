@@ -3,7 +3,9 @@ package com.example.goyounhacom.web.Controller;
 
 import com.example.goyounhacom.Config.PrincipalDatails;
 import com.example.goyounhacom.Service.ChatService;
+import com.example.goyounhacom.Service.NoticeService;
 import com.example.goyounhacom.Service.UserService;
+import com.example.goyounhacom.domain.Infomation.Notice;
 import com.example.goyounhacom.domain.Users.User;
 import com.example.goyounhacom.domain.chat.RoomId;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ import java.util.List;
 public class MainPageController {
     private final UserService userService;
     private final ChatService chatService;
+    private final NoticeService noticeService;
 
     @GetMapping("/") //루트 다이렉트
     public String root(@AuthenticationPrincipal PrincipalDatails principalDatails, Model model){
@@ -32,9 +35,8 @@ public class MainPageController {
             List<RoomId> list = chatService.findListuserid(user.getUsername());
             model.addAttribute("usernamelist", list);
         }
-
-
-
+        List<Notice> noticelist = noticeService.findByTop3List();
+        model.addAttribute("noticelist", noticelist);
         return "Main";
     }
 
