@@ -39,7 +39,7 @@
     <div class="card border-dark my-3  mx-auto col-md-10">
         <div class="card-header d-flex justify-content-between" th:if="${main_post.user != null}">
             <p class="my-auto">[[${main_post.user.nickname}]]</p>
-            <div class="dropdown dropstart" th:if="${#authentication.getPrincipal().getUsername() != main_post.user.username}">
+            <div class="dropdown dropstart" sec:authorize="isAuthenticated()" th:if="${#authentication.getPrincipal().getUsername() != main_post.user.username}">
                 <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
                         data-bs-toggle="dropdown" aria-expanded="false">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
@@ -144,7 +144,7 @@
                     </div>
                 </form>
             </div>
-            <div class="card-footer my-1">
+            <div class="card-footer">
                 <a th:href="@{|/mainpost/comment/put/${commentlist.id}|}" class="btn btn-sm btn-outline-secondary"
                    sec:authorize="isAuthenticated()"
                    th:if="${commentlist.user != null and #authentication.getPrincipal().getUsername() == commentlist.user.username}"
@@ -181,7 +181,7 @@
                             </footer>
                         </blockquote>
                     </div>
-                    <div class="card-footer my-1">
+                    <div class="card-footer">
                         <a th:href="@{|/mainpost/recomment/put/${recommentlist.id}|}"
                            class="btn btn-sm btn-outline-secondary"
                            sec:authorize="isAuthenticated()"

@@ -66,7 +66,9 @@ public class MainPostPageController {
     }
 
     @GetMapping("/comment/{id}")
-    public String mainpostcoment(@PathVariable Long id, Model model,@RequestParam(required = false) Long errorpoint, @RequestParam(required = false) String iserror ,@ModelAttribute  CommentSaveDto commentSaveDto, @ModelAttribute  RecommentSaveDto recommentSaveDto ,@AuthenticationPrincipal PrincipalDatails principalDatails) {
+    public String mainpostcoment(@PathVariable Long id, Model model, Long errorpoint, String iserror ,CommentSaveDto commentSaveDto, RecommentSaveDto recommentSaveDto ,@AuthenticationPrincipal PrincipalDatails principalDatails) {
+        errorpoint = (Long)model.getAttribute("errorpoint");
+        iserror = (String)model.getAttribute("iserror");
         MainPostGetDto post = mainPostsService.getMainpost(id);
         model.addAttribute("main_post", post);
         if (principalDatails != null) {

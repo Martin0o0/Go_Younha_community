@@ -41,7 +41,7 @@
                 <span class="text-start">#[[${notice.getTotalElements - (notice.number * notice.size) - loop.index}]]</span>
             </p>
             <div class="card-body">
-                <h3 class="card-title"><a th:href="@{|/notice/content/${list.id}|}"
+                <h3 class="card-title"><a th:href="@{|/admin/notice/${list.id}|}"
                                           th:text="${list.title}"></a>
                 </h3>
             </div>

@@ -51,8 +51,8 @@ public class RecommentPageController {
                 List<Recomment> list = recommentService.findallbymainpostid(commentGetDto.getMainPost().getId());
                 model.addAttribute("recomment", list);
             }
-            abbtribute.addAttribute("errorpoint", commentid);
-            abbtribute.addAttribute("iserror", "true");
+            abbtribute.addFlashAttribute("errorpoint", commentid);
+            abbtribute.addFlashAttribute("iserror", "true");
             return "redirect:/mainpost/comment/" + commentGetDto.getMainPost().getId() + "#comment_" + commentid; //앵커
         }
 

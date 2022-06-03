@@ -3,6 +3,7 @@ package com.example.goyounhacom.Service;
 
 import com.example.goyounhacom.domain.Infomation.Notice;
 import com.example.goyounhacom.domain.Infomation.NoticeRepository;
+import com.example.goyounhacom.domain.Users.User;
 import com.example.goyounhacom.web.Dto.Imformation.NoticeSaveDto;
 import lombok.RequiredArgsConstructor;
 import net.bytebuddy.asm.Advice;
@@ -20,7 +21,8 @@ public class NoticeService {
     private final NoticeRepository noticeRepository;
 
     @Transactional
-    public Long save(NoticeSaveDto noticeSaveDto) {
+    public Long save(NoticeSaveDto noticeSaveDto, User user) {
+        noticeSaveDto.setUser(user);
         return noticeRepository.save(noticeSaveDto.toEntity()).getId();
     }
 
@@ -44,5 +46,11 @@ public class NoticeService {
         return list;
     }
 
+
+    @Transactional
+    public Notice getById(Long id){
+        Notice notice = noticeRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당하는 공지사항이 없습니다."));
+        return notice;
+    }
 
 }
