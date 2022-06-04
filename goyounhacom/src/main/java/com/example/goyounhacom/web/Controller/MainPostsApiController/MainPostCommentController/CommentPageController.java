@@ -1,5 +1,6 @@
 package com.example.goyounhacom.web.Controller.MainPostsApiController.MainPostCommentController;
 
+import com.example.goyounhacom.Config.PrincipalDatails;
 import com.example.goyounhacom.Service.CommentService;
 import com.example.goyounhacom.Service.MainPostsService;
 import com.example.goyounhacom.Service.RecommentService;
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -62,19 +64,27 @@ public class CommentPageController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/comment/put/{id}")
-    public String commentmodify(CommentSaveDto commentSaveDto,  @PathVariable Long id, Principal principal){
+    public String commentmodify(CommentSaveDto commentSaveDto, @PathVariable Long id, Principal principal, @AuthenticationPrincipal PrincipalDatails principalDatails, Model model){
         CommentGetDto commentGetDto = commentService.getComment(id);
         if(commentGetDto.getUser().getUsername().equals(principal.getName()) == false){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없음");
         }
         commentSaveDto.setContent(commentGetDto.getContent());
+        if (principalDatails != null) {
+            User user = userService.getbyUsername(principalDatails.getUsername());
+            model.addAttribute("userinfo", user);
+        }
         return "comment";
     }
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/comment/put/{id}")
-    public String CommentUpdate(@Valid CommentSaveDto commentSaveDto, BindingResult bindingResult, @PathVariable Long id, Principal principal){
+    public String CommentUpdate(@Valid CommentSaveDto commentSaveDto, BindingResult bindingResult, @PathVariable Long id, Principal principal, @AuthenticationPrincipal PrincipalDatails principalDatails, Model model){
         if (bindingResult.hasErrors()) {
+            if (principalDatails != null) {
+                User user = userService.getbyUsername(principalDatails.getUsername());
+                model.addAttribute("userinfo", user);
+            }
             return "comment";
         }
         CommentGetDto Dto = commentService.getComment(id);

@@ -37,7 +37,7 @@
                     <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
                         <a class="nav-link dropdown-toggle" href="#" id="offcanvasNavbarDropdown" role="button"
                            data-bs-toggle="dropdown" aria-expanded="false">
-                            계정정보
+                            [[${#authentication.principal.username}]]
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="offcanvasNavbarDropdown">
                             <li><a class="dropdown-item" th:href="@{|/auth/update|}">회원정보 수정</a></li>

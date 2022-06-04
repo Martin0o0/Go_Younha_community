@@ -40,9 +40,13 @@ public class HelloPostPageController {
     private final UserService userService;
 
     @GetMapping("/hellolist")
-    public String helopost(Model model, @PageableDefault(sort="id", direction = Sort.Direction.DESC, size = 5) Pageable pageable){
+    public String helopost(@AuthenticationPrincipal PrincipalDatails principalDatails,  Model model, @PageableDefault(sort="id", direction = Sort.Direction.DESC, size = 5) Pageable pageable){
         Page<HelloPost> list = helloPostsService.pageList(pageable);
         model.addAttribute("hello_post", list);
+        if (principalDatails != null) {
+            User user = userService.getbyUsername(principalDatails.getUsername());
+            model.addAttribute("userinfo", user);
+        }
         return "HelloPost";
     }
 
@@ -61,17 +65,22 @@ public class HelloPostPageController {
 
     @PreAuthorize("isAuthenticated()") //로그인 필요
     @GetMapping("/save")
-    public String hellopostpage(HelloPostsSaveDto helloPostsSaveDto){
+    public String hellopostpage(HelloPostsSaveDto helloPostsSaveDto,Model model ,@AuthenticationPrincipal PrincipalDatails principalDatails){
         log.info("저장된 글 내용 : {} ", helloPostsSaveDto.getContent());
+        if (principalDatails != null) {
+            User user = userService.getbyUsername(principalDatails.getUsername());
+            model.addAttribute("userinfo", user);
+        };
         return "HelloPost_save";
     }
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/save")
-    public String hellopostsave(@Valid HelloPostsSaveDto helloPostsSaveDto, BindingResult bindingResult, Principal principal){
+    public String hellopostsave(@Valid HelloPostsSaveDto helloPostsSaveDto, BindingResult bindingResult, Principal principal, @AuthenticationPrincipal PrincipalDatails principalDatails, Model model){
         User user = userService.getbyUsername(principal.getName());
         log.info("저장된 글 내용 : {} ", helloPostsSaveDto.getContent());
         if(bindingResult.hasErrors()){
+            model.addAttribute("userinfo", user);
             return  "HelloPost_save";
         }
         long savenum = helloPostsService.save(helloPostsSaveDto.getContent(), user);
@@ -83,20 +92,28 @@ public class HelloPostPageController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/put/{id}")
-    public String hellopostput(@PathVariable Long id, Principal principal, HelloPostsSaveDto helloPostsSaveDto){
+    public String hellopostput(@PathVariable Long id, Principal principal, HelloPostsSaveDto helloPostsSaveDto, @AuthenticationPrincipal PrincipalDatails principalDatails, Model model){
         HelloPostsGetDto helloPostsGetDto= helloPostsService.getHelloPosts(id);
         if(helloPostsGetDto.getUser().getUsername().equals(principal.getName()) == false){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없음");
         }
         helloPostsSaveDto.setContent(helloPostsGetDto.getContent());
+        if (principalDatails != null) {
+            User user = userService.getbyUsername(principalDatails.getUsername());
+            model.addAttribute("userinfo", user);
+        }
         return "HelloPost_save";
     }
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/put/{id}")
-    public String hellopostupdate(@PathVariable Long id, @Valid HelloPostsSaveDto helloPostsSaveDto, BindingResult bindingResult, Principal principal) { //BindingResult 매개변수는 @Valid 애너테이션으로 인해 검증이 수행된 결과를 의미하는 객체이다.
+    public String hellopostupdate(@PathVariable Long id, @Valid HelloPostsSaveDto helloPostsSaveDto, BindingResult bindingResult, Principal principal, Model model, @AuthenticationPrincipal PrincipalDatails principalDatails) { //BindingResult 매개변수는 @Valid 애너테이션으로 인해 검증이 수행된 결과를 의미하는 객체이다.
 
         if (bindingResult.hasErrors()) {
+            if (principalDatails != null) {
+                User user = userService.getbyUsername(principalDatails.getUsername());
+                model.addAttribute("userinfo", user);
+            }
             return "HelloPost_save";
         }
         HelloPostsGetDto Dto = helloPostsService.getHelloPosts(id);

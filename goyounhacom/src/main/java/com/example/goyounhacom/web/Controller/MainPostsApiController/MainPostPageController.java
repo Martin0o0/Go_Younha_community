@@ -66,9 +66,9 @@ public class MainPostPageController {
     }
 
     @GetMapping("/comment/{id}")
-    public String mainpostcoment(@PathVariable Long id, Model model, Long errorpoint, String iserror ,CommentSaveDto commentSaveDto, RecommentSaveDto recommentSaveDto ,@AuthenticationPrincipal PrincipalDatails principalDatails) {
-        errorpoint = (Long)model.getAttribute("errorpoint");
-        iserror = (String)model.getAttribute("iserror");
+    public String mainpostcoment(@PathVariable Long id, Model model, Long errorpoint, String iserror, CommentSaveDto commentSaveDto, RecommentSaveDto recommentSaveDto, @AuthenticationPrincipal PrincipalDatails principalDatails) {
+        errorpoint = (Long) model.getAttribute("errorpoint");
+        iserror = (String) model.getAttribute("iserror");
         MainPostGetDto post = mainPostsService.getMainpost(id);
         model.addAttribute("main_post", post);
         if (principalDatails != null) {
@@ -81,15 +81,14 @@ public class MainPostPageController {
             model.addAttribute("filename", filedto.getOriginalFilename());
         }
 
-        if(recommentService.existbymainpostid(id)){
+        if (recommentService.existbymainpostid(id)) {
             List<Recomment> list = recommentService.findallbymainpostid(id);
             model.addAttribute("recomment", list);
         }
-        if(errorpoint != null && iserror != null){
+        if (errorpoint != null && iserror != null) {
             model.addAttribute("errorpoint", errorpoint);
             model.addAttribute("iserror", iserror);
-        }
-        else {
+        } else {
             model.addAttribute("errorpoint", null);
             model.addAttribute("iserror", null);
         }
@@ -99,8 +98,13 @@ public class MainPostPageController {
 
     @PreAuthorize("isAuthenticated()") //로그인이 붙은 메서드는 로그인이 필요한 메서드를 의미
     @GetMapping("/save")
-    public String mainpostpage(MainPostSaveDto mainPostSaveDto, Model model) {
+    public String mainpostpage(MainPostSaveDto mainPostSaveDto, Model model, @AuthenticationPrincipal PrincipalDatails principalDatails) {
         model.addAttribute("posttype", "게시글 등록");
+
+        if (principalDatails != null) {
+            User user = userService.getbyUsername(principalDatails.getUsername());
+            model.addAttribute("userinfo", user);
+        }
         model.addAttribute("fileid", null);
         return "MainPost_save";
     } //발리데이션 때문에.
@@ -108,12 +112,14 @@ public class MainPostPageController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/save")
-    public String mainpostsave(@RequestParam("file") MultipartFile files, @Valid MainPostSaveDto mainPostSaveDto, BindingResult bindingResult, Principal principal, Model model) { //BindingResult 매개변수는 @Valid 애너테이션으로 인해 검증이 수행된 결과를 의미하는 객체이다.
+    public String mainpostsave(@RequestParam("file") MultipartFile files, @Valid MainPostSaveDto mainPostSaveDto, BindingResult bindingResult, Principal principal, Model model, @AuthenticationPrincipal PrincipalDatails principalDatails) { //BindingResult 매개변수는 @Valid 애너테이션으로 인해 검증이 수행된 결과를 의미하는 객체이다.
         model.addAttribute("posttype", "게시글 등록");
         model.addAttribute("fileid", null);
         log.info("파일 형식 : {}", files.getContentType());
         User user = userService.getbyUsername(principal.getName());
         if (bindingResult.hasErrors()) {
+            model.addAttribute("userinfo", user);
+
             return "MainPost_save";
         }
         try {
@@ -182,7 +188,7 @@ public class MainPostPageController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/put/{id}")
-    public String mainpostput(@PathVariable Long id, Principal principal, MainPostSaveDto mainPostSaveDto, Model model) {
+    public String mainpostput(@PathVariable Long id, Principal principal, MainPostSaveDto mainPostSaveDto, Model model, @AuthenticationPrincipal PrincipalDatails principalDatails) {
         model.addAttribute("posttype", "게시글 수정");
         MainPostGetDto Dto = mainPostsService.getMainpost(id);
         if (Dto.getUser().getUsername().equals(principal.getName()) == false) {
@@ -196,16 +202,24 @@ public class MainPostPageController {
         } else {
             model.addAttribute("fileid", null);
         }
+        if (principalDatails != null) {
+            User user = userService.getbyUsername(principalDatails.getUsername());
+            model.addAttribute("userinfo", user);
+        }
         return "MainPost_save";
     }
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/put/{id}")
-    public String mainpostupdate(@RequestParam("file") MultipartFile files, @PathVariable Long id, @Valid MainPostSaveDto mainPostSaveDto, BindingResult bindingResult, Principal principal, Model model) { //BindingResult 매개변수는 @Valid 애너테이션으로 인해 검증이 수행된 결과를 의미하는 객체이다.
+    public String mainpostupdate(@RequestParam("file") MultipartFile files, @PathVariable Long id, @Valid MainPostSaveDto mainPostSaveDto, BindingResult bindingResult, Principal principal, Model model, @AuthenticationPrincipal PrincipalDatails principalDatails) { //BindingResult 매개변수는 @Valid 애너테이션으로 인해 검증이 수행된 결과를 의미하는 객체이다.
         MainPostGetDto Dto = mainPostsService.getMainpost(id);
         model.addAttribute("posttype", "게시글 수정");
         model.addAttribute("fileid", Dto.getFileId());
         if (bindingResult.hasErrors()) {
+            if (principalDatails != null) {
+                User user = userService.getbyUsername(principalDatails.getUsername());
+                model.addAttribute("userinfo", user);
+            }
             return "MainPost_save";
         }
         if (Dto.getUser().getUsername().equals(principal.getName()) == false) {
@@ -237,10 +251,9 @@ public class MainPostPageController {
                 fileDto.setFilePath(filePath);
                 fileDto.setFiletype(files.getContentType());
                 log.info(fileDto.toString());
-                if(fileId != null){
+                if (fileId != null) {
                     fileId = fileService.modify(fileId, fileDto);
-                }
-                else{
+                } else {
                     fileId = fileService.saveFile(fileDto);
                 }
 
