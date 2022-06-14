@@ -139,7 +139,7 @@
                     <ul class="list-group list-group-flush"> <!--공지사항-->
 
                         <li class="list-group-item" th:each="list : ${noticelist}"><a class="text-muted"
-                                                                                      th:href="@{|/notice/${list.id}|}">[[${list.title}]]</a>
+                                                                                      th:href="@{|/user/notice/${list.id}|}">[[${list.title}]]</a>
                         </li>
                     </ul>
                 </div>

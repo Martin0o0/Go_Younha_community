@@ -36,9 +36,14 @@ public class NoticePageController {
     private final NoticeService noticeService;
 
     @GetMapping("/noticelist")
-    public String UserNotice(Model model, @PageableDefault(sort="id", direction = Sort.Direction.DESC, size = 5) Pageable pageable){
+    public String UserNotice(Model model, @PageableDefault(sort="id", direction = Sort.Direction.DESC, size = 5) Pageable pageable, @AuthenticationPrincipal PrincipalDatails principalDatails){
         Page<Notice> list = noticeService.pagelist(pageable);
         model.addAttribute("notice", list);
+        if(principalDatails != null){
+            User user = userService.getbyUsername(principalDatails.getUsername());
+            model.addAttribute("userinfo", user);
+        }
+
         return "UserNotice";
     }
 
@@ -64,11 +69,27 @@ public class NoticePageController {
     }
 
     @GetMapping("/notice/{id}")//공지사항 입장.
-    public String adminNoticeInfo(@PathVariable Long id, Model model){
+    public String adminNoticeInfo(@PathVariable Long id, Model model, @AuthenticationPrincipal PrincipalDatails principalDatails){
         Notice notice = noticeService.getById(id);
         model.addAttribute("notice", notice);
+        if(principalDatails != null){
+            User user = userService.getbyUsername(principalDatails.getUsername());
+            model.addAttribute("userinfo", user);
+        }
         return "Admin/NoticeInfo";
     }
+
+    @GetMapping("/user/notice/{id}")//공지사항 입장.
+    public String userNoticeInfo(@PathVariable Long id, Model model, @AuthenticationPrincipal PrincipalDatails principalDatails){
+        Notice notice = noticeService.getById(id);
+        model.addAttribute("notice", notice);
+        if(principalDatails != null){
+            User user = userService.getbyUsername(principalDatails.getUsername());
+            model.addAttribute("userinfo", user);
+        }
+        return "usernoticeinfo";
+    }
+
 
 
     @PreAuthorize("isAuthenticated()")

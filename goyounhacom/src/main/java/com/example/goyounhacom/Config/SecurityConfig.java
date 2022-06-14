@@ -46,7 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .headers().frameOptions().sameOrigin().and()
+                .headers().frameOptions().sameOrigin().and() //stomp를 사용하기 위해서
                 .authorizeRequests()
                 // URL별 권한 관리를 설정하는 옵션의 시작점
                 .antMatchers("/**").permitAll()
@@ -63,8 +63,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()//해당하는 로그인 페이지로 이동//폼 로그인 좆까라 선언.
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout"))
-                .logoutSuccessUrl("/");
-//                .invalidateHttpSession(true)
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true);
+
 //                //세션 상태 유지 안함
 
 

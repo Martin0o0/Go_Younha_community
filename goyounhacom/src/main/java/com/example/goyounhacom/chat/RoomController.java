@@ -22,7 +22,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -68,8 +72,16 @@ public class RoomController {
             model.addAttribute("userinfo", user);
 
             model.addAttribute("room", chatService.findByroomname(roomId, user.getUsername()));
-            List<Message> list = chatService.findListMsg(roomId);
-            model.addAttribute("msglist", list);
+            //List<Message> list = chatService.findListMsg(roomId); //전체 챗팅 리스트 받아와서,
+            List<LocalDate> datelist = chatService.finddistict(roomId); //
+            Map<LocalDate, Object> map = new LinkedHashMap<>(); //순서가 지켜지는 맵 생성하고,
+            for(LocalDate i : datelist){
+                map.put(i, chatService.findByLocalDate(i));
+            }
+            log.info("{}", map.entrySet().toString());
+
+
+            model.addAttribute("msglist", map);
 
         }
         log.info("# get Message Room, roomID : " + roomId);
