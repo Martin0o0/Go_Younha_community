@@ -52,6 +52,9 @@ public class MainPostPageController {
     private final PrincipalDetailService principalDetailService;
     private final FileService fileService;
     private final RecommentService recommentService;
+    private final ScrapService scrapService;
+    private final MainPostLikeService mainPostLikeService;
+
 
     @GetMapping("/mainlist")
     public String mainpost(@AuthenticationPrincipal PrincipalDatails principalDatails, Model model, @PageableDefault(sort = "id", direction = Sort.Direction.DESC, size = 5) Pageable pageable, @RequestParam(required = false, defaultValue = "") String search) {
@@ -66,14 +69,25 @@ public class MainPostPageController {
     }
 
     @GetMapping("/comment/{id}")
-    public String mainpostcoment(@PathVariable Long id, Model model, Long errorpoint, String iserror, CommentSaveDto commentSaveDto, RecommentSaveDto recommentSaveDto, @AuthenticationPrincipal PrincipalDatails principalDatails) {
+    public String mainpostcoment(@PathVariable Long id, Model model, Long errorpoint, String iserror,CommentSaveDto commentSaveDto, RecommentSaveDto recommentSaveDto, @AuthenticationPrincipal PrincipalDatails principalDatails) {
         errorpoint = (Long) model.getAttribute("errorpoint");
         iserror = (String) model.getAttribute("iserror");
+
+        long cnt = mainPostLikeService.getCountLike(id);
+        model.addAttribute("countlike", cnt);
+
+
         MainPostGetDto post = mainPostsService.getMainpost(id);
         model.addAttribute("main_post", post);
         if (principalDatails != null) {
             User user = userService.getbyUsername(principalDatails.getUsername());
             model.addAttribute("userinfo", user);
+            boolean haslike = mainPostLikeService.existLike(user.getId(), id); //있다면,
+            log.info("좋아요 여부 : {}", haslike);
+            model.addAttribute("haslike", haslike);
+            boolean hasScrap = scrapService.findByScrap(user.getId(), id);
+            log.info("스크랩 여부 : {}" , hasScrap);
+            model.addAttribute("hasscrap", hasScrap);
         }
 
         if (post.getFileId() != null) {
@@ -289,15 +303,14 @@ public class MainPostPageController {
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없음");
         }
-
     }
 
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping("/like/{id}")
-    public String mainpostlike(@PathVariable Long id, Principal principal) {
-        User user = this.userService.getbyUsername(principal.getName());
-        this.mainPostsService.like(id, user);
-        return "redirect:/mainpost/comment/" + id;
-    }
+//    @PreAuthorize("isAuthenticated()")
+//    @GetMapping("/like/{id}")
+//    public String mainpostlike(@PathVariable Long id, Principal principal) {
+//        User user = this.userService.getbyUsername(principal.getName());
+//        this.mainPostsService.like(id, user);
+//        return "redirect:/mainpost/comment/" + id;
+//    }
 
 }

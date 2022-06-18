@@ -35,17 +35,30 @@ public class ScrapService {
     public void save(String username, Long postid){
          User user = userService.getbyUsername(username);
          MainPost mainPost = mainPostsService.getMainPostId(postid);
-         Scrap scrap = new Scrap(user, mainPost);
-         scrapRepository.save(scrap);
+         if(scrapRepository.existsByUserIdAndMainPostId(user.getId(), postid) == false) {
+             Scrap scrap = new Scrap(user, mainPost);
+             scrapRepository.save(scrap);
+             log.info("{}", "스크랩 저장됨");
+         }else{
+             Scrap scrap = scrapRepository.findByUserIdAndMainPostId(user.getId(), postid);
+             scrapRepository.delete(scrap);
+             log.info("{}", "스크랩 삭제됨");
+         }
+
+
     }
 
     @Transactional
     public void delete(String username, Long postid){
         User user = userService.getbyUsername(username);
-        MainPost mainPost = mainPostsService.getMainPostId(postid);
-        Scrap scrap = new Scrap(user, mainPost);
+        Scrap scrap = scrapRepository.findByUserIdAndMainPostId(user.getId(), postid);
         scrapRepository.delete(scrap);
+        log.info("{}의 {} 게시물 스크랩 삭제 완료", username, postid );
     }
 
+
+    public Boolean findByScrap(Long userid, Long mainPostid){
+        return scrapRepository.existsByUserIdAndMainPostId(userid, mainPostid);
+    }
 
 }

@@ -34,7 +34,6 @@ public class MainPostGetDto {
 
     private List<Recomment> recommentList;
 
-    private Set<User> like;
 
 
     public MainPostGetDto(MainPost entity) {
@@ -48,7 +47,6 @@ public class MainPostGetDto {
         this.viewcount = entity.getViewcount();
         this.list = entity.getMainPostComents();
         this.recommentList = entity.getMainPostRecomment();
-        this.like = entity.getLike();
 
     }
 }

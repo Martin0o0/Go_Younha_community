@@ -2,6 +2,8 @@ package com.example.goyounhacom.Service;
 
 
 import com.example.goyounhacom.domain.HelloPosts.HelloPost;
+import com.example.goyounhacom.domain.MainPostLike.MainPostLike;
+import com.example.goyounhacom.domain.MainPostLike.MainPostLikeRepository;
 import com.example.goyounhacom.domain.MainPosts.MainPost;
 import com.example.goyounhacom.domain.MainPosts.MainPostRepository;
 import com.example.goyounhacom.domain.Photo.PhotoRepository;
@@ -31,6 +33,9 @@ public class MainPostsService {
     private final PhotoRepository photoRepository;
     private final FileService fileService;
     private final ScrapRepository scrapRepository;
+
+
+    private final MainPostLikeRepository mainPostLikeRepository;
 
 
     @Transactional
@@ -66,17 +71,17 @@ public class MainPostsService {
         //반환값은 HelloPost가 된다. getId를 통해 등록된 글 번호를 가져오자.
     }
 
-   @Transactional
-    public void like(Long id, User user){
-        MainPost mainpost = mainPostRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없다."));
-        mainpost.getLike().add(user);
-        this.mainPostRepository.save(mainpost);
-    }
+//   @Transactional
+//    public void like(Long id, User user){
+//        MainPost mainpost = mainPostRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없다."));
+//        mainpost.getLike().add(user);
+//        this.mainPostRepository.save(mainpost);
+//    }
 
     @Transactional
     public void deleteLike(Long id, User user){ //좋아요 삭제.
         MainPost mainpost = mainPostRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없다."));
-        mainpost.getLike().remove(user);
+//        mainpost.getLike().remove(user);
         this.mainPostRepository.save(mainpost);
     }
 
@@ -104,6 +109,12 @@ public class MainPostsService {
             List<Scrap> list = scrapRepository.findAllByMainPostId(id);
             for(int i = 0; i < list.size(); i++){
                 scrapRepository.delete(list.get(i));
+            }
+        }
+        if(mainPostLikeRepository.existsByMainPostId(id)){
+            List<MainPostLike> list = mainPostLikeRepository.findAllByMainPostId(id);
+            for(MainPostLike i : list){
+                mainPostLikeRepository.delete(i);
             }
         }
         mainPostRepository.delete(posts);

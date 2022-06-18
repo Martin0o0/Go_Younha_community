@@ -1,5 +1,6 @@
 package com.example.goyounhacom.domain.MainPosts;
 
+import com.example.goyounhacom.domain.MainPostLike.MainPostLike;
 import com.example.goyounhacom.domain.Photo.Photo;
 import com.example.goyounhacom.domain.Users.User;
 import com.example.goyounhacom.domain.baseTimeEntity.BaseTimeEntity;
@@ -33,7 +34,7 @@ public class MainPost extends BaseTimeEntity {
 
     @ManyToOne //여러개의 글이 한명의 작성자로 부터 생성 될 수 있기 때문에.
     @JoinColumn
-    @JsonBackReference //순환참조 방지.
+    @JsonBackReference //순환참조 방지.ㅁ
     private User user;
 
     private int viewcount; //조회수
@@ -44,8 +45,6 @@ public class MainPost extends BaseTimeEntity {
     @OneToMany(mappedBy = "mainPost", cascade = CascadeType.REMOVE)
     private List<Recomment> mainPostRecomment;
 
-    @ManyToMany //대등관계
-    private Set<User> like;
 
     @Builder
     public MainPost(String title, String content, Long fileId,  User user){

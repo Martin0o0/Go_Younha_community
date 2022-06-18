@@ -104,11 +104,20 @@
                th:if="${(main_post.user.username != null and #authentication.getPrincipal().getUsername() == main_post.user.username) or userinfo.getRoleKey() == 'ROLE_ADMIN' }"
                th:text="삭제"></a>
             <a href="#" class="btn btn-sm btn-outline-info" id="recommend"
-               th:data-uri="@{|/mainpost/like/${main_post.id}|}">
+               th:data-uri="@{|/mainpost/like/${main_post.id}|}"  th:if="${haslike} == false ">
                 추천
-                <span class="badge rounded-pill bg-info" th:text="${#lists.size(main_post.like)}"></span>
+                <span class="badge rounded-pill bg-info" th:text="${countlike}"></span>
             </a>
-            <a href="#" class="btn btn-sm btn-outline-info" id="scrap" sec:authorize="isAuthenticated()"
+            <a href="#" class="btn btn-sm btn-info" id="deleterecommend"
+               th:data-uri="@{|/mainpost/like/${main_post.id}|}"  th:if="${haslike} == true">
+                추천
+                <span class="badge rounded-pill bg-info" th:text="${countlike}"></span>
+            </a>
+            <a href="#" class="btn btn-sm btn-outline-info" id="scrap" sec:authorize="isAuthenticated()" th:if="${hasscrap} == false"
+               th:data-uri="@{|/api/auth/user/scrap/${#authentication.getPrincipal().getUsername()}?postid=${main_post.id}|}">
+                스크랩
+            </a>
+            <a href="#" class="btn btn-sm btn-info" id="deletescrap" sec:authorize="isAuthenticated()" th:if="${hasscrap} == true"
                th:data-uri="@{|/api/auth/user/scrap/${#authentication.getPrincipal().getUsername()}?postid=${main_post.id}|}">
                 스크랩
             </a>

@@ -1,4 +1,4 @@
-package com.example.goyounhacom.domain.Scrap;
+package com.example.goyounhacom.domain.MainPostLike;
 
 import com.example.goyounhacom.domain.MainPosts.MainPost;
 import com.example.goyounhacom.domain.Users.User;
@@ -10,28 +10,31 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 
-@IdClass(ScrapId.class)
+
 @Getter
 @NoArgsConstructor
 @Entity
-public class Scrap{ //id가 두개인 경우이므로 id class를 만들어 주자.
+public class MainPostLike {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @ManyToOne
-    @JsonBackReference
-    @JoinColumn //외래키 맵핑
+    @JsonBackReference //순환참조 방지
+    @JoinColumn //왜래키 맵핑
     private User user;
 
-
-    @Id
     @ManyToOne
     @JsonBackReference
-    @JoinColumn //외래키 맵핑
+    @JoinColumn
     private MainPost mainPost;
 
+
     @Builder
-    public Scrap(User user, MainPost mainPost){
+    public MainPostLike(User user, MainPost mainPost){
         this.user = user;
         this.mainPost = mainPost;
     }
+
 }

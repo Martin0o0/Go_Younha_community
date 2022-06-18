@@ -2,10 +2,7 @@ package com.example.goyounhacom.web.Controller;
 
 
 import com.example.goyounhacom.Config.PrincipalDatails;
-import com.example.goyounhacom.Service.ChatService;
-import com.example.goyounhacom.Service.MainPostsService;
-import com.example.goyounhacom.Service.NoticeService;
-import com.example.goyounhacom.Service.UserService;
+import com.example.goyounhacom.Service.*;
 import com.example.goyounhacom.domain.Infomation.Notice;
 import com.example.goyounhacom.domain.MainPosts.MainPost;
 import com.example.goyounhacom.domain.Users.User;
@@ -31,6 +28,8 @@ public class MainPageController {
     private final NoticeService noticeService;
     private final MainPostsService mainPostsService;
 
+    private final MainPostLikeService mainPostLikeService;
+
     @GetMapping("/") //루트 다이렉트
     public String root(@AuthenticationPrincipal PrincipalDatails principalDatails, Model model){
         if (principalDatails != null) {
@@ -48,7 +47,7 @@ public class MainPageController {
             if(cnt == 3){
                 break;
             }
-            if(mainpostlist.get(i).getLike().size() >= 5){
+            if(mainPostLikeService.getCountLike(mainpostlist.get(i).getId()) >= 5){
                 top3list.add(mainpostlist.get(i));
                 cnt++;
             }

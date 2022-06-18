@@ -17,4 +17,8 @@ public interface ScrapRepository extends JpaRepository<Scrap, ScrapId> {
     Boolean existsByUserId(Long userid);
 
     Boolean existsByMainPostId(Long postid);
+
+    Boolean existsByUserIdAndMainPostId(Long userid, Long postid);
+
+    Scrap findByUserIdAndMainPostId(Long userid, Long mainPostid);
 }
