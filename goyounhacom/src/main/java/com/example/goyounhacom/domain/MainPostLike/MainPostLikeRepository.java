@@ -18,4 +18,6 @@ public interface MainPostLikeRepository extends JpaRepository<MainPostLike, Long
     List<MainPostLike> findAllByUserId(Long userid);
 
     Boolean existsByMainPostId(Long mainPostid);
+
+    Boolean existsByUserId(Long userid);
 }

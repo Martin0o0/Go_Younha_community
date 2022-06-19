@@ -54,6 +54,10 @@ public class MainPostLikeService {
     }
 
 
+    public Boolean existUserlike(Long userid){
+        return mainPostLikeRepository.existsByUserId(userid);
+    }
+
     public boolean existMainPostlike(Long postid){
         return mainPostLikeRepository.existsByMainPostId(postid);
     }

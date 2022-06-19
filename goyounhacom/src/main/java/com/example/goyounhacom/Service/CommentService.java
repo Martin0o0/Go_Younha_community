@@ -1,5 +1,8 @@
 package com.example.goyounhacom.Service;
 
+import com.example.goyounhacom.domain.CommentLike.CommentLike;
+import com.example.goyounhacom.domain.CommentLike.CommentLikeRepository;
+import com.example.goyounhacom.domain.MainPostLike.MainPostLike;
 import com.example.goyounhacom.domain.MainPosts.MainPost;
 import com.example.goyounhacom.domain.MainPosts.MainPostComment;
 import com.example.goyounhacom.domain.MainPosts.MainPostCommentRepository;
@@ -15,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import javax.xml.stream.events.Comment;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -22,6 +26,8 @@ import javax.transaction.Transactional;
 public class CommentService {
     private final MainPostCommentRepository mainPostCommentRepository;
     private final MainPostRepository mainPostRepository;
+
+    private final CommentLikeRepository commentLikeRepository;
 
 
 
@@ -58,15 +64,17 @@ public class CommentService {
     @Transactional
     public void like(Long id, User user){
         MainPostComment mainPostComment = mainPostCommentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없다."));
-        mainPostComment.getLike().add(user);
-        this.mainPostCommentRepository.save(mainPostComment);
-    }
+        if(commentLikeRepository.existsByUserIdAndMainPostCommentId(user.getId(), id) == false){
+            CommentLike commentLike = CommentLike.builder().user(user).mainPostComment(mainPostComment).build();
+            commentLikeRepository.save(commentLike);
+            log.info("{}", "추천 저장됨");
+        }
+        else{
+            CommentLike commentLike = commentLikeRepository.findByUserIdAndMainPostCommentId(user.getId(), id);
+            commentLikeRepository.delete(commentLike);
+            log.info("{}", "추천 취소됨");
+        }
 
-    @Transactional
-    void deleteLike(Long id, User user){ //좋아요 삭제.
-        MainPostComment mainPost = mainPostCommentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없다."));
-        mainPost.getLike().remove(user);
-        this.mainPostCommentRepository.save(mainPost);
     }
 
 

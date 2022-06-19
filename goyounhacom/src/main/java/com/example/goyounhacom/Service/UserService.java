@@ -3,6 +3,8 @@ package com.example.goyounhacom.Service;
 import com.example.goyounhacom.Config.PrincipalDatails;
 import com.example.goyounhacom.domain.HelloPosts.HelloPost;
 import com.example.goyounhacom.domain.HelloPosts.HelloPostRepository;
+import com.example.goyounhacom.domain.MainPostLike.MainPostLike;
+import com.example.goyounhacom.domain.MainPostLike.MainPostLikeRepository;
 import com.example.goyounhacom.domain.MainPosts.MainPost;
 import com.example.goyounhacom.domain.MainPosts.MainPostComment;
 import com.example.goyounhacom.domain.MainPosts.MainPostCommentRepository;
@@ -42,6 +44,8 @@ public class UserService {
     private final HelloPostsService helloPostsService;
     private final MainPostsService mainPostsService;
     private final ScrapRepository scrapRepository;
+
+    private final MainPostLikeRepository mainPostLikeRepository;
 
     @Transactional
     public Long save(UserSaveDto userSaveDto) {
@@ -149,6 +153,14 @@ public class UserService {
                 scrapRepository.delete(list.get(i));
             }
         }
+        if(mainPostLikeRepository.existsByUserId(user.getId())){
+            List<MainPostLike> list = mainPostLikeRepository.findAllByUserId(user.getId());
+            for(MainPostLike i : list){
+                mainPostLikeRepository.delete(i);
+            }
+        }
+
+
       userRepository.delete(user);
     }
 

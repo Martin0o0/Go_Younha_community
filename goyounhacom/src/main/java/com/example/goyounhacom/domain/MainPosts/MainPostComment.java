@@ -1,9 +1,11 @@
 package com.example.goyounhacom.domain.MainPosts;
 
+import com.example.goyounhacom.domain.CommentLike.CommentLike;
 import com.example.goyounhacom.domain.Users.User;
 import com.example.goyounhacom.domain.baseTimeEntity.BaseTimeEntity;
 import com.example.goyounhacom.web.Dto.UserDto.UserGetDto;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,12 +37,14 @@ public class MainPostComment extends BaseTimeEntity {
     private MainPost mainPost; //자식이니까 N:1방식이다.
 
 
-    @OneToMany(mappedBy = "mainPostComment", cascade = CascadeType.REMOVE, orphanRemoval = true) //mappedby => 참조엔티티 속성명, cascade => 게시글 삭제하면 그 예하 묶인 놈들 싸그리 삭제함.
+    @OneToMany(mappedBy = "mainPostComment", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @JsonManagedReference
+    private List<CommentLike> commentLikes;
+
+
+
+    @OneToMany(mappedBy = "mainPostComment", cascade = CascadeType.REMOVE, orphanRemoval = true) //mappedby => 참조엔티티 속성명, cascade => 게시글 삭제하면 그 예하 묶인 놈들 싸그리 삭제함..
     private List<Recomment> mainPostComents; //1:N방식이니까. 부모엔티티가 자식엔티티를 여러개 가질 수 있어
-
-    @ManyToMany //마찬가지로 대등관계이므로
-    private Set<User> like;
-
 
     @Builder
     public MainPostComment(String content, User user, MainPost mainPost){
@@ -49,6 +53,7 @@ public class MainPostComment extends BaseTimeEntity {
         this.mainPost = mainPost;
     }
 
+
     @Override
     public String toString() {
         return "MainPostComment{" +
@@ -56,7 +61,8 @@ public class MainPostComment extends BaseTimeEntity {
                 ", content='" + content + '\'' +
                 ", user=" + user +
                 ", mainPost=" + mainPost +
-                ", like=" + like +
+                ", commentLikes=" + commentLikes +
+                ", mainPostComents=" + mainPostComents +
                 '}';
     }
 

@@ -88,6 +88,7 @@ public class MainPostPageController {
             boolean hasScrap = scrapService.findByScrap(user.getId(), id);
             log.info("스크랩 여부 : {}" , hasScrap);
             model.addAttribute("hasscrap", hasScrap);
+
         }
 
         if (post.getFileId() != null) {
