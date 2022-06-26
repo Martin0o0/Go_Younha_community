@@ -1,9 +1,9 @@
 package com.example.goyounhacom.Config;
 
 
-import com.example.goyounhacom.Config.handler.LoginFailuereHandler;
-import com.example.goyounhacom.Config.handler.LoginSuccessHandler;
+
 import com.example.goyounhacom.Service.PrincipalDetailService;
+import com.example.goyounhacom.Service.customOAuth2UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -26,17 +26,18 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration //하나 이상의 빈을 등록하기 위해 Configuration 선언 //환경설정파일을 뜻하는 어노테이션이기도 함.
 @EnableWebSecurity //스프링 시큐리티 설정 활성화
 @RequiredArgsConstructor
-@EnableGlobalMethodSecurity(prePostEnabled = true)
-//prePostEnabled = true 설정은 로그인 여부를 판별하기 위해 사용했던 @PreAuthorize 애너테이션을 사용하기 위해 반드시 필요하다.
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+@EnableGlobalMethodSecurity(prePostEnabled = true)//prePostEnabled = true 설정은 로그인 여부를 판별하기 위해 사용했던 @PreAuthorize 애너테이션을 사용하기 위해 반드시 필요하다.
+public class SecurityConfig extends WebSecurityConfigurerAdapter { //Spring Security Filter Chain을 사용한다는 것을 명시해줘야 한다.
+    // WebSecurityConfigurerAdapter 상속받은 Configuration 객체를 일단 만들어주고 거기에 @EnableWebSecurity 어노테이션을 달아주면 된다.
+
 
     private final PrincipalDetailService principalDetailService;
     private final ObjectMapper objectMapper;
+    private final customOAuth2UserService customOAuth2UserService;
 
-    @Bean // 필드단위니까 Bean
-    public PasswordEncoder passwordEncoder() { //비밀번호 암호화
-        return new BCryptPasswordEncoder(); //비밀번호 암호화를 해주어야 함.
-    }
+    private final PasswordEncoder passwordEncoder;
+
+
 
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -64,48 +65,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout"))
                 .logoutSuccessUrl("/")
-                .invalidateHttpSession(true);
+                .and()
+                .oauth2Login()//Oauth2방식으로 로그인
+                .userInfoEndpoint() //성공했다면 그 정보를 가져올떄의 방식을 정함
+                .userService(customOAuth2UserService); //가공할 방식을 지정 -> 아래에서 지정한 authenticationmananger와 비슷한 원리. -> userService방시을 지정한다.
 
 //                //세션 상태 유지 안함
 
 
         http.rememberMe().tokenValiditySeconds(60 * 60 * 7).userDetailsService(principalDetailService); //유저 쿠키 유지.
 
-
-        http.addFilterAfter(jsonUsernamePasswordLoginFilter(), LogoutFilter.class); //필터링 후 추가.
-
     }
 
     @Bean
-    public AuthenticationManager authenticationManager() {//- AuthenticationManager 등록
+    public AuthenticationManager authenticationManager() {//- AuthenticationManager 등록 ->인증을 만들고 처리하는 인터페이스.
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();//DaoAuthenticationProvider 사용
-        provider.setPasswordEncoder(passwordEncoder());//PasswordEncoder로는 bCryPasswordEncoder를 사용
-        provider.setUserDetailsService(principalDetailService);
-        return new ProviderManager(provider);
-    }
-
-    @Bean
-    public LoginFailuereHandler loginFailuereHandler() {
-        return new LoginFailuereHandler();
-    } //실패 핸들러
-
-    @Bean
-    public LoginSuccessHandler loginSuccessHandler() {
-        return new LoginSuccessHandler();
-    } //성공 핸들러
-
-    @Bean
-    public JsonUsernamePasswordAuthenticationFilter jsonUsernamePasswordLoginFilter() {
-        JsonUsernamePasswordAuthenticationFilter jsonUsernamePasswordLoginFilter = new JsonUsernamePasswordAuthenticationFilter(objectMapper);
-        jsonUsernamePasswordLoginFilter.setAuthenticationManager(authenticationManager());
-        jsonUsernamePasswordLoginFilter.setAuthenticationSuccessHandler(loginSuccessHandler()); //성공핸들러 적용
-        jsonUsernamePasswordLoginFilter.setAuthenticationFailureHandler(loginFailuereHandler()); //실패해들러 적용
-        return jsonUsernamePasswordLoginFilter;
+        provider.setPasswordEncoder(passwordEncoder);//PasswordEncoder로는 bCryPasswordEncoder를 사용 암호화는 이친구로 설정.
+        provider.setUserDetailsService(principalDetailService); //유저 인증절차는 이친구에게 넘김.
+        return new ProviderManager(provider); //인증은 provider에게 넘김.
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception { // 스프링 시큐리티의 인증절차를 수행함.
-        auth.userDetailsService(principalDetailService).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(principalDetailService).passwordEncoder(passwordEncoder);
     }
 
     @Bean

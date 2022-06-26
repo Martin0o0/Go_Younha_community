@@ -8,4 +8,5 @@ public interface NoticeRepository extends JpaRepository<Notice, Long> {
 
     List<Notice> findTop3ByOrderByIdDesc(); //제일최근 3개 리스트만 받아오기.
 
+
 }

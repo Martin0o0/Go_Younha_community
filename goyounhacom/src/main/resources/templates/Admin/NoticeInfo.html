@@ -55,8 +55,7 @@
             <a href="#" th:data-uri="@{|/admin/notice/delete/${notice.id}|}" id="deletebtn"
                class="btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated() and hasRole('ADMIN')"
                th:text="삭제"></a>
-        </div>
-    </div>
+           </div>
 </div>
 <div class="container">
     <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">

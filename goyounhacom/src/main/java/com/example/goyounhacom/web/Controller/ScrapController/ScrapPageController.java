@@ -4,7 +4,9 @@ package com.example.goyounhacom.web.Controller.ScrapController;
 import com.example.goyounhacom.Config.PrincipalDatails;
 import com.example.goyounhacom.Service.ScrapService;
 import com.example.goyounhacom.Service.UserService;
+import com.example.goyounhacom.domain.Infomation.Notice;
 import com.example.goyounhacom.domain.MainPosts.MainPost;
+import com.example.goyounhacom.domain.NoticeScrap.NoticeScrap;
 import com.example.goyounhacom.domain.Scrap.Scrap;
 import com.example.goyounhacom.domain.Users.User;
 import com.example.goyounhacom.web.Dto.MainPostDto.MainPostGetDto;
@@ -38,12 +40,29 @@ public class ScrapPageController {
         Page<Scrap> list = scrapService.getList(userid, pageable);
         Page<MainPost> postlist = list.map(dto -> dto.getMainPost());
         model.addAttribute("main_post_scrap", postlist);
+
         if (principalDatails != null) {
             User user = userService.getbyUsername(principalDatails.getUsername());
             model.addAttribute("userinfo", user);
         }
 
+
+
         //Pagealbe로 변환.
         return "User/UserScrap";
     }
+
+    @GetMapping("/noticescrap/{userid}")
+    public String noticescraplist(@AuthenticationPrincipal PrincipalDatails principalDatails, Model model, @PathVariable Long userid, @PageableDefault(size = 5) Pageable pageable){
+        Page<NoticeScrap> noticescraplist = scrapService.getNoticeList(userid, pageable);
+        Page<Notice> noticelist = noticescraplist.map(dto -> dto.getNotice());
+        model.addAttribute("notice_scrap", noticelist);
+        if (principalDatails != null) {
+            User user = userService.getbyUsername(principalDatails.getUsername());
+            model.addAttribute("userinfo", user);
+        }
+        return "User/UserNoticeScrap";
+    }
+
+
 }

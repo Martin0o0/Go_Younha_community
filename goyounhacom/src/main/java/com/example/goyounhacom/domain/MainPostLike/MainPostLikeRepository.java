@@ -10,7 +10,6 @@ import java.util.Optional;
 public interface MainPostLikeRepository extends JpaRepository<MainPostLike, Long> {
     Boolean existsByUserIdAndMainPostId(Long userid, Long mainPostid);
     Optional<Long> countByMainPostId(Long mainPost);
-
     Optional<MainPostLike> findByUserIdAndMainPostId(Long userid, Long mainPostid);
 
     List<MainPostLike> findAllByMainPostId(Long postid);

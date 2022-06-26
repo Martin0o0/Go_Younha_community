@@ -3,6 +3,8 @@ package com.example.goyounhacom.web.Controller.UserController;
 
 import com.example.goyounhacom.Service.ScrapService;
 import com.example.goyounhacom.Service.UserService;
+import com.example.goyounhacom.domain.Infomation.Notice;
+import com.example.goyounhacom.domain.NoticeScrap.NoticeScrapRepository;
 import com.example.goyounhacom.domain.Users.User;
 import com.example.goyounhacom.domain.Users.UserRepository;
 import com.example.goyounhacom.web.Dto.HelloPostsDto.HelloPostsSaveDto;
@@ -26,6 +28,7 @@ public class UserApiController {
     private final UserService userService;
 
     private final ScrapService scrapService;
+
 
     @PostMapping("/sign-up")
     public String signup(@RequestBody UserSaveDto userSaveDto) {
@@ -76,6 +79,23 @@ public class UserApiController {
         scrapService.delete(username, postid);
         log.info("{}의 스크랩에 제거된 게시글 번호 : {} ", username, postid);
     }
+
+    @PostMapping("/noticescrap/{username}")
+    public void savenotice(@PathVariable String username, @RequestParam Long noticeid){
+        log.info("{}", noticeid);
+        scrapService.noticesave(username, noticeid);
+        log.info("{}의 스크렙애 등록된 공지사항 번호 : {}", username, noticeid);
+    }
+
+    @DeleteMapping("/noticescrap/{username}")
+    public void deletenotice(@PathVariable String username, @RequestParam Long noticeid){
+        scrapService.deletecreap(username, noticeid);
+        log.info("{}의 스크랩에 제거된 공지사항 번호 : {} ", username, noticeid);
+    }
+
+
+
+
 
 
 

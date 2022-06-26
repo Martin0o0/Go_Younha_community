@@ -56,6 +56,8 @@
             <label for="rememberMe" aria-describedby="rememberMeHelp">로그인 상태 유지</label>
         </div>
         <button type="submit" class="btn btn-primary">로그인</button>
+        <a th:href="@{/oauth2/authorization/google}" class="btn btn-info" role="button">Google login</a>
+        <a th:href="@{/oauth2/authorization/naver}" class="btn btn-info" role="button">naver login</a>
     </form>
 </div>
 <div class="container">

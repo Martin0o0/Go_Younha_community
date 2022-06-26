@@ -78,7 +78,7 @@ if(deletescrap != null){
                 if (xhr.DONE) {
                     console.log(xhr.response);
                     console.log("통신 성공");
-                    alert('스크랩되었습니다.');
+                    alert('스크랩이 취소되었습니다.');
                     window.location.href = cnturl;
                 } else { //통신 실패
                     alert("스크랩에 실패했습니다.")

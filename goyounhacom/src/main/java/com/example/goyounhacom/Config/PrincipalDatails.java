@@ -2,31 +2,49 @@ package com.example.goyounhacom.Config;
 
 import com.example.goyounhacom.domain.Users.User;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
+@ToString
 @RequiredArgsConstructor
-public class PrincipalDatails implements UserDetails {
+public class PrincipalDatails implements UserDetails, OAuth2User {
 
     private User user;
+    private Map<String, Object> attributes; //Oauth 방식
 
     public PrincipalDatails(User user){
         this.user = user;
+    } //form방식
+
+    public PrincipalDatails(User user, Map<String, Object> attributes) {
+        //PrincipalOauth2UserService 참고
+        this.user = user;
+        this.attributes = attributes;
     }
 
+    @Override //oauthe 방식
+    public Map<String, Object> getAttributes() {
+        return attributes;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> collection = new ArrayList<>();
-        collection.add(() -> user.getRoleKey());
+        collection.add(() -> user.getRoleKey()); //유저의 Role을 담음.
         return collection;
     }
 
-
+    @Override
+    public String getName() {
+        return this.toString();
+    }
 
     @Override
     public String getPassword() {

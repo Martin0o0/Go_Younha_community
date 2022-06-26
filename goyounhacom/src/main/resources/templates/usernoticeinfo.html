@@ -76,13 +76,14 @@
                 [[${#temporals.format(notice.createdDate, 'yyyy-MM-dd HH:mm')}]]
             </li>
         </div>
-        <div class="card-body my-1" sec:authorize="isAuthenticated() and hasRole('ADMIN')" >
-            <a th:href="@{|/admin/notice/put/${notice.id}|}" class="btn btn-sm btn-outline-secondary"
-               sec:authorize="isAuthenticated() and hasRole('ADMIN')"
-               th:text="수정"></a>
-            <a href="#" th:data-uri="@{|/admin/notice/delete/${notice.id}|}" id="deletebtn"
-               class="btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated() and hasRole('ADMIN')"
-               th:text="삭제"></a>
+        <div class="card-body my-1" sec:authorize="isAuthenticated()">
+
+            <a href="#" th:data-uri="@{|/api/auth/user/noticescrap/${#authentication.getPrincipal().getUsername()}?noticeid=${notice.id}|}" id="scrap"  sec:authorize="isAuthenticated()" th:if="${@noticeScrapRepository.existsByUserIdAndNoticeId(@userService.findbyusername(#authentication.getPrincipal().getUsername()).getId(), notice.id)} == false"
+               class="btn btn-sm btn-outline-info"
+               th:text="스크랩"></a>
+            <a href="#" th:data-uri="@{|/api/auth/user/noticescrap/${#authentication.getPrincipal().getUsername()}?noticeid=${notice.id}|}" id="deletescrap" sec:authorize="isAuthenticated()"  th:if="${@noticeScrapRepository.existsByUserIdAndNoticeId(@userService.findbyusername(#authentication.getPrincipal().getUsername()).getId(), notice.id)} == true"
+               class="btn btn-sm btn-info"
+               th:text="스크랩"></a>
         </div>
     </div>
 </div>

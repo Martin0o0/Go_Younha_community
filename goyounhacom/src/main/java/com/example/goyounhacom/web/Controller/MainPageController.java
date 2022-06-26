@@ -7,19 +7,23 @@ import com.example.goyounhacom.domain.Infomation.Notice;
 import com.example.goyounhacom.domain.MainPosts.MainPost;
 import com.example.goyounhacom.domain.Users.User;
 import com.example.goyounhacom.domain.chat.RoomId;
+import com.example.goyounhacom.web.Dto.UserDto.UserGetDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.thymeleaf.model.IModel;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
-
+@Slf4j
 @RequiredArgsConstructor
 @Controller
 public class MainPageController {
@@ -27,7 +31,7 @@ public class MainPageController {
     private final ChatService chatService;
     private final NoticeService noticeService;
     private final MainPostsService mainPostsService;
-
+    private final HttpSession httpSession;
     private final MainPostLikeService mainPostLikeService;
 
     @GetMapping("/") //루트 다이렉트
@@ -38,6 +42,7 @@ public class MainPageController {
             List<RoomId> list = chatService.findListuserid(user.getUsername());
             model.addAttribute("usernamelist", list);
         }
+
         List<Notice> noticelist = noticeService.findByTop3List();
         model.addAttribute("noticelist", noticelist);
         List<MainPost> mainpostlist = mainPostsService.findByAll();

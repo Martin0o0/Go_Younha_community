@@ -30,6 +30,7 @@ dependencies {
     //implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.0'
     //implementation 'com.auth0:java-jwt:3.18.2' //jwt 추가.
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-websocket' //웹소켓 추가

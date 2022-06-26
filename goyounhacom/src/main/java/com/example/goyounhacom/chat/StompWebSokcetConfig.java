@@ -16,8 +16,10 @@ public class StompWebSokcetConfig implements WebSocketMessageBrokerConfigurer {
         registry.addEndpoint("/stomp/chat").setAllowedOrigins("http://localhost:8090").withSockJS();
     }
 
+
+
     @Override
-    public void configureMessageBroker(MessageBrokerRegistry registry) {
+    public void configureMessageBroker(MessageBrokerRegistry registry) { //브로커 설정
         registry.setApplicationDestinationPrefixes("/pub");  //클라이언트 쪽에서 보내오는 요청을 처리 (send)
         registry.enableSimpleBroker("/sub"); //해당 경로로 브로커를 설정. 브로커는 해당하는 경로로 구독하는 클라이언트에게 메시지를 전달하는 역할을 수행한다.
     }

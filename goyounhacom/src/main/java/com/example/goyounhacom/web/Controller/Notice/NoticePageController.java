@@ -122,7 +122,7 @@ public class NoticePageController {
         if (user.getRoleKey().contentEquals("ROLE_ADMIN") || notice.getUser().getUsername().equals(principal.getName()) == true ) {
             noticeSaveDto.setUser(user);
             noticeService.update(id, noticeSaveDto);
-            return "redirect:/admin/notice/"+id;
+            return "redirect:/notice/"+id;
         }
         else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없음");

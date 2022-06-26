@@ -35,6 +35,10 @@ public class NoticeService {
     }
 
 
+    public Notice findByid(Long id){
+        return noticeRepository.findById(id).get();
+    }
+
     @Transactional
     public Long delete(Long id) {
         Notice notice = noticeRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당하는 공지사항이 없습니다."));
@@ -61,4 +65,6 @@ public class NoticeService {
         List<Notice> list = noticeRepository.findTop3ByOrderByIdDesc();
         return list;
     }
+
+
 }

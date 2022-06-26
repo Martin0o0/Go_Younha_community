@@ -36,13 +36,14 @@
                     </li>
                     <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
                         <a class="nav-link dropdown-toggle" href="#" id="offcanvasNavbarDropdown" role="button"
-                           data-bs-toggle="dropdown" aria-expanded="false">
-                            [[${#authentication.principal.username}]]
+                           data-bs-toggle="dropdown" aria-expanded="false" th:text="${user_info.getUsername()}">
+
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="offcanvasNavbarDropdown">
                             <li><a class="dropdown-item" th:href="@{|/auth/update|}">회원정보 수정</a></li>
                             <li><a class="dropdown-item" th:href="@{|/auth/user/scrap/${user_info.getId()}|}">게시글
                                 스크랩</a></li>
+                            <li><a class="dropdown-item" th:href="@{|/auth/user/noticescrap/${user_info.getId()}|}">공지사항 스크랩</a></li>
                             <li><a class="dropdown-item" data-bs-toggle="offcanvas"
                                    data-bs-target="#offcanvasWithBackdrop" aria-controls="offcanvasWithBackdrop">채팅방</a>
                             </li>
